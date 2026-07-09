@@ -41,7 +41,7 @@ Labs 1-3 build on each other. Labs 4-6 are standalone.
 | Lab 2 | Event-driven ingestion: S3 to SQS to Lambda |
 | Lab 3 | Data governance: Lake Formation row/column/tag-based access control |
 | Lab 4 | Redshift Serverless, federated query from Aurora RDS |
-| Lab 5 | Change Data Capture: Postgres to DMS to S3 or Postgres target |
+| Lab 5 | Change Data Capture: Oracle/Postgres to DMS to S3 or Oracle/Postgres target |
 | Lab 6 | OpenSearch: ingestion, search, and dashboards |
 
 ---
