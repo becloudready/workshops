@@ -1,4 +1,4 @@
-#  DynamoDB Global Tables + CDC 
+# DynamoDB Global Tables + CDC 
 
 Table: `quicklabs-student-<NUMBER>-pipeline-tracker`, primary Region `us-west-2`, replica Region
 `us-east-1`. Console only — no NoSQL Workbench.
@@ -35,7 +35,7 @@ Table: `quicklabs-student-<NUMBER>-pipeline-tracker`, primary Region `us-west-2`
 ## Task 4 — Create the Kinesis stream (in the replica Region)
 
 1. Console Region = `us-east-1`.
-2. Kinesis console → **Create data stream** → name it → On-demand mode.
+2. Kinesis console → **Create data stream** → name it `quicklabs-student-<NUMBER>-dynamodb-stream` → On-demand mode.
 
 ## Task 5 — Enable Kinesis Data Streams for DynamoDB (on the replica)
 
@@ -76,7 +76,7 @@ records manually in the Data Viewer.
        return {"statusCode": 200}
    ```
 5. **Deploy**.
-6. **Add trigger** → Kinesis → select the stream from Task 4 → batch size 1 → **Add**.
+6. **Add trigger** → Kinesis → select the stream from Task 4 - `quicklabs-student-<NUMBER>-dynamodb-stream` → batch size 1 → **Add**.
 
 ## Task 8 — Validate the full pipeline
 
