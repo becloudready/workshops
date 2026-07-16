@@ -30,7 +30,7 @@ You will expose two endpoints:
 1. Go to **Lambda** → **Create function**
 2. Select **Author from scratch**
 3. Fill in:
-   - Function name: `student-rest-api`
+   - Function name: `student-<NAME>-rest-api`
    - Runtime: **Python 3.12**
    - Region: **us-east-1**
 4. Click **Create function**
