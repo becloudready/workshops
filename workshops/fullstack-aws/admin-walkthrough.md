@@ -127,19 +127,14 @@ Each failed expectation → one edit to `student-iam-policy.json` → `terraform
 Two-phase: tear down the student-built lab resources first, then the IAM scaffolding.
 
 ```bash
-# 1. Lab resources students built during the bootcamp (Lambda, S3, DynamoDB, EC2, log groups, IAM roles)
-#    NOTE: cleanup-student-resources.py still matches by the student-<slug>-* name prefix
-#    (with tag-based matching as an add-on). It has NOT yet been updated to the
-#    new "delete anything missing workshop/autodelete/date tags" model described
-#    in the README. Until that follow-up lands, students who skip the naming
-#    convention won't be caught by this script even though the README says tags
-#    are what's enforced. Treat this as a known gap, not yet fixed.
-cd ~/workspace/fullstack-bootcamp
-while IFS=, read -r username _; do
-  [[ "$username" == "username" ]] && continue
-  slug="${username%@*}"
-  python tools/cleanup-student-resources.py --student "$slug" --region us-east-1
-done < ~/workspace/quick-labs/workshops/fullstack-aws/terraform-iam/students.csv
+# 1. Lab resources students built during the bootcamp (Lambda, S3, DynamoDB, EC2,
+#    log groups, key pairs, security groups, CloudFront). Tag-driven, not name-driven:
+#    deletes everything found unless it's tagged autodelete=false. Always pass
+#    --workshop, this account holds resources from other projects too.
+#    Dry run first (no --delete), read the output, then re-run with --delete.
+cd ~/workspace/quick-labs/workshops/fullstack-aws/tools
+python cleanup-student-resources.py --region us-east-1 --workshop full-stack
+python cleanup-student-resources.py --region us-east-1 --workshop full-stack --delete
 
 # 2. IAM scaffolding for this cohort (users, group, managed policy, memberships)
 cd ~/workspace/quick-labs/workshops/fullstack-aws/terraform-iam

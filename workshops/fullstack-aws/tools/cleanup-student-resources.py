@@ -2,24 +2,54 @@
 """
 cleanup-student-resources.py
 
-Finds and deletes all AWS resources created by students during labs.
-All student resources use the "student-" prefix enforced by IAM policies.
+Nightly sweep of lab resources (Lambda, S3, EC2, CloudFront, DynamoDB, log
+groups, key pairs, security groups). Deletion is tag-driven, not name-driven:
 
-Covers (in dependency order): Lambda → CloudWatch Log Groups → API Gateway →
-CloudFront Distributions + OACs → S3 Buckets → EC2 Instances → Key Pairs →
-Security Groups → IAM Roles → IAM Users.
+    A resource is deleted UNLESS it is tagged autodelete=false.
+
+That means a resource with no tags at all, autodelete=true, or any other
+value gets swept. Only autodelete=false (case-insensitive) protects it. This
+matches the tagging convention in the root README: tag your resources or the
+nightly script removes them, no warning.
+
+This script does NOT touch IAM. The shared Lambda execution role, the IAM
+group/policy, and student IAM users are admin-provisioned in terraform-iam
+and tagged autodelete=true by that module's own default_tags (because they
+need to survive nightly sweeps, not because they're supposed to persist
+forever): running this script unscoped would otherwise delete every
+student's login and the shared execution role on night one. Cohort-level IAM
+teardown stays a deliberate step: `terraform destroy` in terraform-iam, per
+admin-walkthrough.md.
+
+This AWS account is shared with other projects, confirmed by a real dry run
+(unrelated security groups, a Kubernetes ELB group, dozens of untagged key
+pairs from unrelated experiments). Two extra safety nets beyond the tag rule:
+  1. A hard-coded exclude list for well-known AWS-managed resource name
+     prefixes (CloudTrail logs, Config, CDK/CloudFormation bootstrap, etc.)
+     that is never deleted regardless of tags.
+  2. Security groups and key pairs additionally require a student-/quicklabs-
+     style name OR a matching --workshop tag before they're considered: most
+     of what's actually in this account for these two resource types was
+     created by hand outside Terraform and carries no tags at all, so the tag
+     rule alone isn't enough discrimination for them specifically.
+Always pass --workshop full-stack for a real cohort unless you deliberately
+want to sweep the whole account.
 
 Usage:
-    # Dry run — preview everything (safe, no deletions)
+    # Dry run: preview everything (safe, no deletions)
     python cleanup-student-resources.py --region us-east-1
 
-    # Delete all student resources
+    # Actually delete
     python cleanup-student-resources.py --region us-east-1 --delete
 
-    # Delete one student only
+    # Extra safety: also require workshop=<value> tag to match (recommended
+    # if this AWS account is ever used for anything besides this workshop)
+    python cleanup-student-resources.py --region us-east-1 --delete --workshop full-stack
+
+    # Restrict to one student's named resources only (still tag-gated on top)
     python cleanup-student-resources.py --region us-east-1 --delete --student john.doe
 
-    # Delete only users listed in a file (one username per line, or a CSV with 'username' column)
+    # Restrict to a list of students (one username per line, or CSV with 'username' column)
     python cleanup-student-resources.py --region us-east-1 --delete --users-file students.csv
 """
 
@@ -33,20 +63,22 @@ from botocore.exceptions import ClientError, WaiterError
 
 # ─── CLI ─────────────────────────────────────────────────────────────────────
 
-parser = argparse.ArgumentParser(description="Clean up student AWS resources")
+parser = argparse.ArgumentParser(description="Tag-driven nightly cleanup of student lab resources")
 parser.add_argument("--region",     required=True, help="AWS region (e.g. us-east-1)")
 parser.add_argument("--delete",     action="store_true", help="Actually delete resources (default is dry run)")
-parser.add_argument("--student",    default=None, help="Target a single student by username (e.g. john.doe)")
-parser.add_argument("--users-file", default=None, help="Path to a CSV or .txt file with usernames to delete")
+parser.add_argument("--workshop",   default=None, help="Also require workshop=<value> tag (e.g. full-stack). Omit to sweep the whole account/region.")
+parser.add_argument("--student",    default=None, help="Restrict to one student's named resources (student-<name>-* / <name>-prefixed), still tag-gated")
+parser.add_argument("--users-file", default=None, help="Path to a CSV or .txt file with usernames to restrict to")
 parser.add_argument("--profile",    default=None, help="AWS CLI profile to use")
 args = parser.parse_args()
 
-DRY_RUN = not args.delete
-REGION  = args.region
+DRY_RUN  = not args.delete
+REGION   = args.region
+WORKSHOP = args.workshop
 
-# ─── Build target user list ───────────────────────────────────────────────────
+# ─── Build optional student-name filter (name-based, on top of the tag gate) ──
 
-TARGET_USERS = None  # None means "match all student-* by prefix"
+TARGET_USERS = None  # None means "no name restriction: tag gate alone decides"
 
 if args.users_file:
     if not os.path.exists(args.users_file):
@@ -55,12 +87,10 @@ if args.users_file:
 
     TARGET_USERS = []
     with open(args.users_file, newline="") as f:
-        # Auto-detect CSV vs plain text
         sample = f.read(1024)
         f.seek(0)
         if "," in sample:
             reader = csv.DictReader(f)
-            # Accept 'username' or 'full_name' column
             col = next((c for c in reader.fieldnames if c.lower() in ("username", "user_name")), None)
             if not col:
                 print(f"ERROR: CSV must have a 'username' column. Found: {reader.fieldnames}")
@@ -69,71 +99,94 @@ if args.users_file:
         else:
             KNOWN_HEADERS = {"username", "user_name", "name"}
             lines = [line.strip() for line in f if line.strip()]
-            # Skip header line if present
             if lines and lines[0].lower() in KNOWN_HEADERS:
                 lines = lines[1:]
-            TARGET_USERS = list(dict.fromkeys(lines))  # deduplicate, preserve order
+            TARGET_USERS = list(dict.fromkeys(lines))
 
     print(f"Loaded {len(TARGET_USERS)} user(s) from {args.users_file}")
 
 elif args.student:
     TARGET_USERS = [args.student]
 
-# ─── Helper: should this resource name be included? ──────────────────────────
-
 PREFIX = "student-"
+WORKSHOP_NAME_PREFIXES = ("student-", "quicklabs-")
 
-def is_targeted(resource_name):
-    """Return True if the AWS resource (Lambda, S3, EC2...) belongs to a targeted student.
-    These resources are named student-<username>-... by convention."""
+# Never touched, regardless of tags or --workshop. These are well-known
+# AWS/account-managed resource name prefixes, not lab resources. Found the
+# hard way: a real dry run against this account flagged the CloudTrail log
+# bucket for deletion because it (correctly) has no autodelete tag at all.
+NEVER_DELETE_NAME_PREFIXES = (
+    "aws-cloudtrail-logs-",
+    "aws-config-",
+    "cf-templates-",
+    "elasticbeanstalk-",
+    "amplify-",
+    "cdk-",
+    "codepipeline-",
+    "do-not-delete-",
+)
+
+def is_protected_by_name(resource_name):
+    return any(resource_name.startswith(p) for p in NEVER_DELETE_NAME_PREFIXES)
+
+def name_matches_target(resource_name):
+    """True if no student filter is set, or the name looks like it belongs to a targeted student.
+    Resources are conventionally named student-<slug>-...: this is a recommendation, not
+    IAM-enforced, so treat it as best-effort when a --student/--users-file filter is used."""
+    if TARGET_USERS is None:
+        return True
     if not resource_name.startswith(PREFIX):
         return False
-    if TARGET_USERS is None:
-        return True  # match all student-* resources
-    suffix = resource_name[len(PREFIX):]  # e.g. "john.doe-task-tracker-abc123"
+    suffix = resource_name[len(PREFIX):]
     return any(suffix.startswith(u) for u in TARGET_USERS)
 
-def is_iam_user_targeted(username):
-    """Return True if the IAM username itself is in the target list.
-    IAM usernames are plain (e.g. john.doe), not prefixed with student-."""
-    if TARGET_USERS is None:
-        return True  # no filter — delete all
-    return username in TARGET_USERS
-
-# ─── Tag-based discovery (augments name-based) ────────────────────────────────
-# Populated after we connect. Maps AWS service key (e.g. "lambda", "s3") to a
-# set of resource names/ids found via the `student=<slug>` tag. Used to catch
-# resources whose names don't fit the student-<slug>-* convention.
-tagged_by_service = {}
-
-def _tail_resource(arn):
-    """Extract the name/id portion of an ARN, regardless of resource-type prefix.
-    arn:aws:lambda:r:a:function:foo → 'foo'
-    arn:aws:s3:::my-bucket          → 'my-bucket'
-    arn:aws:iam::a:role/foo         → 'foo'
-    arn:aws:dynamodb:r:a:table/foo  → 'foo'
-    """
-    parts = arn.split(":", 5)
-    tail = parts[5] if len(parts) > 5 else ""
-    if ":" in tail:
-        tail = tail.split(":", 1)[-1]
-    if "/" in tail:
-        tail = tail.split("/", 1)[-1]
-    return tail
-
-def is_target_resource(service_key, name):
-    """Match by name convention OR by tag-discovered set for this service."""
-    if is_targeted(name):
+def looks_like_workshop_resource(resource_name, raw_tags):
+    """For resource types that are frequently created by hand outside Terraform
+    (security groups, key pairs) and therefore often carry no tags at all: require
+    EITHER a recognizable student-/quicklabs- style name OR a workshop tag match,
+    so an untagged unrelated resource with a generic name doesn't get swept."""
+    if resource_name.startswith(WORKSHOP_NAME_PREFIXES):
         return True
-    return name in tagged_by_service.get(service_key, set())
+    tags = normalize_tags(raw_tags)
+    if WORKSHOP is not None:
+        return tags.get("workshop", "").strip().lower() == WORKSHOP.strip().lower()
+    return "workshop" in tags
+
+# ─── Tag gate: the actual deletion decision ───────────────────────────────────
+
+def normalize_tags(raw):
+    """Accepts a dict, a list of {'Key':.., 'Value':..}, or a list of {'key':.., 'value':..}
+    and returns a lowercase-keyed dict for case-insensitive lookups."""
+    if raw is None:
+        return {}
+    if isinstance(raw, dict):
+        return {str(k).lower(): str(v) for k, v in raw.items()}
+    out = {}
+    for item in raw:
+        k = item.get("Key", item.get("key"))
+        v = item.get("Value", item.get("value"))
+        if k is not None:
+            out[str(k).lower()] = str(v)
+    return out
+
+def eligible_for_deletion(raw_tags):
+    """The core rule: delete unless autodelete is explicitly false. Also requires the
+    workshop tag to match if --workshop was given."""
+    tags = normalize_tags(raw_tags)
+    if tags.get("autodelete", "").strip().lower() == "false":
+        return False
+    if WORKSHOP is not None and tags.get("workshop", "").strip().lower() != WORKSHOP.strip().lower():
+        return False
+    return True
 
 # ─────────────────────────────────────────────────────────────────────────────
 
 session = boto3.Session(profile_name=args.profile, region_name=REGION)
 
-# ─── Validate credentials before doing any work ───────────────────────────────
 try:
-    session.client("sts").get_caller_identity()
+    sts = session.client("sts")
+    identity = sts.get_caller_identity()
+    ACCOUNT_ID = identity["Account"]
 except ClientError as e:
     code = e.response["Error"]["Code"]
     if code in ("InvalidClientTokenId", "ExpiredTokenException"):
@@ -142,42 +195,35 @@ except ClientError as e:
         sys.exit(1)
     raise
 
-label = "all student-* resources" if TARGET_USERS is None else f"{len(TARGET_USERS)} user(s)"
-print(f"\n{'[DRY RUN] ' if DRY_RUN else '[DELETING] '}Target: {label}")
-print(f"Region: {REGION}\n")
+scope_bits = []
+if TARGET_USERS is not None:
+    scope_bits.append(f"{len(TARGET_USERS)} named student(s)")
+if WORKSHOP is not None:
+    scope_bits.append(f"workshop={WORKSHOP}")
+scope_label = " + ".join(scope_bits) if scope_bits else "entire account/region (no name or workshop filter)"
 
-# ─── Pre-populate tag-discovered resources ───────────────────────────────────
-# Resource Groups Tagging API: returns ARNs of any resource tagged
-# student=<slug>. We bucket them by service so each section below can match
-# against the right set in addition to its name-based filter.
-print("── Tag-based discovery (student=<slug> tag) ──────────────────────")
-rgt = session.client("resourcegroupstaggingapi")
-tag_filter = (
-    [{"Key": "student", "Values": TARGET_USERS}]
-    if TARGET_USERS is not None
-    else [{"Key": "student"}]
-)
-try:
-    paginator = rgt.get_paginator("get_resources")
-    for page in paginator.paginate(TagFilters=tag_filter):
-        for r in page["ResourceTagMappingList"]:
-            arn = r["ResourceARN"]
-            service = arn.split(":", 5)[2]
-            tagged_by_service.setdefault(service, set()).add(_tail_resource(arn))
-    total = sum(len(v) for v in tagged_by_service.values())
-    print(f"  Found {total} tagged resource(s) across {len(tagged_by_service)} service(s).")
-    for svc, names in sorted(tagged_by_service.items()):
-        print(f"    {svc}: {len(names)}")
-except ClientError as e:
-    print(f"  [WARN] tag query failed — continuing with name-based discovery only: {e}")
+print(f"\n{'[DRY RUN] ' if DRY_RUN else '[DELETING] '}Region: {REGION}")
+print(f"Scope: {scope_label}")
+print("Rule: delete everything found UNLESS tagged autodelete=false\n")
 
+if not DRY_RUN and WORKSHOP is None and TARGET_USERS is None:
+    print("!" * 60)
+    print("! No --workshop filter set. This will sweep the ENTIRE account/region,")
+    print("! not just this workshop's resources. This account is known to hold")
+    print("! resources from other projects. Strongly recommended: re-run with")
+    print("! --workshop full-stack. Proceeding in 10 seconds, Ctrl+C to abort.")
+    print("!" * 60)
+    import time
+    time.sleep(10)
 
 deleted = []
 errors  = []
 
-def log(resource_type, name, action="would delete"):
-    label = action if DRY_RUN else "deleted"
+def log(resource_type, name):
     print(f"  {'[DRY RUN]' if DRY_RUN else '[DELETED]'} {resource_type}: {name}")
+
+def log_protected(resource_type, name):
+    print(f"  [PROTECTED: autodelete=false] {resource_type}: {name}")
 
 EXPIRED_TOKEN_CODES = {"InvalidClientTokenId", "ExpiredTokenException", "RequestExpired"}
 
@@ -185,7 +231,7 @@ def record_error(resource_type, name, e):
     code = e.response["Error"]["Code"] if hasattr(e, "response") else ""
     if code in EXPIRED_TOKEN_CODES:
         print(f"\n[FATAL] AWS credentials expired mid-run.")
-        print(f"  Refresh your credentials and re-run — already-deleted users will be skipped automatically.")
+        print(f"  Refresh your credentials and re-run.")
         print(f"  Stopped at: {resource_type} '{name}'\n")
         sys.exit(1)
     msg = f"{resource_type} '{name}': {e}"
@@ -196,39 +242,62 @@ def record_error(resource_type, name, e):
 
 print("── Lambda Functions ─────────────────────────────────────────────")
 lam = session.client("lambda")
+deleted_function_names = set()
+
 paginator = lam.get_paginator("list_functions")
 for page in paginator.paginate():
     for fn in page["Functions"]:
         name = fn["FunctionName"]
-        if is_target_resource("lambda", name):
-            log("Lambda", name)
-            deleted.append(("Lambda", name))
-            if not DRY_RUN:
-                try:
-                    lam.delete_function(FunctionName=name)
-                except ClientError as e:
-                    record_error("Lambda", name, e)
+        if not name_matches_target(name):
+            continue
+        try:
+            tags = lam.list_tags(Resource=fn["FunctionArn"]).get("Tags", {})
+        except ClientError as e:
+            record_error("Lambda (tags)", name, e)
+            continue
+        if not eligible_for_deletion(tags):
+            log_protected("Lambda", name)
+            continue
+        log("Lambda", name)
+        deleted.append(("Lambda", name))
+        deleted_function_names.add(name)
+        if not DRY_RUN:
+            try:
+                lam.delete_function(FunctionName=name)
+            except ClientError as e:
+                record_error("Lambda", name, e)
 
 # ─── CloudWatch Log Groups ────────────────────────────────────────────────────
+# Checked on their own tags (Terraform-created log groups inherit default_tags).
+# Auto-created log groups (Lambda made one on first invoke without Terraform
+# managing it) have no tags at all, so they're swept too under the default
+# rule unless the associated Lambda's log group was tagged autodelete=false.
 
 print("\n── CloudWatch Log Groups ────────────────────────────────────────")
 logs = session.client("logs")
 paginator = logs.get_paginator("describe_log_groups")
-log_prefix = f"/aws/lambda/{PREFIX}"
-for page in paginator.paginate(logGroupNamePrefix=log_prefix):
-    for group in page["logGroups"]:
-        name = group["logGroupName"]
-        # Strip the /aws/lambda/ prefix before checking targeting
-        fn_name = name.removeprefix("/aws/lambda/")
-        if not is_target_resource("lambda", fn_name):
-            continue
-        log("Log Group", name)
-        deleted.append(("Log Group", name))
-        if not DRY_RUN:
+for prefix in ("/aws/lambda/", "/aws/apigateway/"):
+    for page in paginator.paginate(logGroupNamePrefix=prefix):
+        for group in page["logGroups"]:
+            name = group["logGroupName"]
+            fn_or_api_name = name[len(prefix):]
+            if not name_matches_target(fn_or_api_name):
+                continue
             try:
-                logs.delete_log_group(logGroupName=name)
+                tags = logs.list_tags_log_group(logGroupName=name).get("tags", {})
             except ClientError as e:
-                record_error("Log Group", name, e)
+                record_error("Log Group (tags)", name, e)
+                continue
+            if not eligible_for_deletion(tags):
+                log_protected("Log Group", name)
+                continue
+            log("Log Group", name)
+            deleted.append(("Log Group", name))
+            if not DRY_RUN:
+                try:
+                    logs.delete_log_group(logGroupName=name)
+                except ClientError as e:
+                    record_error("Log Group", name, e)
 
 # ─── API Gateway HTTP APIs ────────────────────────────────────────────────────
 
@@ -237,49 +306,64 @@ apigw = session.client("apigatewayv2")
 response = apigw.get_apis()
 for api in response.get("Items", []):
     name = api["Name"]
-    if is_target_resource("apigateway", name) or api["ApiId"] in tagged_by_service.get("apigateway", set()):
-        log("API Gateway", f"{name} ({api['ApiId']})")
-        deleted.append(("API Gateway", name))
-        if not DRY_RUN:
-            try:
-                apigw.delete_api(ApiId=api["ApiId"])
-            except ClientError as e:
-                record_error("API Gateway", name, e)
+    if not name_matches_target(name):
+        continue
+    tags = api.get("Tags", {})
+    if not eligible_for_deletion(tags):
+        log_protected("API Gateway", f"{name} ({api['ApiId']})")
+        continue
+    log("API Gateway", f"{name} ({api['ApiId']})")
+    deleted.append(("API Gateway", name))
+    if not DRY_RUN:
+        try:
+            apigw.delete_api(ApiId=api["ApiId"])
+        except ClientError as e:
+            record_error("API Gateway", name, e)
 
 # ─── CloudFront Distributions ────────────────────────────────────────────────
-# CloudFront distributions must be DISABLED, fully PROPAGATED (~5–15 min), then
+# CloudFront distributions must be DISABLED, fully PROPAGATED (~5-15 min), then
 # DELETED. Run before S3 so the bucket policy + OAC can come down cleanly.
-# Filter: any Origin whose Id matches the student prefix.
 
 print("\n── CloudFront Distributions ────────────────────────────────────")
 cf = session.client("cloudfront")
 paginator = cf.get_paginator("list_distributions")
 
-def _origin_matches(origin):
-    """Match an origin by Id OR by the bucket portion of an S3 DomainName.
-    Terraform often sets Origin.Id to a generic label (e.g. "s3-frontend"),
-    so we also check the S3 bucket FQDN: <bucket>.s3.<region>.amazonaws.com."""
-    if is_targeted(origin.get("Id", "")):
-        return True
-    dn = origin.get("DomainName", "")
-    if ".s3." in dn:
-        bucket = dn.split(".s3.", 1)[0]
-        if is_targeted(bucket):
-            return True
-    return False
+surviving_dist_ids = set()
+to_wait = []
 
-to_wait = []  # distribution IDs that need waiter + delete after disable
 for page in paginator.paginate():
     items = (page.get("DistributionList") or {}).get("Items") or []
     for dist in items:
         dist_id = dist["Id"]
         origins = (dist.get("Origins") or {}).get("Items") or []
-        origin_match = any(_origin_matches(o) for o in origins)
-        tag_match    = dist_id in tagged_by_service.get("cloudfront", set())
-        if not (origin_match or tag_match):
+        origin_summary = origins[0].get("DomainName") if origins else "<no-origin>"
+
+        # Name-filter (if a student filter is set) by origin bucket name.
+        if TARGET_USERS is not None:
+            origin_owned = False
+            for o in origins:
+                dn = o.get("DomainName", "")
+                bucket = dn.split(".s3.", 1)[0] if ".s3." in dn else o.get("Id", "")
+                if name_matches_target(bucket):
+                    origin_owned = True
+                    break
+            if not origin_owned:
+                surviving_dist_ids.add(dist_id)
+                continue
+
+        dist_arn = f"arn:aws:cloudfront::{ACCOUNT_ID}:distribution/{dist_id}"
+        try:
+            tags = cf.list_tags_for_resource(Resource=dist_arn).get("Tags", {}).get("Items", [])
+        except ClientError as e:
+            record_error("CloudFront Distribution (tags)", dist_id, e)
+            surviving_dist_ids.add(dist_id)
             continue
 
-        origin_summary = origins[0].get("DomainName") or origins[0].get("Id", "<no-origin>") if origins else "<no-origin>"
+        if not eligible_for_deletion(tags):
+            log_protected("CloudFront Distribution", f"{dist_id} (origin: {origin_summary})")
+            surviving_dist_ids.add(dist_id)
+            continue
+
         log("CloudFront Distribution", f"{dist_id} (origin: {origin_summary})")
         deleted.append(("CloudFront Distribution", dist_id))
 
@@ -299,11 +383,10 @@ for page in paginator.paginate():
             except ClientError as e:
                 record_error("CloudFront Distribution (disable)", dist_id, e)
         else:
-            # Already disabled — may or may not be Deployed yet
             to_wait.append(dist_id)
 
 if to_wait and not DRY_RUN:
-    print(f"  Waiting for {len(to_wait)} distribution(s) to reach Deployed state (5–15 min, in parallel)...")
+    print(f"  Waiting for {len(to_wait)} distribution(s) to reach Deployed state (5-15 min, in parallel)...")
 
     def wait_and_delete(d_id):
         waiter = cf.get_waiter("distribution_deployed")
@@ -328,17 +411,34 @@ if to_wait and not DRY_RUN:
                 print(f"  [DELETED] CloudFront Distribution: {d_id}")
 
 # ─── CloudFront Origin Access Controls (OAC) ─────────────────────────────────
-# OACs become orphaned once their distribution is deleted. Filter by name.
+# OACs have no tagging API at all. An OAC is only ever a helper object for a
+# distribution, so the safe rule is: delete it if no surviving (non-deleted,
+# non-protected) distribution references it. Deleted-distribution OACs become
+# orphaned; protected-distribution OACs are excluded via surviving_dist_ids.
 
 print("\n── CloudFront Origin Access Controls ───────────────────────────")
+referenced_oac_ids = set()
+paginator = cf.get_paginator("list_distributions")
+for page in paginator.paginate():
+    items = (page.get("DistributionList") or {}).get("Items") or []
+    for dist in items:
+        if dist["Id"] not in surviving_dist_ids:
+            continue
+        origins = (dist.get("Origins") or {}).get("Items") or []
+        for o in origins:
+            oac_id = o.get("OriginAccessControlId")
+            if oac_id:
+                referenced_oac_ids.add(oac_id)
+
 paginator = cf.get_paginator("list_origin_access_controls")
 for page in paginator.paginate():
     items = (page.get("OriginAccessControlList") or {}).get("Items") or []
     for oac in items:
         name = oac["Name"]
         oac_id = oac["Id"]
-        # Match by name OR by tag-discovered OAC id (the tagging API returns OACs by id, not name)
-        if not is_targeted(name) and oac_id not in tagged_by_service.get("cloudfront", set()):
+        if oac_id in referenced_oac_ids:
+            continue
+        if TARGET_USERS is not None and not name_matches_target(name):
             continue
         log("OAC", f"{name} ({oac_id})")
         deleted.append(("OAC", name))
@@ -357,32 +457,80 @@ s3_resource = session.resource("s3")
 response = s3.list_buckets()
 for bucket in response.get("Buckets", []):
     name = bucket["Name"]
-    if is_target_resource("s3", name):
-        log("S3 Bucket", name)
-        deleted.append(("S3 Bucket", name))
+    if is_protected_by_name(name):
+        continue
+    if not name_matches_target(name):
+        continue
+    try:
+        tags = s3.get_bucket_tagging(Bucket=name).get("TagSet", [])
+    except ClientError as e:
+        code = e.response["Error"]["Code"]
+        if code == "NoSuchTagSet":
+            tags = []
+        elif code in ("NoSuchBucket", "AccessDenied"):
+            # bucket in another region, or we can't read it: skip rather than guess
+            continue
+        else:
+            record_error("S3 Bucket (tags)", name, e)
+            continue
+    if not eligible_for_deletion(tags):
+        log_protected("S3 Bucket", name)
+        continue
+    log("S3 Bucket", name)
+    deleted.append(("S3 Bucket", name))
+    if not DRY_RUN:
+        try:
+            b = s3_resource.Bucket(name)
+            b.object_versions.delete()
+            b.objects.delete()
+            b.delete()
+        except ClientError as e:
+            record_error("S3 Bucket", name, e)
+
+# ─── DynamoDB Tables ──────────────────────────────────────────────────────────
+
+print("\n── DynamoDB Tables ──────────────────────────────────────────────")
+ddb = session.client("dynamodb")
+paginator = ddb.get_paginator("list_tables")
+for page in paginator.paginate():
+    for name in page["TableNames"]:
+        if not name_matches_target(name):
+            continue
+        try:
+            table_arn = ddb.describe_table(TableName=name)["Table"]["TableArn"]
+            tags = ddb.list_tags_of_resource(ResourceArn=table_arn).get("Tags", [])
+        except ClientError as e:
+            record_error("DynamoDB Table (tags)", name, e)
+            continue
+        if not eligible_for_deletion(tags):
+            log_protected("DynamoDB Table", name)
+            continue
+        log("DynamoDB Table", name)
+        deleted.append(("DynamoDB Table", name))
         if not DRY_RUN:
             try:
-                # Empty bucket first (required before deletion)
-                b = s3_resource.Bucket(name)
-                b.object_versions.delete()
-                b.objects.delete()
-                b.delete()
+                ddb.delete_table(TableName=name)
             except ClientError as e:
-                record_error("S3 Bucket", name, e)
+                record_error("DynamoDB Table", name, e)
 
 # ─── EC2 Instances ────────────────────────────────────────────────────────────
 
 print("\n── EC2 Instances ────────────────────────────────────────────────")
 ec2 = session.client("ec2")
 response = ec2.describe_instances(Filters=[
-    {"Name": "tag:Name", "Values": [f"{PREFIX}*"]},
     {"Name": "instance-state-name", "Values": ["pending", "running", "stopped", "stopping"]},
 ])
 instance_ids = []
 for reservation in response["Reservations"]:
     for instance in reservation["Instances"]:
         iid  = instance["InstanceId"]
-        name = next((t["Value"] for t in instance.get("Tags", []) if t["Key"] == "Name"), iid)
+        tags_list = instance.get("Tags", [])
+        name = next((t["Value"] for t in tags_list if t["Key"] == "Name"), iid)
+        if not name_matches_target(name):
+            continue
+        if not eligible_for_deletion(tags_list):
+            log_protected("EC2 Instance", f"{name} ({iid})")
+            continue
         log("EC2 Instance", f"{name} ({iid})")
         deleted.append(("EC2 Instance", name))
         instance_ids.append(iid)
@@ -403,29 +551,43 @@ print("\n── EC2 Key Pairs ────────────────�
 response = ec2.describe_key_pairs()
 for kp in response["KeyPairs"]:
     name = kp["KeyName"]
-    if is_target_resource("ec2", name):
-        log("Key Pair", name)
-        deleted.append(("Key Pair", name))
-        if not DRY_RUN:
-            try:
-                ec2.delete_key_pair(KeyName=name)
-            except ClientError as e:
-                record_error("Key Pair", name, e)
+    tags = kp.get("Tags", [])
+    if not looks_like_workshop_resource(name, tags):
+        continue
+    if not name_matches_target(name):
+        continue
+    if not eligible_for_deletion(tags):
+        log_protected("Key Pair", name)
+        continue
+    log("Key Pair", name)
+    deleted.append(("Key Pair", name))
+    if not DRY_RUN:
+        try:
+            ec2.delete_key_pair(KeyName=name)
+        except ClientError as e:
+            record_error("Key Pair", name, e)
 
 # ─── Security Groups ─────────────────────────────────────────────────────────
 
 print("\n── Security Groups ──────────────────────────────────────────────")
-response = ec2.describe_security_groups(Filters=[
-    {"Name": "group-name", "Values": [f"{PREFIX}*"]},
-])
+response = ec2.describe_security_groups()
 for sg in response["SecurityGroups"]:
     name = sg["GroupName"]
     sgid = sg["GroupId"]
+    if name == "default":
+        continue  # never touch the VPC default security group
+    tags = sg.get("Tags", [])
+    if not looks_like_workshop_resource(name, tags):
+        continue
+    if not name_matches_target(name):
+        continue
+    if not eligible_for_deletion(tags):
+        log_protected("Security Group", f"{name} ({sgid})")
+        continue
     log("Security Group", f"{name} ({sgid})")
     deleted.append(("Security Group", name))
     if not DRY_RUN:
         try:
-            # Step 1: detach any network interfaces still using this SG
             enis = ec2.describe_network_interfaces(Filters=[
                 {"Name": "group-id", "Values": [sgid]}
             ])["NetworkInterfaces"]
@@ -433,123 +595,35 @@ for sg in response["SecurityGroups"]:
                 eni_id = eni["NetworkInterfaceId"]
                 attachment = eni.get("Attachment", {})
                 attach_id  = attachment.get("AttachmentId")
-                # Only detach non-primary attachments (index != 0)
                 if attach_id and attachment.get("DeviceIndex", 0) != 0:
                     try:
                         ec2.detach_network_interface(AttachmentId=attach_id, Force=True)
                     except ClientError:
                         pass
-                # Delete the ENI if it's not in-use by a running instance
                 if eni.get("Status") != "in-use":
                     try:
                         ec2.delete_network_interface(NetworkInterfaceId=eni_id)
                     except ClientError:
                         pass
 
-            # Step 2: revoke all ingress rules (some reference other SGs)
             if sg.get("IpPermissions"):
-                ec2.revoke_security_group_ingress(
-                    GroupId=sgid, IpPermissions=sg["IpPermissions"]
-                )
-            # Step 3: revoke all egress rules
+                ec2.revoke_security_group_ingress(GroupId=sgid, IpPermissions=sg["IpPermissions"])
             if sg.get("IpPermissionsEgress"):
-                ec2.revoke_security_group_egress(
-                    GroupId=sgid, IpPermissions=sg["IpPermissionsEgress"]
-                )
+                ec2.revoke_security_group_egress(GroupId=sgid, IpPermissions=sg["IpPermissionsEgress"])
 
-            # Step 4: delete the security group
             ec2.delete_security_group(GroupId=sgid)
 
         except ClientError as e:
             record_error("Security Group", name, e)
 
-# ─── IAM Roles (Lambda execution roles) ──────────────────────────────────────
-
-print("\n── IAM Roles ────────────────────────────────────────────────────")
-iam = session.client("iam")
-paginator = iam.get_paginator("list_roles")
-for page in paginator.paginate():
-    for role in page["Roles"]:
-        name = role["RoleName"]
-        if is_target_resource("iam", name):
-            log("IAM Role", name)
-            deleted.append(("IAM Role", name))
-            if not DRY_RUN:
-                try:
-                    # Detach all managed policies first
-                    attached = iam.list_attached_role_policies(RoleName=name)["AttachedPolicies"]
-                    for p in attached:
-                        iam.detach_role_policy(RoleName=name, PolicyArn=p["PolicyArn"])
-                    # Delete inline policies
-                    inline = iam.list_role_policies(RoleName=name)["PolicyNames"]
-                    for p in inline:
-                        iam.delete_role_policy(RoleName=name, PolicyName=p)
-                    iam.delete_role(RoleName=name)
-                except ClientError as e:
-                    record_error("IAM Role", name, e)
-
-# ─── IAM Users ───────────────────────────────────────────────────────────────
-# Deletes the IAM console user accounts for each student.
-# Must run AFTER roles are cleaned up to avoid confusion with user vs role names.
-# IAM users require stripping all attachments before deletion:
-#   access keys → MFA devices → group memberships → policies → login profile → user
-
-print("\n── IAM Users ────────────────────────────────────────────────────")
-paginator = iam.get_paginator("list_users")
-for page in paginator.paginate():
-    for user in page["Users"]:
-        name = user["UserName"]
-        if not is_iam_user_targeted(name):
-            continue
-        log("IAM User", name)
-        deleted.append(("IAM User", name))
-        if not DRY_RUN:
-            try:
-                # 1. Delete access keys
-                for key in iam.list_access_keys(UserName=name)["AccessKeyMetadata"]:
-                    iam.delete_access_key(UserName=name, AccessKeyId=key["AccessKeyId"])
-
-                # 2. Deactivate and delete MFA devices
-                for mfa in iam.list_mfa_devices(UserName=name)["MFADevices"]:
-                    iam.deactivate_mfa_device(UserName=name, SerialNumber=mfa["SerialNumber"])
-                    try:
-                        iam.delete_virtual_mfa_device(SerialNumber=mfa["SerialNumber"])
-                    except ClientError:
-                        pass  # physical MFA — skip
-
-                # 3. Remove from all groups
-                for group in iam.list_groups_for_user(UserName=name)["Groups"]:
-                    iam.remove_user_from_group(GroupName=group["GroupName"], UserName=name)
-
-                # 4. Detach managed policies
-                for policy in iam.list_attached_user_policies(UserName=name)["AttachedPolicies"]:
-                    iam.detach_user_policy(UserName=name, PolicyArn=policy["PolicyArn"])
-
-                # 5. Delete inline policies
-                for policy_name in iam.list_user_policies(UserName=name)["PolicyNames"]:
-                    iam.delete_user_policy(UserName=name, PolicyName=policy_name)
-
-                # 6. Delete console login profile (if exists)
-                try:
-                    iam.delete_login_profile(UserName=name)
-                except ClientError as e:
-                    if e.response["Error"]["Code"] != "NoSuchEntity":
-                        raise
-
-                # 7. Delete the user
-                iam.delete_user(UserName=name)
-
-            except ClientError as e:
-                record_error("IAM User", name, e)
-
 # ─── Summary ─────────────────────────────────────────────────────────────────
 
 print("\n" + "─" * 60)
 if DRY_RUN:
-    print(f"DRY RUN complete — {len(deleted)} resource(s) would be deleted.")
+    print(f"DRY RUN complete: {len(deleted)} resource(s) would be deleted.")
     print("Run with --delete to actually remove them.\n")
 else:
-    print(f"Done — {len(deleted)} resource(s) deleted.")
+    print(f"Done: {len(deleted)} resource(s) deleted.")
 
 if errors:
     print(f"\n{len(errors)} error(s):")
