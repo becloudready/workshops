@@ -1,0 +1,57 @@
+.navbar {
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: #172033;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  text-decoration: none;
+}
+
+.brand-mark {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #172033;
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #667085;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 180ms ease;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: #5865f2;
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    height: 74px;
+  }
+
+  .nav-link {
+    font-size: 0;
+  }
+
+  .nav-link span {
+    font-size: 20px;
+  }
+}

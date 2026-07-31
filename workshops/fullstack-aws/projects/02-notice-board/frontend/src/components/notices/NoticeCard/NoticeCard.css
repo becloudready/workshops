@@ -1,0 +1,37 @@
+.notice-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 24px;
+  border: 1px solid #e3e6f0;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(40, 52, 89, 0.06);
+}
+
+.notice-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.notice-card-header h3 {
+  color: #172033;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.notice-card-date {
+  color: #98a2b3;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.notice-card-message {
+  color: #667085;
+  font-size: 15px;
+  line-height: 1.6;
+}

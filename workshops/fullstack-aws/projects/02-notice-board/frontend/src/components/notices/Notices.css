@@ -1,0 +1,29 @@
+.notices-page {
+  flex: 1;
+  padding: 56px 0 100px;
+}
+
+.notices-header {
+  margin-bottom: 36px;
+}
+
+.notices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.notices-status {
+  color: #667085;
+  font-size: 15px;
+}
+
+.notices-error {
+  color: #d64545;
+}
+
+@media (max-width: 480px) {
+  .notices-page {
+    padding: 40px 0 75px;
+  }
+}
