@@ -172,6 +172,102 @@ resource "aws_iam_user_policy" "cleanup" {
         ]
         Resource = "*"
       },
+      # ECS / Fargate
+      {
+        Sid    = "ECSCleanup"
+        Effect = "Allow"
+        Action = [
+          "ecs:ListClusters",
+          "ecs:DescribeClusters",
+          "ecs:DeleteCluster",
+          "ecs:ListServices",
+          "ecs:DescribeServices",
+          "ecs:DeleteService",
+          "ecs:UpdateService",
+          "ecs:ListTaskDefinitions",
+          "ecs:DeregisterTaskDefinition",
+          "ecs:ListTagsForResource",
+        ]
+        Resource = "*"
+      },
+      # ECR
+      {
+        Sid    = "ECRCleanup"
+        Effect = "Allow"
+        Action = [
+          "ecr:DescribeRepositories",
+          "ecr:DeleteRepository",
+          "ecr:ListTagsForResource",
+          "ecr:BatchDeleteImage",
+          "ecr:ListImages",
+        ]
+        Resource = "*"
+      },
+      # DocumentDB
+      {
+        Sid    = "DocDBCleanup"
+        Effect = "Allow"
+        Action = [
+          "rds:DescribeDBClusters",
+          "rds:DeleteDBCluster",
+          "rds:DescribeDBInstances",
+          "rds:DeleteDBInstance",
+          "rds:ListTagsForResource",
+          "rds:DescribeDBSubnetGroups",
+          "rds:DeleteDBSubnetGroup",
+          "rds:DescribeDBClusterParameterGroups",
+          "rds:DeleteDBClusterParameterGroup",
+        ]
+        Resource = "*"
+      },
+      # Secrets Manager
+      {
+        Sid    = "SecretsManagerCleanup"
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:ListSecrets",
+          "secretsmanager:DescribeSecret",
+          "secretsmanager:DeleteSecret",
+          "secretsmanager:ListSecretVersionIds",
+          "secretsmanager:TagResource",
+        ]
+        Resource = "*"
+      },
+      # ALB / ELBv2
+      {
+        Sid    = "ALBCleanup"
+        Effect = "Allow"
+        Action = [
+          "elasticloadbalancing:DescribeLoadBalancers",
+          "elasticloadbalancing:DeleteLoadBalancer",
+          "elasticloadbalancing:DescribeTargetGroups",
+          "elasticloadbalancing:DeleteTargetGroup",
+          "elasticloadbalancing:DescribeListeners",
+          "elasticloadbalancing:DeleteListener",
+          "elasticloadbalancing:DescribeTags",
+        ]
+        Resource = "*"
+      },
+      # VPC networking (NAT GWs, EIPs already partly covered by EC2 above)
+      {
+        Sid    = "VPCCleanup"
+        Effect = "Allow"
+        Action = [
+          "ec2:DescribeVpcs",
+          "ec2:DeleteVpc",
+          "ec2:DescribeSubnets",
+          "ec2:DeleteSubnet",
+          "ec2:DescribeSecurityGroups",
+          "ec2:DeleteSecurityGroup",
+          "ec2:DescribeInternetGateways",
+          "ec2:DetachInternetGateway",
+          "ec2:DeleteInternetGateway",
+          "ec2:DescribeRouteTables",
+          "ec2:DeleteRouteTable",
+          "ec2:DisassociateRouteTable",
+        ]
+        Resource = "*"
+      },
     ]
   })
 }
