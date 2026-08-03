@@ -1,0 +1,11 @@
+{
+  "name": "notice-board-lambda-runtime",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongodb": "^7.5.0",
+    "serverless-http": "^4.0.0"
+  }
+}
