@@ -1,0 +1,59 @@
+name: Deploy Notice Board
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'workshops/fullstack-aws/projects/Group2_Allen_Marcos_Addison_Alex/**'
+
+defaults:
+  run:
+    working-directory: workshops/fullstack-aws/projects/Group2_Allen_Marcos_Addison_Alex
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build and deploy backend
+        run: |
+          pip install -r backend/requirements.txt -t backend/_build -q
+          cp backend/lambda_function.py backend/_build/
+          cd backend/_build && zip -r ../lambda.zip . -x '*.pyc' && cd ../..
+          aws lambda update-function-code \
+            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
+            --zip-file fileb://backend/lambda.zip
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build frontend
+        working-directory: workshops/fullstack-aws/projects/Group2_Allen_Marcos_Addison_Alex/frontend
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy frontend to S3
+        run: |
+          aws s3 sync frontend/dist/ s3://${{ secrets.S3_BUCKET }}/ --delete
+
+      - name: Invalidate CloudFront cache
+        if: ${{ secrets.CF_DISTRIBUTION_ID != '' }}
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CF_DISTRIBUTION_ID }} \
+            --paths "/*"
