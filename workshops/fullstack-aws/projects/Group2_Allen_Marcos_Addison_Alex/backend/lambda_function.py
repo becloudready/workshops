@@ -92,10 +92,11 @@ def react_notice(notice_id, data):
     except InvalidId:
         return response(400, {"error": f"Invalid notice id: {notice_id}"})
 
-    result = get_collection().update_one({"_id": object_id}, {"$inc": {f"reactions.{reaction}": 1}})
+    delta = -1 if data.get("remove") else 1
+    result = get_collection().update_one({"_id": object_id}, {"$inc": {f"reactions.{reaction}": delta}})
     if result.matched_count == 0:
         return response(404, {"error": "Notice not found"})
-    return response(200, {"id": notice_id, "reaction": reaction})
+    return response(200, {"id": notice_id, "reaction": reaction, "removed": delta < 0})
 
 
 def delete_notice(notice_id):

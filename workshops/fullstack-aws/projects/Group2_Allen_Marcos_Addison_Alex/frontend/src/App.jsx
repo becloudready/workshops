@@ -7,11 +7,22 @@ const REACTIONS = [
   { key: 'fire', emoji: '🔥' },
 ]
 
+const REACTED_STORAGE_KEY = 'noticeboard_reacted'
+
+function loadReacted() {
+  try {
+    return JSON.parse(localStorage.getItem(REACTED_STORAGE_KEY)) || {}
+  } catch {
+    return {}
+  }
+}
+
 export default function App() {
   const [notices, setNotices] = useState([])
   const [error, setError] = useState(null)
   const [name, setName] = useState('')
   const [message, setMessage] = useState('')
+  const [reacted, setReacted] = useState(loadReacted)
 
   const loadNotices = () => {
     getNotices()
@@ -47,8 +58,15 @@ export default function App() {
   }
 
   const handleReact = async (id, reaction) => {
+    const alreadyReacted = reacted[id]?.[reaction]
     try {
-      await reactToNotice(id, reaction)
+      await reactToNotice(id, reaction, alreadyReacted)
+      const next = {
+        ...reacted,
+        [id]: { ...reacted[id], [reaction]: !alreadyReacted },
+      }
+      setReacted(next)
+      localStorage.setItem(REACTED_STORAGE_KEY, JSON.stringify(next))
       loadNotices()
     } catch (err) {
       setError(err.message)
@@ -85,7 +103,11 @@ export default function App() {
             <p style={{ margin: '0.5rem 0 0' }}>{n.message}</p>
             <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.75rem' }}>
               {REACTIONS.map(({ key, emoji }) => (
-                <button key={key} onClick={() => handleReact(n.id, key)}>
+                <button
+                  key={key}
+                  onClick={() => handleReact(n.id, key)}
+                  style={{ background: reacted[n.id]?.[key] ? '#cde7ff' : undefined }}
+                >
                   {emoji} {n.reactions?.[key] || 0}
                 </button>
               ))}
