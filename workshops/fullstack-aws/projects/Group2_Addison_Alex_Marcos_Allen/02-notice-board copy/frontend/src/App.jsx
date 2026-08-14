@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getNotices, createNotice, deleteNotice } from './api'
+import { getNotices, createNotice, deleteNotice, voteNotice } from './api'
 
 export default function App() {
   const [notices, setNotices] = useState([])
@@ -40,6 +40,15 @@ export default function App() {
     }
   }
 
+  const handleVote = async (id, type) => {
+    try {
+      const data = await voteNotice(id, type)
+      setNotices((prev) => prev.map((n) => (n.id === id ? data.notice : n)))
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
   return (
     <div style={{ maxWidth: 600, margin: '2rem auto', fontFamily: 'sans-serif' }}>
       <h1>Notice Board</h1>
@@ -68,7 +77,11 @@ export default function App() {
           <li key={n.id} style={{ border: '1px solid #ddd', borderRadius: 8, padding: '1rem', marginBottom: '0.75rem' }}>
             <strong>{n.name}</strong>
             <p style={{ margin: '0.5rem 0 0' }}>{n.message}</p>
-            <button onClick={() => handleDelete(n.id)} style={{ marginTop: '0.5rem' }}>Delete</button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem' }}>
+              <button onClick={() => handleVote(n.id, 'up')}>👍 {n.likes || 0}</button>
+              <button onClick={() => handleVote(n.id, 'down')}>👎 {n.dislikes || 0}</button>
+              <button onClick={() => handleDelete(n.id)}>Delete</button>
+            </div>
           </li>
         ))}
       </ul>

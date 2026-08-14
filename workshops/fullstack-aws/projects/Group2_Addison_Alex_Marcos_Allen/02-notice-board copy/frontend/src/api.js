@@ -19,3 +19,12 @@ export async function deleteNotice(id) {
   const res = await fetch(`${API_URL}/notices/${id}`, { method: 'DELETE' })
   return res.json()
 }
+
+export async function voteNotice(id, type) {
+  const res = await fetch(`${API_URL}/notices/${id}/vote`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type }),
+  })
+  return res.json()
+}
