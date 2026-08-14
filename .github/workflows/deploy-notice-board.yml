@@ -2,29 +2,22 @@ name: Deploy Notice Board
 
 on:
   push:
-    branches: [master]
+    branches:
+      - main
     paths:
-      - '.github/workflows/deploy-notice-board.yml'
-      - 'workshops/fullstack-aws/projects/02-notice-board/**'
-  workflow_dispatch: {}
-
-env:
-  PROJECT_DIR: workshops/fullstack-aws/projects/02-notice-board
+      - 'workshops/fullstack-aws/projects/Group2_Addison_Alex_Marcos_Allen/02-notice-board copy/**'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: workshops/fullstack-aws/projects/Group2_Addison_Alex_Marcos_Allen/02-notice-board copy
+
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -33,33 +26,35 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Build Lambda package
-        working-directory: ${{ env.PROJECT_DIR }}
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build Lambda zip
         run: python build.py
 
-      - name: Deploy backend
-        working-directory: ${{ env.PROJECT_DIR }}
+      - name: Deploy Lambda code
         run: |
           aws lambda update-function-code \
-            --function-name "${{ secrets.LAMBDA_FUNCTION_NAME }}" \
+            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
             --zip-file fileb://backend/lambda.zip
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
       - name: Install frontend dependencies
-        working-directory: ${{ env.PROJECT_DIR }}/frontend
+        working-directory: workshops/fullstack-aws/projects/Group2_Addison_Alex_Marcos_Allen/02-notice-board copy/frontend
         run: npm install
 
       - name: Build frontend
-        working-directory: ${{ env.PROJECT_DIR }}/frontend
+        working-directory: workshops/fullstack-aws/projects/Group2_Addison_Alex_Marcos_Allen/02-notice-board copy/frontend
+        run: npm run build
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
-        run: npm run build
 
-      - name: Deploy frontend
-        working-directory: ${{ env.PROJECT_DIR }}/frontend
-        run: aws s3 sync dist/ "s3://${{ secrets.S3_BUCKET }}/" --delete
-
-      - name: Invalidate CloudFront cache
+      - name: Upload frontend to S3
         run: |
-          aws cloudfront create-invalidation \
-            --distribution-id "${{ secrets.CF_DISTRIBUTION_ID }}" \
-            --paths "/*"
+          aws s3 sync "frontend/dist/" "s3://${{ secrets.S3_BUCKET }}/" --delete
