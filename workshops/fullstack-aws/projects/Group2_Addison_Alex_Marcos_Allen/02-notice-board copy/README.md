@@ -28,4 +28,5 @@ A full-stack notice board application: React frontend, Python Lambda backend, Mo
 |--------|------|-------------|
 | GET | `/notices` | Return all notices |
 | POST | `/notices` | Create a notice `{ "name": "...", "message": "..." }` |
+| POST | `/notices/{id}/vote` | Thumbs up/down a notice `{ "type": "up" \| "down" }` |
 | DELETE | `/notices/{id}` | Delete a notice by ID |
