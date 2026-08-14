@@ -1,8 +1,8 @@
-name: Deploy Notice Board
+name: Deploy Notice Board (Group2 Allen Marcos Addison Alex)
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
     paths:
       - 'workshops/fullstack-aws/projects/Group2_Allen_Marcos_Addison_Alex/**'
 
