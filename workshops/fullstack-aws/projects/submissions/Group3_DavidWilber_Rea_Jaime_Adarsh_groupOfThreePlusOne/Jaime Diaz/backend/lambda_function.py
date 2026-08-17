@@ -51,9 +51,10 @@ def lambda_handler(event, context):
 
 
 def get_notices():
-    notices = list(get_collection().find({}, {"_id": 1, "name": 1, "message": 1, "created_at": 1}))
+    notices = list(get_collection().find({}, {"_id": 1, "name": 1, "message": 1, "created_at": 1, "pinned": 1}))
     for n in notices:
         n["id"] = str(n.pop("_id"))
+        n.setdefault("pinned", False)
     return response(200, {"notices": notices})
 
 def create_notice(data):
@@ -65,6 +66,7 @@ def create_notice(data):
     notice = {
         "name": name,
         "message": message,
+        "pinned": bool(data.get("pinned", False)),
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
 
