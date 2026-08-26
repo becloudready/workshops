@@ -1,71 +1,110 @@
-// Main dashboard for authenticated customers.
-// Displays the customer's accounts, balances, transactions, and available customer actions.
-// src/pages/CustomerDashboard.jsx
-//
-// Main dashboard for authenticated customers. Displays the customer's
-// accounts, balances, transaction history, and the transfer form.
-//
-// Currently wired to local mock data (mockData.js) so it renders with no
-// backend running. To connect it to the real API later:
-//   1. import { getMyAccounts, getAccountTransactions, createTransfer } from "../api/api"
-//   2. replace the two useState(mock...) lines below with useEffect calls
-//      that fetch and setAccounts/setTransactions
-//   3. pass createTransfer (mapped to the onSubmit shape) into <TransferForm onSubmit={...} />
-// None of the child components need to change.
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AccountsOverview from "../features/accounts/AccountsOverview";
 import TransactionList from "../features/transactions/TransactionList";
 import TransferForm from "../features/transfers/TransferForm";
-import { mockAccounts, mockTransactions } from "./mockData";
+import { getCurrentUser, getMyAccounts, getAccountTransactions, createTransfer } from "../api/api";
 
-export default function CustomerDashboard({ customerName = "Example" }) {
-  const [accounts, setAccounts] = useState(mockAccounts);
-  const [selectedAccountId, setSelectedAccountId] = useState(mockAccounts[0]?.id ?? null);
+// TEMPORARY: the backend can't yet list "all accounts belonging to the
+// logged-in customer" — see the note in api.js. Until that endpoint
+// exists, list the account ids to show here. Once it exists, delete
+// this and call getMyAccounts() with no arguments.
+const MY_ACCOUNT_IDS = [1, 2];
 
-  const transactions = mockTransactions[selectedAccountId] ?? [];
+export default function CustomerDashboard() {
+  const [customerName, setCustomerName] = useState("");
+  const [accounts, setAccounts] = useState([]);
+  const [selectedAccountId, setSelectedAccountId] = useState(null);
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  function handleTransfer({ fromAccountId, toAccountId, amount }) {
-    // Mock behavior: move the balance locally so the UI feels real.
-    setAccounts((prev) =>
-      prev.map((a) => {
-        if (a.id === fromAccountId) return { ...a, balance: a.balance - amount };
-        if (a.id === toAccountId) return { ...a, balance: a.balance + amount };
-        return a;
-      })
+
+  useEffect(() => {
+    async function load() {//CUstomer name
+      setError("");
+      try {
+        const [user, myAccounts] = await Promise.all([
+          getCurrentUser(),
+          getMyAccounts(MY_ACCOUNT_IDS),
+        ]);
+        setCustomerName(user.first_name);
+        setAccounts(myAccounts);
+        setSelectedAccountId(myAccounts[0]?.id ?? null);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
+  // Whenever the selected account changes, load its transactions.
+  useEffect(() => {
+    if (!selectedAccountId) return;
+    getAccountTransactions(selectedAccountId)
+      .then(setTransactions)
+      .catch((err) => setError(err.message));
+  }, [selectedAccountId]);
+
+  async function handleTransfer({ fromAccountId, toAccountId, amount }) {
+    await createTransfer({ fromAccountId, toAccountId, amount });
+
+    // Refresh balances and the transaction list so the UI reflects the transfer.
+    const refreshedAccounts = await getMyAccounts(MY_ACCOUNT_IDS);
+    setAccounts(refreshedAccounts);
+    const refreshedTransactions = await getAccountTransactions(selectedAccountId);
+    setTransactions(refreshedTransactions);
+  }
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#f4f5f8]">
+        <p className="text-sm text-slate-500">Loading your dashboard…</p>
+      </div>
     );
-    return Promise.resolve();
   }
 
   return (
-    <div className="p-8 bg-[#f4f5f8] min-h-screen">
-      <header className="mb-6">
-        <h1 className="text-xl font-bold text-[#16233f] mb-1">Good afternoon, {customerName}</h1>
-        <p className="text-sm text-slate-500">Here's an overview of your accounts.</p>
-      </header>
+    <div className="flex min-h-screen bg-[#f4f5f8]">
+      <aside className="flex w-64 shrink-0 flex-col bg-[#1254a3] px-5 py-7 text-white max-lg:w-20 max-lg:px-3 max-sm:w-full max-sm:flex-row max-sm:items-center max-sm:justify-between max-sm:px-4 max-sm:py-4">
+      </aside>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-5 items-start">
-        <div className="flex flex-col gap-5">
-          <section className="bg-white rounded-2xl border border-slate-100 p-5">
+      <main className="min-w-0 flex-1 p-8 max-sm:p-4">
+        <header className="mb-6">
+          <h1 className="mb-1 text-xl font-bold text-[#16233f]">Hello, {customerName || "there"}</h1>
+          <p className="text-sm text-slate-500">Here's an overview of your accounts.</p>
+        </header>
+
+        {error && (
+          <p className="mb-4 rounded-lg bg-red-50 px-4 py-2 text-sm text-red-600">{error}</p>
+        )}
+
+        <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[2fr_1fr]">
+          <div className="flex flex-col gap-5">
+            <section id="overview" className="rounded-2xl border border-slate-100 bg-white p-5">
             <h2 className="text-sm font-semibold text-[#16233f] mb-4">Accounts overview</h2>
             <AccountsOverview
               accounts={accounts}
               selectedAccountId={selectedAccountId}
               onSelectAccount={setSelectedAccountId}
             />
-          </section>
+            </section>
 
-          <section className="bg-white rounded-2xl border border-slate-100 p-5">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-semibold text-[#16233f]">Recent transactions</h2>
-              <button className="text-xs font-semibold text-amber-600">View all</button>
-            </div>
-            <TransactionList transactions={transactions} />
-          </section>
+            <section id="transactions" className="rounded-2xl border border-slate-100 bg-white p-5">
+              <div className="mb-3 flex items-center justify-between">
+                <h2 className="text-sm font-semibold text-[#16233f]">Recent transactions</h2>
+                <button className="text-xs font-semibold text-amber-600">View all</button>
+              </div>
+              <TransactionList transactions={transactions} />
+            </section>
+          </div>
+
+          <div id="transfer">
+            <TransferForm accounts={accounts} onSubmit={handleTransfer} />
+          </div>
         </div>
-
-        <TransferForm accounts={accounts} onSubmit={handleTransfer} />
-      </div>
+      </main>
     </div>
   );
 }
