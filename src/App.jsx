@@ -1,7 +1,8 @@
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
-import AuthPage from "./pages/AuthPage";
+import Login from "./pages/Login";
+import Registration from "./pages/Registration";
 import CustomerDashboard from "./pages/CustomerDashboard";
 import TellerDashboard from "./pages/TellerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -9,7 +10,10 @@ import AdminDashboard from "./pages/AdminDashboard";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<AuthPage />} />
+      <Route path="/" element={<Navigate to="/login" replace />} />
+
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Registration />} />
 
       <Route path="/customer" element={<CustomerDashboard />} />
       <Route path="/teller" element={<TellerDashboard />} />
