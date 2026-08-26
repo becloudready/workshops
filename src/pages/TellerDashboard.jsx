@@ -27,53 +27,65 @@ function TellerDashboard() {
   }
 
   return (
-    <div>
-      <h2>Teller Dashboard</h2>
+    <div className="min-h-screen bg-slate-50 p-6">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-slate-900">Teller Dashboard</h1>
+      </div>
 
-      <section>
-        <h3>Find a Customer</h3>
-        <TellerCustomerSearch onSelectCustomer={handleSelectCustomer} />
-      </section>
-
-      {selectedCustomer && (
-        <section>
-          <h3>
-            Accounts — {selectedCustomer.first_name} {selectedCustomer.last_name}
-          </h3>
-          <TellerAccountList
-            key={`${selectedCustomer.id}-${version}`}
-            customer={selectedCustomer}
-            onSelectAccount={setSelectedAccount}
-          />
-          <TellerCreateAccountForm
-            customer={selectedCustomer}
-            onSuccess={handleMutationSuccess}
-          />
-          <TellerEditCustomerForm
-            key={selectedCustomer.id}
-            customer={selectedCustomer}
-            onSuccess={setSelectedCustomer}
-          />
+      <div className="space-y-8">
+        <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-4 text-lg font-semibold text-slate-900">Find a Customer</h2>
+          <TellerCustomerSearch onSelectCustomer={handleSelectCustomer} />
         </section>
-      )}
 
-      {selectedAccount && (
-        <section>
-          <h3>Account #{selectedAccount.id}</h3>
-          <TellerDepositForm
-            accountId={selectedAccount.id}
-            onSuccess={handleMutationSuccess}
-          />
-          <TellerWithdrawForm
-            accountId={selectedAccount.id}
-            onSuccess={handleMutationSuccess}
-          />
-          <TellerTransactionHistory
-            key={`${selectedAccount.id}-${version}`}
-            account={selectedAccount}
-          />
-        </section>
-      )}
+        {selectedCustomer && (
+          <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 className="mb-4 text-lg font-semibold text-slate-900">
+              Accounts — {selectedCustomer.first_name} {selectedCustomer.last_name}
+            </h2>
+            <TellerAccountList
+              key={`${selectedCustomer.id}-${version}`}
+              customer={selectedCustomer}
+              onSelectAccount={setSelectedAccount}
+            />
+            <div className="mt-6 grid gap-6 md:grid-cols-2">
+              <TellerCreateAccountForm
+                customer={selectedCustomer}
+                onSuccess={handleMutationSuccess}
+              />
+              <TellerEditCustomerForm
+                key={selectedCustomer.id}
+                customer={selectedCustomer}
+                onSuccess={setSelectedCustomer}
+              />
+            </div>
+          </section>
+        )}
+
+        {selectedAccount && (
+          <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 className="mb-4 text-lg font-semibold text-slate-900">
+              Account #{selectedAccount.id}
+            </h2>
+            <div className="grid gap-6 md:grid-cols-2">
+              <TellerDepositForm
+                accountId={selectedAccount.id}
+                onSuccess={handleMutationSuccess}
+              />
+              <TellerWithdrawForm
+                accountId={selectedAccount.id}
+                onSuccess={handleMutationSuccess}
+              />
+            </div>
+            <div className="mt-6">
+              <TellerTransactionHistory
+                key={`${selectedAccount.id}-${version}`}
+                account={selectedAccount}
+              />
+            </div>
+          </section>
+        )}
+      </div>
     </div>
   )
 }

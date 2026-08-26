@@ -33,41 +33,50 @@ function TellerEditCustomerForm({ customer, onSuccess }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h4>Edit Customer Info</h4>
+    <form onSubmit={handleSubmit} className="rounded-lg border border-slate-200 p-4">
+      <h3 className="mb-3 text-sm font-semibold text-slate-900">Edit Customer Info</h3>
 
-      <label>
-        First name
-        <input
-          type="text"
-          value={firstName}
-          onChange={(event) => setFirstName(event.target.value)}
-        />
-      </label>
+      <div className="flex flex-col gap-3">
+        <label className="block">
+          <span className="mb-1 block text-sm font-medium text-slate-700">First name</span>
+          <input
+            type="text"
+            value={firstName}
+            onChange={(event) => setFirstName(event.target.value)}
+            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-slate-500 focus:outline-none"
+          />
+        </label>
 
-      <label>
-        Last name
-        <input
-          type="text"
-          value={lastName}
-          onChange={(event) => setLastName(event.target.value)}
-        />
-      </label>
+        <label className="block">
+          <span className="mb-1 block text-sm font-medium text-slate-700">Last name</span>
+          <input
+            type="text"
+            value={lastName}
+            onChange={(event) => setLastName(event.target.value)}
+            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-slate-500 focus:outline-none"
+          />
+        </label>
 
-      <label>
-        Email
-        <input
-          type="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-        />
-      </label>
+        <label className="block">
+          <span className="mb-1 block text-sm font-medium text-slate-700">Email</span>
+          <input
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-slate-500 focus:outline-none"
+          />
+        </label>
 
-      {error && <p role="alert">{error}</p>}
+        {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
 
-      <button type="submit" disabled={submitting}>
-        {submitting ? 'Saving...' : 'Save Changes'}
-      </button>
+        <button
+          type="submit"
+          disabled={submitting}
+          className="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
+        >
+          {submitting ? 'Saving...' : 'Save Changes'}
+        </button>
+      </div>
     </form>
   )
 }

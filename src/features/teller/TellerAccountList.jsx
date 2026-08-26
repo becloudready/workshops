@@ -34,36 +34,38 @@ function TellerAccountList({ customer, onSelectAccount }) {
     }
   }, [customer.id])
 
-  if (loading) return <p>Loading accounts...</p>
-  if (error) return <p role="alert">{error}</p>
+  if (loading) return <p className="text-sm text-slate-500">Loading accounts...</p>
+  if (error) return <p role="alert" className="text-sm text-red-600">{error}</p>
 
   return (
     <div>
-      <h3>Accounts for {customer.first_name} {customer.last_name}</h3>
-
       {accounts.length === 0 ? (
-        <p>No accounts found.</p>
+        <p className="text-sm text-slate-500">No accounts found.</p>
       ) : (
-        <table>
+        <table className="w-full text-left text-sm">
           <thead>
-            <tr>
-              <th>Account ID</th>
-              <th>Type</th>
-              <th>Balance</th>
-              <th>Status</th>
-              <th></th>
+            <tr className="border-b border-slate-200 text-slate-500">
+              <th className="py-2 px-3 font-medium">Account ID</th>
+              <th className="py-2 px-3 font-medium">Type</th>
+              <th className="py-2 px-3 font-medium">Balance</th>
+              <th className="py-2 px-3 font-medium">Status</th>
+              <th className="py-2 px-3"></th>
             </tr>
           </thead>
           <tbody>
             {accounts.map((account) => (
-              <tr key={account.id}>
-                <td>{account.id}</td>
-                <td>{account.account_type}</td>
-                <td>${account.balance.toFixed(2)}</td>
-                <td>{account.status}</td>
-                <td>
+              <tr key={account.id} className="border-b border-slate-100 hover:bg-slate-50">
+                <td className="py-2 px-3">{account.id}</td>
+                <td className="py-2 px-3">{account.account_type}</td>
+                <td className="py-2 px-3">${account.balance.toFixed(2)}</td>
+                <td className="py-2 px-3">{account.status}</td>
+                <td className="py-2 px-3">
                   {onSelectAccount && (
-                    <button type="button" onClick={() => onSelectAccount(account)}>
+                    <button
+                      type="button"
+                      onClick={() => onSelectAccount(account)}
+                      className="rounded bg-blue-600 px-3 py-1 text-white"
+                    >
                       Select
                     </button>
                   )}

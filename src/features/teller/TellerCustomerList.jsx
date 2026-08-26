@@ -4,27 +4,31 @@
 
 function TellerCustomerList({ customers, onSelectCustomer }) {
   if (customers.length === 0) {
-    return <p>No customers found.</p>
+    return <p className="text-sm text-slate-500">No customers found.</p>
   }
 
   return (
-    <table>
+    <table className="w-full text-left text-sm">
       <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>DOB</th>
-          <th></th>
+        <tr className="border-b border-slate-200 text-slate-500">
+          <th className="py-2 px-3 font-medium">Name</th>
+          <th className="py-2 px-3 font-medium">Email</th>
+          <th className="py-2 px-3 font-medium">DOB</th>
+          <th className="py-2 px-3"></th>
         </tr>
       </thead>
       <tbody>
         {customers.map((customer) => (
-          <tr key={customer.id}>
-            <td>{customer.first_name} {customer.last_name}</td>
-            <td>{customer.email}</td>
-            <td>{customer.dob}</td>
-            <td>
-              <button type="button" onClick={() => onSelectCustomer(customer)}>
+          <tr key={customer.id} className="border-b border-slate-100 hover:bg-slate-50">
+            <td className="py-2 px-3">{customer.first_name} {customer.last_name}</td>
+            <td className="py-2 px-3">{customer.email}</td>
+            <td className="py-2 px-3">{customer.dob}</td>
+            <td className="py-2 px-3">
+              <button
+                type="button"
+                onClick={() => onSelectCustomer(customer)}
+                className="rounded bg-blue-600 px-3 py-1 text-white"
+              >
                 Select
               </button>
             </td>

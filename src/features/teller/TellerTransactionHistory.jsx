@@ -30,34 +30,34 @@ function TellerTransactionHistory({ account }) {
     }
   }, [account.id])
 
-  if (loading) return <p>Loading transactions...</p>
-  if (error) return <p role="alert">{error}</p>
+  if (loading) return <p className="text-sm text-slate-500">Loading transactions...</p>
+  if (error) return <p role="alert" className="text-sm text-red-600">{error}</p>
 
   return (
     <div>
-      <h4>Transaction History — Account #{account.id}</h4>
+      <h3 className="mb-3 text-sm font-semibold text-slate-900">Transaction History</h3>
 
       {transactions.length === 0 ? (
-        <p>No transactions found.</p>
+        <p className="text-sm text-slate-500">No transactions found.</p>
       ) : (
-        <table>
+        <table className="w-full text-left text-sm">
           <thead>
-            <tr>
-              <th>Date</th>
-              <th>Type</th>
-              <th>Amount</th>
-              <th>Description</th>
+            <tr className="border-b border-slate-200 text-slate-500">
+              <th className="py-2 px-3 font-medium">Date</th>
+              <th className="py-2 px-3 font-medium">Type</th>
+              <th className="py-2 px-3 font-medium">Amount</th>
+              <th className="py-2 px-3 font-medium">Description</th>
             </tr>
           </thead>
           <tbody>
             {[...transactions]
               .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
               .map((transaction) => (
-                <tr key={transaction.id}>
-                  <td>{new Date(transaction.timestamp).toLocaleString()}</td>
-                  <td>{transaction.transaction_type}</td>
-                  <td>${transaction.amount.toFixed(2)}</td>
-                  <td>{transaction.description || '—'}</td>
+                <tr key={transaction.id} className="border-b border-slate-100 hover:bg-slate-50">
+                  <td className="py-2 px-3">{new Date(transaction.timestamp).toLocaleString()}</td>
+                  <td className="py-2 px-3">{transaction.transaction_type}</td>
+                  <td className="py-2 px-3">${transaction.amount.toFixed(2)}</td>
+                  <td className="py-2 px-3">{transaction.description || '—'}</td>
                 </tr>
               ))}
           </tbody>

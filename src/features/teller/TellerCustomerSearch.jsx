@@ -40,22 +40,29 @@ function TellerCustomerSearch({ onSelectCustomer }) {
 
   return (
     <div>
-      <form onSubmit={handleSearch}>
+      <form onSubmit={handleSearch} className="flex gap-2">
         <input
           type="text"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search by name, email, or account #"
+          className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-slate-500 focus:outline-none"
         />
-        <button type="submit" disabled={loading}>
+        <button
+          type="submit"
+          disabled={loading}
+          className="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
+        >
           {loading ? 'Searching...' : 'Search'}
         </button>
       </form>
 
-      {error && <p role="alert">{error}</p>}
+      {error && <p role="alert" className="mt-3 text-sm text-red-600">{error}</p>}
 
       {searched && !loading && !error && (
-        <TellerCustomerList customers={customers} onSelectCustomer={onSelectCustomer} />
+        <div className="mt-4">
+          <TellerCustomerList customers={customers} onSelectCustomer={onSelectCustomer} />
+        </div>
       )}
     </div>
   )
