@@ -1,11 +1,30 @@
+import Logo from "../components/Logo";
 import RegisterForm from "../features/auth/RegisterForm";
+
+const FEATURES = [
+  {
+    icon: "🛡️",
+    title: "Bank-grade security",
+    description: "Your data is protected with industry-leading encryption.",
+  },
+  {
+    icon: "🔒",
+    title: "Secure access",
+    description: "Multi-layer authentication keeps your account safe.",
+  },
+  {
+    icon: "👥",
+    title: "Trusted by thousands",
+    description: "Join thousands of customers who trust us with their money.",
+  },
+];
 
 function Registration() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-50 p-6">
       <section className="grid w-full max-w-5xl overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:grid-cols-2">
         <div className="p-8 md:p-12">
-          <h1 className="text-2xl font-bold text-slate-900">TrustPoint Bank</h1>
+          <Logo />
 
           <div className="mt-10">
             <h2 className="text-3xl font-bold text-slate-900">
@@ -30,30 +49,18 @@ function Registration() {
           </div>
 
           <div className="mt-8 space-y-6">
-            <div>
-              <h3 className="font-semibold text-slate-900">
-                Bank-grade security
-              </h3>
-              <p className="mt-1 text-sm text-slate-600">
-                Your data is protected with industry-leading encryption.
-              </p>
-            </div>
+            {FEATURES.map((feature) => (
+              <div key={feature.title} className="flex items-start gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-lg shadow-sm">
+                  {feature.icon}
+                </div>
 
-            <div>
-              <h3 className="font-semibold text-slate-900">Secure access</h3>
-              <p className="mt-1 text-sm text-slate-600">
-                Multi-layer authentication keeps your account safe.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-slate-900">
-                Trusted by thousands
-              </h3>
-              <p className="mt-1 text-sm text-slate-600">
-                Join thousands of customers who trust us with their money.
-              </p>
-            </div>
+                <div>
+                  <h3 className="font-semibold text-slate-900">{feature.title}</h3>
+                  <p className="mt-1 text-sm text-slate-600">{feature.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
