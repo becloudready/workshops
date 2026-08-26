@@ -40,7 +40,7 @@ async function request(path, { method = "GET", body, token } = {}) {
     throw new Error("Could not reach the server. Is the API running?");
   }
 
-  let payload = null;
+  let payload;
   try {
     payload = await response.json();
   } catch {

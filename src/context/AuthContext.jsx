@@ -11,13 +11,14 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY));
   // Starts true so route guards wait for the session check instead of
   // bouncing an authenticated user to /login on every refresh.
-  const [restoring, setRestoring] = useState(true);
+  const [restoring, setRestoring] = useState(
+    () => Boolean(localStorage.getItem(TOKEN_KEY)),
+  );
 
   useEffect(() => {
     const stored = localStorage.getItem(TOKEN_KEY);
 
     if (!stored) {
-      setRestoring(false);
       return;
     }
 
@@ -77,6 +78,7 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === null) {
