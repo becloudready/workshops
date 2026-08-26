@@ -1,0 +1,64 @@
+import RegisterForm from "../features/auth/RegisterForm";
+
+function Registration() {
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-slate-50 p-6">
+      <section className="grid w-full max-w-5xl overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:grid-cols-2">
+        <div className="p-8 md:p-12">
+          <h1 className="text-2xl font-bold text-slate-900">TrustPoint Bank</h1>
+
+          <div className="mt-10">
+            <h2 className="text-3xl font-bold text-slate-900">
+              Create your account
+            </h2>
+
+            <p className="mt-2 text-sm text-slate-500">
+              Join TrustPoint Bank today
+            </p>
+
+            <RegisterForm />
+          </div>
+        </div>
+
+        <div className="hidden bg-amber-50 p-12 md:flex md:flex-col md:justify-center">
+          <div className="text-center">
+            <div className="mb-8 text-6xl">🏦</div>
+
+            <h2 className="text-xl font-semibold text-slate-900">
+              Your security is our priority
+            </h2>
+          </div>
+
+          <div className="mt-8 space-y-6">
+            <div>
+              <h3 className="font-semibold text-slate-900">
+                Bank-grade security
+              </h3>
+              <p className="mt-1 text-sm text-slate-600">
+                Your data is protected with industry-leading encryption.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-slate-900">Secure access</h3>
+              <p className="mt-1 text-sm text-slate-600">
+                Multi-layer authentication keeps your account safe.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-slate-900">
+                Trusted by thousands
+              </h3>
+              <p className="mt-1 text-sm text-slate-600">
+                Join thousands of customers who trust us with their money.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+export default Registration;
