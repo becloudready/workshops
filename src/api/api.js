@@ -225,12 +225,7 @@ export function unfreezeAccount(token, accountId) {
   });
 }
 
-
-export { BASE_URL };
 // --- Accounts ---
-export function getAccount(accountId) {
-  return request(`/accounts/${accountId}`);
-}
 
 // NOTE: still no "list my accounts" endpoint on the backend — see
 // MY_ACCOUNT_IDS in CustomerDashboard.jsx until that's added.
