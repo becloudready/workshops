@@ -145,6 +145,15 @@ export function deleteUser(token, userId) {
   });
 }
 
+export function resetUserPassword(token, userId, newPassword) {
+  return request(`/users/${userId}/password`, {
+    method: "PATCH",
+    body: { new_password: newPassword },
+    token,
+  });
+}
+
+
 // ADMIN / ACCOUNT API
 
 // Get all accounts

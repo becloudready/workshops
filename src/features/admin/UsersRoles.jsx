@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import DashboardSidebar from "../../components/DashboardSidebar";
 import Button from "../../components/Button";
 
-import { getUsers, updateUserRole, deleteUser } from "../../api/api";
+import { getUsers, updateUserRole, deleteUser, resetUserPassword } from "../../api/api";
 import { useAuth } from "../../context/AuthContext";
 
 function UsersRoles() {
@@ -16,6 +16,37 @@ function UsersRoles() {
   const [roleChanges, setRoleChanges] = useState({});
   const [updatingUserId, setUpdatingUserId] = useState(null);
   const [deletingUserId, setDeletingUserId] = useState(null);
+
+  const [showResetPassword, setShowResetPassword] = useState(false);
+  const [resetPasswordUser, setResetPasswordUser] = useState(null);
+  const [newPassword, setNewPassword] = useState("");
+  const [resettingPassword, setResettingPassword] = useState(false);
+
+
+  async function handleResetPassword(event) {
+        event.preventDefault();
+
+        if (!token || !resetPasswordUser) return;
+
+        setResettingPassword(true);
+        setError("");
+
+        try {
+            await resetUserPassword(
+            token,
+            resetPasswordUser.id,
+            newPassword
+           );
+
+           setShowResetPassword(false);
+           setResetPasswordUser(null);
+           setNewPassword("");
+         } catch (err) {
+           setError(err.message);
+         } finally {
+           setResettingPassword(false);
+        }
+    }
 
   useEffect(() => {
     async function loadUsers() {
@@ -232,6 +263,18 @@ function UsersRoles() {
                               )}
 
                               <Button
+                                  onClick={() => {
+                                      setResetPasswordUser(currentUser);
+                                      setNewPassword("");
+                                      setShowResetPassword(true);
+                                      setError("");
+                                    }}
+                                    disabled={isCurrentUser}
+                                >
+                                Reset Password
+                              </Button>
+
+                              <Button
                                 onClick={() =>
                                   handleDeleteUser(currentUser.id)
                                 }
@@ -259,6 +302,78 @@ function UsersRoles() {
           </section>
         </div>
       </main>
+                    {/* Reset Password Modal */}
+            {showResetPassword && resetPasswordUser && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+                <div className="w-full max-w-lg rounded-xl bg-white shadow-xl">
+
+                    {/* Modal Header */}
+                    <div className="border-b border-slate-200 px-6 py-4">
+                    <h2 className="text-lg font-semibold text-[#062b4f]">
+                        Reset Password
+                    </h2>
+
+                    <p className="mt-1 text-sm text-slate-500">
+                        Set a new password for{" "}
+                        <span className="font-medium">
+                        {resetPasswordUser.first_name}{" "}
+                        {resetPasswordUser.last_name}
+                        </span>
+                        .
+                    </p>
+                    </div>
+
+                    {/* Reset Password Form */}
+                    <form
+                    onSubmit={handleResetPassword}
+                    className="space-y-4 p-6"
+                    >
+                    <div>
+                        <label className="mb-1 block text-sm font-medium text-slate-700">
+                        New Password
+                        </label>
+
+                        <input
+                        type="password"
+                        required
+                        minLength={8}
+                        value={newPassword}
+                        onChange={(event) =>
+                            setNewPassword(event.target.value)
+                        }
+                        className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#062b4f]"
+                        placeholder="Enter temporary password"
+                        />
+                    </div>
+
+                    {/* Buttons */}
+                    <div className="flex justify-end gap-3 pt-2">
+                        <Button
+                        type="button"
+                        onClick={() => {
+                            setShowResetPassword(false);
+                            setResetPasswordUser(null);
+                            setNewPassword("");
+                        }}
+                        disabled={resettingPassword}
+                        >
+                        Cancel
+                        </Button>
+
+                        <Button
+                        type="submit"
+                        disabled={resettingPassword}
+                        >
+                        {resettingPassword
+                            ? "Resetting..."
+                            : "Reset Password"}
+                        </Button>
+                    </div>
+                    </form>
+
+                </div>
+                </div>
+            )}
     </div>
   );
 }
