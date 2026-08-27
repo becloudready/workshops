@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { createAccount } from './tellerApi'
+import { useAuth } from '../../context/AuthContext'
+import Button from '../../components/Button'
 
 // Opens a new account for the currently selected customer. New accounts
 // always start active — freezing/closing is an admin action, not part of
 // teller account creation.
 
 function TellerCreateAccountForm({ customer, onSuccess }) {
+  const { token } = useAuth()
   const [accountType, setAccountType] = useState('checking')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
@@ -21,7 +24,7 @@ function TellerCreateAccountForm({ customer, onSuccess }) {
         userId: customer.id,
         accountType,
         status: 'active',
-      })
+      }, token)
       onSuccess?.(account)
     } catch (err) {
       setError(err.message)
@@ -49,13 +52,9 @@ function TellerCreateAccountForm({ customer, onSuccess }) {
 
         {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
-        >
+        <Button type="submit" disabled={submitting}>
           {submitting ? 'Creating...' : 'Create Account'}
-        </button>
+        </Button>
       </div>
     </form>
   )

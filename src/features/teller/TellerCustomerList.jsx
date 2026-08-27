@@ -1,6 +1,8 @@
 // Renders a list of customers and reports selection back to the caller.
-// Uses plain elements for now — swap for the shared Table component once
+// Uses a plain table for now — swap for the shared Table component once
 // it lands, the props/behavior below won't need to change.
+
+import Button from '../../components/Button'
 
 function TellerCustomerList({ customers, onSelectCustomer }) {
   if (customers.length === 0) {
@@ -24,13 +26,9 @@ function TellerCustomerList({ customers, onSelectCustomer }) {
             <td className="py-2 px-3">{customer.email}</td>
             <td className="py-2 px-3">{customer.dob}</td>
             <td className="py-2 px-3">
-              <button
-                type="button"
-                onClick={() => onSelectCustomer(customer)}
-                className="rounded bg-blue-600 px-3 py-1 text-white"
-              >
+              <Button type="button" onClick={() => onSelectCustomer(customer)}>
                 Select
-              </button>
+              </Button>
             </td>
           </tr>
         ))}

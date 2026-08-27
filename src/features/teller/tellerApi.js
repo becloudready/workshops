@@ -1,37 +1,13 @@
-// Real data layer for teller features, calling the FastAPI backend directly.
-// Function signatures match what the components already expect, so nothing
-// outside this file needed to change when this stopped being a mock.
+// Teller-specific data layer, calling the FastAPI backend directly.
+// Fetch/auth/error-handling plumbing lives in the shared request() from
+// ../../api/api — this file only knows about teller endpoints and shapes.
+// Every function takes the caller's JWT (from useAuth()) as its last
+// argument and forwards it to request().
 
-const API_BASE = 'http://localhost:8000'
+import { request } from '../../api/api'
 
-// Stand-in for real auth until Person 2's JWT work lands. The backend's
-// get_current_user() currently reads this header directly (see
-// core/dependencies.py) instead of decoding a token. This is Olivia
-// Turner, a seeded teller user — swap this for a real Authorization
-// header once login exists.
-const TELLER_USER_ID = 'b2e5703a-fedf-571b-9cf0-3707310d568d'
-
-async function request(path, options = {}) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      'X-User-Id': TELLER_USER_ID,
-      ...options.headers,
-    },
-  })
-
-  if (!res.ok) {
-    const body = await res.json().catch(() => null)
-    throw new Error(body?.detail || `Request failed: ${res.status}`)
-  }
-
-  if (res.status === 204) return null
-  return res.json()
-}
-
-export async function listCustomers(query = '') {
-  const customers = await request('/users?role=customer&limit=100')
+export async function listCustomers(query = '', token) {
+  const customers = await request('/users?role=customer&limit=100', { token })
 
   const q = query.trim().toLowerCase()
   if (!q) return customers
@@ -41,58 +17,62 @@ export async function listCustomers(query = '') {
   )
 }
 
-export async function getAccountsForUser(userId) {
-  const accounts = await request('/accounts')
+export async function getAccountsForUser(userId, token) {
+  const accounts = await request('/accounts', { token })
   return accounts.filter((a) => a.user_id === userId)
 }
 
-export function getAccount(accountId) {
-  return request(`/accounts/${accountId}`)
+export function getAccount(accountId, token) {
+  return request(`/accounts/${accountId}`, { token })
 }
 
-export async function getCustomerForAccount(accountId) {
-  const account = await getAccount(accountId)
-  return request(`/users/${account.user_id}`)
+export async function getCustomerForAccount(accountId, token) {
+  const account = await getAccount(accountId, token)
+  return request(`/users/${account.user_id}`, { token })
 }
 
-export async function getTransactions(accountId) {
-  const transactions = await request(`/accounts/${accountId}/transactions`)
+export async function getTransactions(accountId, token) {
+  const transactions = await request(`/accounts/${accountId}/transactions`, { token })
   // amount comes back as a string ("10.00") from this endpoint, unlike
   // account balances which come back as numbers — normalize here so
   // components can keep calling .toFixed() on it either way.
   return transactions.map((t) => ({ ...t, amount: Number(t.amount) }))
 }
 
-export async function deposit(accountId, amount, description = null) {
+export async function deposit(accountId, amount, description = null, token) {
   const transaction = await request(`/accounts/${accountId}/deposit`, {
     method: 'POST',
-    body: JSON.stringify({ amount, description }),
+    body: { amount, description },
+    token,
   })
   return { ...transaction, amount: Number(transaction.amount) }
 }
 
-export async function withdraw(accountId, amount, description = null) {
+export async function withdraw(accountId, amount, description = null, token) {
   const transaction = await request(`/accounts/${accountId}/withdraw`, {
     method: 'POST',
-    body: JSON.stringify({ amount, description }),
+    body: { amount, description },
+    token,
   })
   return { ...transaction, amount: Number(transaction.amount) }
 }
 
-export function createAccount({ userId, accountType, status = 'active' }) {
+export function createAccount({ userId, accountType, status = 'active' }, token) {
   return request('/accounts', {
     method: 'POST',
-    body: JSON.stringify({
+    body: {
       user_id: userId,
       account_type: accountType,
       status,
-    }),
+    },
+    token,
   })
 }
 
-export function updateCustomer(userId, updates) {
+export function updateCustomer(userId, updates, token) {
   return request(`/users/${userId}`, {
     method: 'PATCH',
-    body: JSON.stringify(updates),
+    body: updates,
+    token,
   })
 }

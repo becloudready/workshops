@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getAccountsForUser } from './tellerApi'
+import { useAuth } from '../../context/AuthContext'
+import Button from '../../components/Button'
 
 // Displays the accounts belonging to whichever customer the teller has
 // selected. Plain elements for now, same as TellerCustomerList — swap for
@@ -10,6 +12,7 @@ import { getAccountsForUser } from './tellerApi'
 // instead of resetting it manually inside the effect.
 
 function TellerAccountList({ customer, onSelectAccount }) {
+  const { token } = useAuth()
   const [accounts, setAccounts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -17,7 +20,7 @@ function TellerAccountList({ customer, onSelectAccount }) {
   useEffect(() => {
     let cancelled = false
 
-    getAccountsForUser(customer.id)
+    getAccountsForUser(customer.id, token)
       .then((results) => {
         if (cancelled) return
         setAccounts(results)
@@ -32,7 +35,7 @@ function TellerAccountList({ customer, onSelectAccount }) {
     return () => {
       cancelled = true
     }
-  }, [customer.id])
+  }, [customer.id, token])
 
   if (loading) return <p className="text-sm text-slate-500">Loading accounts...</p>
   if (error) return <p role="alert" className="text-sm text-red-600">{error}</p>
@@ -61,13 +64,9 @@ function TellerAccountList({ customer, onSelectAccount }) {
                 <td className="py-2 px-3">{account.status}</td>
                 <td className="py-2 px-3">
                   {onSelectAccount && (
-                    <button
-                      type="button"
-                      onClick={() => onSelectAccount(account)}
-                      className="rounded bg-blue-600 px-3 py-1 text-white"
-                    >
+                    <Button type="button" onClick={() => onSelectAccount(account)}>
                       Select
-                    </button>
+                    </Button>
                   )}
                 </td>
               </tr>

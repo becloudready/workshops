@@ -1,10 +1,13 @@
 import { useState } from 'react'
 import { withdraw } from './tellerApi'
+import { useAuth } from '../../context/AuthContext'
+import Button from '../../components/Button'
+import Input from '../../components/Input'
 
-// Withdrawal form for a single account. Mirrors TellerDepositForm — plain
-// elements for now, swap for shared Button/Input once they're built out.
+// Withdrawal form for a single account. Mirrors TellerDepositForm.
 
 function TellerWithdrawForm({ accountId, onSuccess }) {
+  const { token } = useAuth()
   const [amount, setAmount] = useState('')
   const [description, setDescription] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -23,7 +26,7 @@ function TellerWithdrawForm({ accountId, onSuccess }) {
     setError(null)
 
     try {
-      const transaction = await withdraw(accountId, parsedAmount, description || null)
+      const transaction = await withdraw(accountId, parsedAmount, description || null, token)
       setAmount('')
       setDescription('')
       onSuccess?.(transaction)
@@ -39,37 +42,29 @@ function TellerWithdrawForm({ accountId, onSuccess }) {
       <h3 className="mb-3 text-sm font-semibold text-slate-900">Withdraw</h3>
 
       <div className="flex flex-col gap-3">
-        <label className="block">
-          <span className="mb-1 block text-sm font-medium text-slate-700">Amount</span>
-          <input
-            type="number"
-            step="0.01"
-            min="0"
-            value={amount}
-            onChange={(event) => setAmount(event.target.value)}
-            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-slate-500 focus:outline-none"
-          />
-        </label>
+        <Input
+          id="withdraw-amount"
+          label="Amount"
+          type="number"
+          step="0.01"
+          min="0"
+          value={amount}
+          onChange={(event) => setAmount(event.target.value)}
+        />
 
-        <label className="block">
-          <span className="mb-1 block text-sm font-medium text-slate-700">Description (optional)</span>
-          <input
-            type="text"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-slate-500 focus:outline-none"
-          />
-        </label>
+        <Input
+          id="withdraw-description"
+          label="Description (optional)"
+          type="text"
+          value={description}
+          onChange={(event) => setDescription(event.target.value)}
+        />
 
         {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
-        >
+        <Button type="submit" disabled={submitting}>
           {submitting ? 'Withdrawing...' : 'Withdraw'}
-        </button>
+        </Button>
       </div>
     </form>
   )

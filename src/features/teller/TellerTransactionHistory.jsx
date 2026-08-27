@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { getTransactions } from './tellerApi'
+import { useAuth } from '../../context/AuthContext'
 
 // Shows transaction history for a single account. Render with
 // key={account.id} from the caller so switching accounts remounts this
 // component and resets loading/error state, same pattern as TellerAccountList.
 
 function TellerTransactionHistory({ account }) {
+  const { token } = useAuth()
   const [transactions, setTransactions] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -13,7 +15,7 @@ function TellerTransactionHistory({ account }) {
   useEffect(() => {
     let cancelled = false
 
-    getTransactions(account.id)
+    getTransactions(account.id, token)
       .then((results) => {
         if (cancelled) return
         setTransactions(results)
@@ -28,7 +30,7 @@ function TellerTransactionHistory({ account }) {
     return () => {
       cancelled = true
     }
-  }, [account.id])
+  }, [account.id, token])
 
   if (loading) return <p className="text-sm text-slate-500">Loading transactions...</p>
   if (error) return <p role="alert" className="text-sm text-red-600">{error}</p>
