@@ -3,6 +3,7 @@
 // Real login now exists on the backend (see login()/register() below),
 // using a Bearer token instead of the old X-User-Id stand-in this file
 // used before.
+import {TOKEN_KEY} from "../context/AuthContext.jsx"
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
 
@@ -12,15 +13,14 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
 // returns). Every other function below reads the token automatically
 // via getToken(), so screens don't have to pass it around by hand.
 export function getToken() {
-  return localStorage.getItem("bankapp_token");
+  return localStorage.getItem(TOKEN_KEY);
 }
-
 export function setToken(token) {
-  localStorage.setItem("bankapp_token", token);
+  localStorage.setItem(TOKEN_KEY, token);
 }
 
 export function clearToken() {
-  localStorage.removeItem("bankapp_token");
+  localStorage.removeItem(TOKEN_KEY);
 }
 
 if (typeof window !== "undefined") {
@@ -119,11 +119,8 @@ export function getAccount(accountId) {
 // with a hardcoded list) — that should mean "don't show that one," not
 // "break the whole page." Promise.allSettled lets each account succeed
 // or fail on its own instead of one 403 taking down the rest.
-export async function getMyAccounts(accountIds) {
-  const results = await Promise.allSettled(accountIds.map(getAccount));
-  return results
-    .filter((r) => r.status === "fulfilled")
-    .map((r) => r.value);
+export function getMyAccounts() {
+  return request("/accounts/me");
 }
 
 // --- Transactions ---

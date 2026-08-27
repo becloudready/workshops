@@ -1,33 +1,34 @@
+// src/pages/CustomerDashboard.jsx
+//
+// Main dashboard for authenticated customers. Displays the customer's
+// accounts, balances, transaction history, and the transfer form.
+//
+// The logged-in user comes from AuthContext (already fetched once at
+// login/session-restore) — this file only fetches what's specific to
+// the dashboard: accounts, transactions, transfers.
+
 import { useEffect, useState } from "react";
 import AccountsOverview from "../features/accounts/AccountsOverview";
 import TransactionList from "../features/transactions/TransactionList";
 import TransferForm from "../features/transfers/TransferForm";
-import { getCurrentUser, getMyAccounts, getAccountTransactions, createTransfer } from "../api/api";
+import { getMyAccounts, getAccountTransactions, createTransfer } from "../api/api";
+import { useAuth } from "../context/AuthContext";
 
-// TEMPORARY: the backend can't yet list "all accounts belonging to the
-// logged-in customer" — see the note in api.js. Until that endpoint
-// exists, list the account ids to show here. Once it exists, delete
-// this and call getMyAccounts() with no arguments.
-const MY_ACCOUNT_IDS = [1, 2];
 
 export default function CustomerDashboard() {
-  const [customerName, setCustomerName] = useState("");
+  const { user } = useAuth();
   const [accounts, setAccounts] = useState([]);
   const [selectedAccountId, setSelectedAccountId] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-
+  // Load this customer's accounts once, on mount.
   useEffect(() => {
-    async function load() {//CUstomer name
+    async function load() {
       setError("");
       try {
-        const [user, myAccounts] = await Promise.all([
-          getCurrentUser(),
-          getMyAccounts(MY_ACCOUNT_IDS),
-        ]);
-        setCustomerName(user.first_name);
+        const myAccounts = await getMyAccounts();
         setAccounts(myAccounts);
         setSelectedAccountId(myAccounts[0]?.id ?? null);
       } catch (err) {
@@ -51,7 +52,7 @@ export default function CustomerDashboard() {
     await createTransfer({ fromAccountId, toAccountId, amount });
 
     // Refresh balances and the transaction list so the UI reflects the transfer.
-    const refreshedAccounts = await getMyAccounts(MY_ACCOUNT_IDS);
+    const refreshedAccounts = await getMyAccounts();
     setAccounts(refreshedAccounts);
     const refreshedTransactions = await getAccountTransactions(selectedAccountId);
     setTransactions(refreshedTransactions);
@@ -72,7 +73,7 @@ export default function CustomerDashboard() {
 
       <main className="min-w-0 flex-1 p-8 max-sm:p-4">
         <header className="mb-6">
-          <h1 className="mb-1 text-xl font-bold text-[#16233f]">Hello, {customerName || "there"}</h1>
+          <h1 className="mb-1 text-xl font-bold text-[#16233f]">Hello, {user?.first_name || "there"}</h1>
           <p className="text-sm text-slate-500">Here's an overview of your accounts.</p>
         </header>
 
