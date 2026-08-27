@@ -77,4 +77,4 @@ export function resetPassword(token, new_password) {
   return request("/auth/reset-password", { method: "POST", body: { token, new_password } });
 }
 
-export { BASE_URL };
+export { BASE_URL, request };
