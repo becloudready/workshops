@@ -107,6 +107,126 @@ export function resetPassword(token, new_password) {
   return request("/auth/reset-password", { method: "POST", body: { token, new_password } });
 }
 
+// ADMIN / USER API
+
+// Get users
+export function getUsers(
+  token,
+  { role, limit = 50, offset = 0 } = {}
+) {
+  const params = new URLSearchParams();
+
+  if (role) params.set("role", role);
+
+  params.set("limit", limit);
+  params.set("offset", offset);
+
+  return request(`/users?${params.toString()}`, {
+    token,
+  });
+}
+
+// Get today's total transaction count for the admin dashboard
+export function getTodaysTransactions(token) {
+  return request("/accounts/transactions/today", {
+    token,
+  });
+}
+
+// Get a single user
+export function getUser(token, userId) {
+  return request(`/users/${userId}`, {
+    token,
+  });
+}
+
+// Create a user
+export function createUser(token, userData) {
+  return request("/users", {
+    method: "POST",
+    body: userData,
+    token,
+  });
+}
+
+// Update a user
+export function updateUser(token, userId, userData) {
+  return request(`/users/${userId}`, {
+    method: "PATCH",
+    body: userData,
+    token,
+  });
+}
+
+// Update a user's role
+export function updateUserRole(token, userId, role) {
+  return request(`/users/${userId}/role`, {
+    method: "PATCH",
+    body: { role },
+    token,
+  });
+}
+
+// Delete a user
+export function deleteUser(token, userId) {
+  return request(`/users/${userId}`, {
+    method: "DELETE",
+    token,
+  });
+}
+
+export function resetUserPassword(token, userId, newPassword) {
+  return request(`/users/${userId}/password`, {
+    method: "PATCH",
+    body: { new_password: newPassword },
+    token,
+  });
+}
+
+
+// ADMIN / ACCOUNT API
+
+// Get all accounts
+export function getAccounts(token) {
+  return request("/accounts", {
+    token,
+  });
+}
+
+// Get a single account
+export function getAccount(token, accountId) {
+  return request(`/accounts/${accountId}`, {
+    token,
+  });
+}
+
+// Create an account
+export function createAccount(token, accountData) {
+  return request("/accounts", {
+    method: "POST",
+    body: accountData,
+    token,
+  });
+}
+
+// Freeze an account
+export function freezeAccount(token, accountId) {
+  return request(`/accounts/${accountId}/freeze`, {
+    method: "PATCH",
+    token,
+  });
+}
+
+// Unfreeze an account
+export function unfreezeAccount(token, accountId) {
+  return request(`/accounts/${accountId}/unfreeze`, {
+    method: "PATCH",
+    token,
+  });
+}
+
+
+export { BASE_URL };
 // --- Accounts ---
 export function getAccount(accountId) {
   return request(`/accounts/${accountId}`);
