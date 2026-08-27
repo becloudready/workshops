@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 
 import * as api from "../api/api";
 
-const TOKEN_KEY = "banking_access_token";
+export const TOKEN_KEY = "banking_access_token";
 
 const AuthContext = createContext(null);
 

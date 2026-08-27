@@ -1,6 +1,34 @@
 // Shared API utilities for communicating with the FastAPI backend.
-// Put reusable fetch functions, the backend base URL, and JWT authorization headers here.
+//
+// Real login now exists on the backend (see login()/register() below),
+// using a Bearer token instead of the old X-User-Id stand-in this file
+// used before.
+import {TOKEN_KEY} from "../context/AuthContext.jsx"
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
+
+// --- Auth token storage ---
+// After login()/register() succeed, the login screen should call
+// setToken(result.token) (check the exact field name the backend
+// returns). Every other function below reads the token automatically
+// via getToken(), so screens don't have to pass it around by hand.
+export function getToken() {
+  return localStorage.getItem(TOKEN_KEY);
+}
+export function setToken(token) {
+  localStorage.setItem(TOKEN_KEY, token);
+}
+
+export function clearToken() {
+  localStorage.removeItem(TOKEN_KEY);
+}
+
+if (typeof window !== "undefined") {
+  // Dev convenience: if the login screen isn't fully wired up yet, you
+  // can still test by getting a token another way (e.g. the Swagger
+  // docs page) and running setBankToken("...") in the browser console.
+  window.setBankToken = setToken;
+}
 
 /**
  * FastAPI returns errors as {detail: ...}. For 4xx it's usually a string,
@@ -26,7 +54,8 @@ function extractDetail(body, fallback) {
 
 async function request(path, { method = "GET", body, token } = {}) {
   const headers = { "Content-Type": "application/json" };
-  if (token) headers.Authorization = `Bearer ${token}`;
+  const authToken = token ?? getToken();
+  if (authToken) headers.Authorization = `Bearer ${authToken}`;
 
   let response;
   try {
@@ -54,6 +83,7 @@ async function request(path, { method = "GET", body, token } = {}) {
   return payload;
 }
 
+// --- Auth ---
 export function login(email, password) {
   return request("/auth/login", { method: "POST", body: { email, password } });
 }
@@ -75,6 +105,39 @@ export function forgotPassword(email) {
 
 export function resetPassword(token, new_password) {
   return request("/auth/reset-password", { method: "POST", body: { token, new_password } });
+}
+
+// --- Accounts ---
+export function getAccount(accountId) {
+  return request(`/accounts/${accountId}`);
+}
+
+// NOTE: still no "list my accounts" endpoint on the backend — see
+// MY_ACCOUNT_IDS in CustomerDashboard.jsx until that's added.
+//
+// Some of these ids won't belong to the logged-in user (that's expected
+// with a hardcoded list) — that should mean "don't show that one," not
+// "break the whole page." Promise.allSettled lets each account succeed
+// or fail on its own instead of one 403 taking down the rest.
+export function getMyAccounts() {
+  return request("/accounts/me");
+}
+
+// --- Transactions ---
+export function getAccountTransactions(accountId) {
+  return request(`/accounts/${accountId}/transactions`);
+}
+
+// --- Transfers ---
+export function createTransfer({ fromAccountId, toAccountId, amount }) {
+  return request(`/transfers`, {
+    method: "POST",
+    body: {
+      from_account_id: fromAccountId,
+      to_account_id: toAccountId,
+      amount,
+    },
+  });
 }
 
 export { BASE_URL, request };
