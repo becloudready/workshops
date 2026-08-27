@@ -27,7 +27,7 @@ const NAVIGATION_BY_ROLE = {
     { key: "customers", label: "Customers", icon: "customers" },
     { key: "accounts", label: "Accounts", icon: "accounts" },
     { key: "transactions", label: "Transactions", icon: "transactions" },
-    { key: "users-roles", label: "Users & Roles", icon: "users-roles" },
+    { key: "users-roles", label: "Users & Roles", icon: "users-roles", path: "/admin/users-roles" },
     { key: "reports", label: "Reports", icon: "reports" },
     { key: "settings", label: "Settings", icon: "settings" },
     { key: "logout", label: "Logout", icon: "logout", action: "logout" },

@@ -10,6 +10,8 @@ import ResetPassword from "./pages/ResetPassword";
 import CustomerDashboard from "./pages/CustomerDashboard";
 import TellerDashboard from "./pages/TellerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import UsersRoles from "./features/admin/UsersRoles";
+import AccountManagement from "./features/admin/AccountManagement";
 
 function AppRoutes() {
   const { user, restoring } = useAuth();
@@ -48,6 +50,23 @@ function AppRoutes() {
         }
       />
 
+      <Route
+        path="/admin/users-roles"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <UsersRoles />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/account-management"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AccountManagement />
+          </ProtectedRoute>
+        }
+      />
+      
       <Route
         path="/"
         element={
