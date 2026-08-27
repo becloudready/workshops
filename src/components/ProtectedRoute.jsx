@@ -2,7 +2,7 @@ import { Navigate, useLocation } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 
-const DEV_BYPASS_AUTH = true; // TEMPORARY - turn off before final testing
+const DEV_BYPASS_AUTH = false; // TEMPORARY - turn off before final testing
 
 function ProtectedRoute({ allowedRoles, children }) {
   const { user, restoring } = useAuth();
