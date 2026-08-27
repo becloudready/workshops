@@ -228,21 +228,39 @@ function DashboardSidebar({ onNavigate }) {
   }
 
   function handleItemClick(item) {
-    setMobileMenuOpen(false);
+  setMobileMenuOpen(false);
 
-    if (item.action === "logout") {
-      logout();
-      navigate("/login", { replace: true });
-      return;
-    }
-
-    if (item.path) {
-      navigate(item.path);
-      return;
-    }
-
-    onNavigate?.(item.key);
+  if (item.action === "logout") {
+    logout();
+    navigate("/login", { replace: true });
+    return;
   }
+
+  // If the menu item has a normal route, navigate there.
+  if (item.path) {
+    navigate(item.path);
+    return;
+  }
+
+  // Scroll to a section on the current dashboard.
+  const sectionIds = {
+    accounts: "overview",
+    transfers: "transfer",
+    transactions: "transactions",
+  };
+
+  const sectionId = sectionIds[item.key];
+
+  if (sectionId) {
+    document.getElementById(sectionId)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+    return;
+  }
+
+  onNavigate?.(item.key);
+}
 
   return (
     <>

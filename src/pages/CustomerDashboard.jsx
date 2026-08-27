@@ -13,6 +13,7 @@ import TransactionList from "../features/transactions/TransactionList";
 import TransferForm from "../features/transfers/TransferForm";
 import { getMyAccounts, getAccountTransactions, createTransfer } from "../api/api";
 import { useAuth } from "../context/AuthContext";
+import DashboardSidebar from "../components/DashboardSidebar";
 
 
 export default function CustomerDashboard() {
@@ -44,8 +45,10 @@ export default function CustomerDashboard() {
   useEffect(() => {
     if (!selectedAccountId) return;
     getAccountTransactions(selectedAccountId)
-      .then(setTransactions)
-      .catch((err) => setError(err.message));
+        .then((transactions) => {
+            setTransactions([...transactions].reverse());
+        })
+        .catch((err) => setError(err.message));
   }, [selectedAccountId]);
 
   async function handleTransfer({ fromAccountId, toAccountId, amount }) {
@@ -68,8 +71,8 @@ export default function CustomerDashboard() {
 
   return (
     <div className="flex min-h-screen bg-[#f4f5f8]">
-      <aside className="flex w-64 shrink-0 flex-col bg-[#1254a3] px-5 py-7 text-white max-lg:w-20 max-lg:px-3 max-sm:w-full max-sm:flex-row max-sm:items-center max-sm:justify-between max-sm:px-4 max-sm:py-4">
-      </aside>
+      <DashboardSidebar />
+
 
       <main className="min-w-0 flex-1 p-8 max-sm:p-4">
         <header className="mb-6">
