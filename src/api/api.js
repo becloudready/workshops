@@ -140,4 +140,4 @@ export function createTransfer({ fromAccountId, toAccountId, amount }) {
   });
 }
 
-export { BASE_URL };
+export { BASE_URL, request };
