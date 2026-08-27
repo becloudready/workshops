@@ -1,3 +1,4 @@
+import Logo from "../components/Logo";
 import LoginForm from "../features/auth/LoginForm";
 
 function Login() {
@@ -5,7 +6,7 @@ function Login() {
     <main className="flex min-h-screen items-center justify-center bg-slate-50 p-6">
       <section className="grid w-full max-w-5xl overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:grid-cols-2">
         <div className="p-8 md:p-12">
-          <h1 className="text-2xl font-bold text-slate-900">TrustPoint Bank</h1>
+          <Logo />
 
           <div className="mt-10">
             <h2 className="text-3xl font-bold text-slate-900">Welcome back</h2>
