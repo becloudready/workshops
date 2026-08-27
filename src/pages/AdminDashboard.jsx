@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import DashboardSidebar from "../components/DashboardSidebar";
 import Button from "../components/Button";
@@ -7,6 +8,7 @@ import { useAuth } from "../context/AuthContext";
 
 function AdminDashboard() {
   const { token } = useAuth();
+  const navigate = useNavigate();
 
   const [users, setUsers] = useState([]);
   const [accounts, setAccounts] = useState([]);
@@ -311,7 +313,7 @@ async function handleCreateAccount(event) {
                     Create Account
                 </Button>
 
-                <Button className="w-full">
+                <Button className="w-full" onClick={() => navigate("/admin/account-management")}>
                   Freeze Account
                 </Button>
 
