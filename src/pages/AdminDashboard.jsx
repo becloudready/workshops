@@ -1,297 +1,190 @@
-import UserManagement from "../features/admin/UserManagement";
-import AccountManagement from "../features/admin/AccountManagement";
+import DashboardSidebar from "../components/DashboardSidebar";
+import Button from "../components/Button";
 
 function AdminDashboard() {
-<<<<<<< HEAD
-    return (
-        <div className="min-h-screen bg-gray-100">
-            {/* Top Bar */}
-            <header className="border-b bg-white px-6 py-4">
-                <div className="flex items-center justify-between">
+  const statistics = [
+    {
+      label: "Total Customers",
+      value: "1,245",
+    },
+    {
+      label: "Total Accounts",
+      value: "842",
+    },
+    {
+      label: "Today's Transactions",
+      value: "2,341",
+    },
+  ];
+
+  const recentUsers = [
+    {
+      name: "John Doe",
+      role: "Customer",
+    },
+    {
+      name: "Jane Smith",
+      role: "Customer",
+    },
+    {
+      name: "Tom Teller",
+      role: "Teller",
+    },
+    {
+      name: "Sarah Admin",
+      role: "Admin",
+    },
+  ];
+
+  const accountStatus = [
+    {
+      label: "Active Accounts",
+      value: "742",
+    },
+    {
+      label: "Frozen Accounts",
+      value: "68",
+    },
+    {
+      label: "Closed Accounts",
+      value: "32",
+    },
+  ];
+
+  return (
+    <div className="min-h-screen bg-slate-100 lg:flex">
+      <DashboardSidebar />
+
+      <main className="min-w-0 flex-1">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          {/* Page Header */}
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold text-[#062b4f]">
+              Admin Dashboard
+            </h1>
+            <p className="mt-1 text-sm text-slate-500">
+              Overview of your banking system
+            </p>
+          </div>
+
+          {/* Statistics */}
+          <section className="mb-6">
+            <div className="grid gap-4 md:grid-cols-3">
+              {statistics.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-200"
+                >
+                  <p className="text-sm font-medium text-slate-500">
+                    {stat.label}
+                  </p>
+
+                  <p className="mt-2 text-3xl font-bold text-[#062b4f]">
+                    {stat.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Recent Users + Quick Actions */}
+          <section className="mb-6 grid gap-6 lg:grid-cols-2">
+            {/* Recent Users */}
+            <div className="rounded-xl bg-white shadow-sm ring-1 ring-slate-200">
+              <div className="border-b border-slate-200 px-5 py-4">
+                <h2 className="font-semibold text-[#062b4f]">
+                  Recent Users
+                </h2>
+                <p className="mt-1 text-sm text-slate-500">
+                  Recently created users
+                </p>
+              </div>
+
+              <div className="divide-y divide-slate-100">
+                {recentUsers.map((user) => (
+                  <div
+                    key={user.name}
+                    className="flex items-center justify-between px-5 py-4"
+                  >
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900">
-                            Admin Dashboard
-                        </h1>
+                      <p className="font-medium text-slate-800">
+                        {user.name}
+                      </p>
+                      <p className="text-sm text-slate-500">
+                        {user.role}
+                      </p>
                     </div>
 
-                    <button
-                        type="button"
-                        className="rounded-lg border bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-                    >
-                        Admin ▼
-                    </button>
-                </div>
-            </header>
-
-            <div className="flex">
-                {/* Sidebar */}
-                <aside className="min-h-[calc(100vh-73px)] w-64 border-r bg-white p-4">
-                    <nav className="space-y-2">
-                        <button
-                            type="button"
-                            className="w-full rounded-lg px-4 py-3 text-left font-medium"
-                        >
-                            Dashboard
-                        </button>
-
-                        <button
-                            type="button"
-                            className="w-full rounded-lg px-4 py-3 text-left text-gray-600 hover:bg-gray-100"
-                        >
-                            Customers
-                        </button>
-
-                        <button
-                            type="button"
-                            className="w-full rounded-lg px-4 py-3 text-left text-gray-600 hover:bg-gray-100"
-                        >
-                            Accounts
-                        </button>
-
-                        <button
-                            type="button"
-                            className="w-full rounded-lg px-4 py-3 text-left text-gray-600 hover:bg-gray-100"
-                        >
-                            Transactions
-                        </button>
-
-                        <button
-                            type="button"
-                            className="w-full rounded-lg px-4 py-3 text-left text-gray-600 hover:bg-gray-100"
-                        >
-                            Users & Roles
-                        </button>
-
-                        <button
-                            type="button"
-                            className="w-full rounded-lg px-4 py-3 text-left text-gray-600 hover:bg-gray-100"
-                        >
-                            Reports
-                        </button>
-
-                        <button
-                            type="button"
-                            className="w-full rounded-lg px-4 py-3 text-left text-gray-600 hover:bg-gray-100"
-                        >
-                            Settings
-                        </button>
-
-                        <div className="pt-4">
-                            <button
-                                type="button"
-                                className="w-full rounded-lg px-4 py-3 text-left text-gray-600 hover:bg-gray-100"
-                            >
-                                Logout
-                            </button>
-                        </div>
-                    </nav>
-                </aside>
-
-                {/* Main Content */}
-                <main className="flex-1 p-6">
-                    {/* Statistics */}
-                    <section>
-                        <h2 className="mb-4 text-xl font-semibold text-gray-900">
-                            Overview
-                        </h2>
-
-                        <div className="grid gap-6 md:grid-cols-3">
-                            <div className="rounded-xl border bg-white p-6 shadow-sm">
-                                <p className="text-sm font-medium text-gray-500">
-                                    Total Customers
-                                </p>
-
-                                <p className="mt-2 text-3xl font-bold text-gray-900">
-                                    1,245
-                                </p>
-                            </div>
-
-                            <div className="rounded-xl border bg-white p-6 shadow-sm">
-                                <p className="text-sm font-medium text-gray-500">
-                                    Total Accounts
-                                </p>
-
-                                <p className="mt-2 text-3xl font-bold text-gray-900">
-                                    842
-                                </p>
-                            </div>
-
-                            <div className="rounded-xl border bg-white p-6 shadow-sm">
-                                <p className="text-sm font-medium text-gray-500">
-                                    Today's Transactions
-                                </p>
-
-                                <p className="mt-2 text-3xl font-bold text-gray-900">
-                                    2,341
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* Recent Users + Quick Actions */}
-                    <section className="mt-8 grid gap-6 lg:grid-cols-2">
-                        {/* Recent Users */}
-                        <div className="rounded-xl border bg-white p-6 shadow-sm">
-                            <div className="mb-5 flex items-center justify-between">
-                                <h2 className="text-xl font-semibold text-gray-900">
-                                    Recent Users
-                                </h2>
-
-                                <button
-                                    type="button"
-                                    className="text-sm font-medium"
-                                >
-                                    View All
-                                </button>
-                            </div>
-
-                            <div className="space-y-4">
-                                <div className="flex items-center justify-between border-b pb-4">
-                                    <div>
-                                        <p className="font-medium text-gray-900">
-                                            John Doe
-                                        </p>
-                                        <p className="text-sm text-gray-500">
-                                            john@example.com
-                                        </p>
-                                    </div>
-
-                                    <span className="text-sm text-gray-500">
-                                        Customer
-                                    </span>
-                                </div>
-
-                                <div className="flex items-center justify-between border-b pb-4">
-                                    <div>
-                                        <p className="font-medium text-gray-900">
-                                            Jane Smith
-                                        </p>
-                                        <p className="text-sm text-gray-500">
-                                            jane@example.com
-                                        </p>
-                                    </div>
-
-                                    <span className="text-sm text-gray-500">
-                                        Customer
-                                    </span>
-                                </div>
-
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="font-medium text-gray-900">
-                                            Tom Teller
-                                        </p>
-                                        <p className="text-sm text-gray-500">
-                                            tom@bank.com
-                                        </p>
-                                    </div>
-
-                                    <span className="text-sm text-gray-500">
-                                        Teller
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Quick Actions */}
-                        <div className="rounded-xl border bg-white p-6 shadow-sm">
-                            <h2 className="mb-5 text-xl font-semibold text-gray-900">
-                                Quick Actions
-                            </h2>
-
-                            <div className="grid gap-3 sm:grid-cols-2">
-                                <button
-                                    type="button"
-                                    className="rounded-lg border px-4 py-4 text-left font-medium hover:bg-gray-50"
-                                >
-                                    + Create User
-                                </button>
-
-                                <button
-                                    type="button"
-                                    className="rounded-lg border px-4 py-4 text-left font-medium hover:bg-gray-50"
-                                >
-                                    + Create Account
-                                </button>
-
-                                <button
-                                    type="button"
-                                    className="rounded-lg border px-4 py-4 text-left font-medium hover:bg-gray-50"
-                                >
-                                    Freeze Account
-                                </button>
-
-                                <button
-                                    type="button"
-                                    className="rounded-lg border px-4 py-4 text-left font-medium hover:bg-gray-50"
-                                >
-                                    Generate Report
-                                </button>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* Account Status */}
-                    <section className="mt-8">
-                        <div className="rounded-xl border bg-white p-6 shadow-sm">
-                            <h2 className="mb-5 text-xl font-semibold text-gray-900">
-                                Account Status
-                            </h2>
-
-                            <div className="grid gap-6 md:grid-cols-3">
-                                <div>
-                                    <p className="text-sm font-medium text-gray-500">
-                                        Active Accounts
-                                    </p>
-
-                                    <p className="mt-2 text-3xl font-bold text-gray-900">
-                                        742
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <p className="text-sm font-medium text-gray-500">
-                                        Frozen Accounts
-                                    </p>
-
-                                    <p className="mt-2 text-3xl font-bold text-gray-900">
-                                        68
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <p className="text-sm font-medium text-gray-500">
-                                        Closed Accounts
-                                    </p>
-
-                                    <p className="mt-2 text-3xl font-bold text-gray-900">
-                                        32
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </main>
+                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
+                      {user.role}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {/* Quick Actions */}
+            <div className="rounded-xl bg-white shadow-sm ring-1 ring-slate-200">
+              <div className="border-b border-slate-200 px-5 py-4">
+                <h2 className="font-semibold text-[#062b4f]">
+                  Quick Actions
+                </h2>
+                <p className="mt-1 text-sm text-slate-500">
+                  Common administrative actions
+                </p>
+              </div>
+
+              <div className="grid gap-3 p-5 sm:grid-cols-2">
+                <Button className="w-full">
+                  Create User
+                </Button>
+
+                <Button className="w-full">
+                  Create Account
+                </Button>
+
+                <Button className="w-full">
+                  Freeze Account
+                </Button>
+
+                <Button className="w-full">
+                  Generate Report
+                </Button>
+              </div>
+            </div>
+          </section>
+
+          {/* Account Status */}
+          <section>
+            <div className="rounded-xl bg-white shadow-sm ring-1 ring-slate-200">
+              <div className="border-b border-slate-200 px-5 py-4">
+                <h2 className="font-semibold text-[#062b4f]">
+                  Account Status
+                </h2>
+                <p className="mt-1 text-sm text-slate-500">
+                  Current status of all bank accounts
+                </p>
+              </div>
+
+              <div className="grid divide-y divide-slate-200 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+                {accountStatus.map((status) => (
+                  <div key={status.label} className="p-6 text-center">
+                    <p className="text-sm font-medium text-slate-500">
+                      {status.label}
+                    </p>
+
+                    <p className="mt-2 text-3xl font-bold text-[#062b4f]">
+                      {status.value}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
         </div>
-    );
-=======
-  return (
-    <div className="min-h-screen p-6">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-
-        <p className="mt-2 text-gray-600">Manage users, staff, and accounts.</p>
-      </div>
-
-      <div className="space-y-8">
-        <UserManagement />
-
-        <AccountManagement />
-      </div>
+      </main>
     </div>
   );
->>>>>>> main
 }
 
 export default AdminDashboard;

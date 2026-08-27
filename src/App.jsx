@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import { Routes, Route } from "react-router-dom";
-import AdminDashboard from "./pages/AdminDashboard";
-
-function App() {
-    return (
-        <Routes>
-            <Route path="/admin" element={<AdminDashboard />} />
-        </Routes>
-    );
-=======
 import "./App.css";
 import { Navigate, Route, Routes } from "react-router-dom";
 
@@ -75,12 +64,8 @@ function AppRoutes() {
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
->>>>>>> main
 }
 
-<<<<<<< HEAD
-export default App;
-=======
 function App() {
   return (
     <AuthProvider>
@@ -90,4 +75,3 @@ function App() {
 }
 
 export default App;
->>>>>>> main
