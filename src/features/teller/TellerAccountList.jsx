@@ -45,34 +45,26 @@ function TellerAccountList({ customer, onSelectAccount }) {
       {accounts.length === 0 ? (
         <p className="text-sm text-slate-500">No accounts found.</p>
       ) : (
-        <table className="w-full text-left text-sm">
-          <thead>
-            <tr className="border-b border-slate-200 text-slate-500">
-              <th className="py-2 px-3 font-medium">Account ID</th>
-              <th className="py-2 px-3 font-medium">Type</th>
-              <th className="py-2 px-3 font-medium">Balance</th>
-              <th className="py-2 px-3 font-medium">Status</th>
-              <th className="py-2 px-3"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {accounts.map((account) => (
-              <tr key={account.id} className="border-b border-slate-100 hover:bg-slate-50">
-                <td className="py-2 px-3">{account.id}</td>
-                <td className="py-2 px-3">{account.account_type}</td>
-                <td className="py-2 px-3">${account.balance.toFixed(2)}</td>
-                <td className="py-2 px-3">{account.status}</td>
-                <td className="py-2 px-3">
-                  {onSelectAccount && (
-                    <Button type="button" onClick={() => onSelectAccount(account)}>
-                      Select
-                    </Button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ul className="divide-y divide-slate-100">
+          {accounts.map((account) => (
+            <li key={account.id} className="flex items-center justify-between gap-4 py-3">
+              <div>
+                <p className="font-medium capitalize text-slate-900">{account.account_type} Account</p>
+                <p className="text-xs text-slate-500">
+                  Account #{account.id} · {account.status}
+                </p>
+              </div>
+              <div className="flex items-center gap-4">
+                <p className="font-semibold text-slate-900">${account.balance.toFixed(2)}</p>
+                {onSelectAccount && (
+                  <Button type="button" onClick={() => onSelectAccount(account)}>
+                    Select
+                  </Button>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   )

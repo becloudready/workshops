@@ -6,6 +6,11 @@ import { useAuth } from '../../context/AuthContext'
 // key={account.id} from the caller so switching accounts remounts this
 // component and resets loading/error state, same pattern as TellerAccountList.
 
+// Transaction types that increase the account balance — shown in green
+// with a "+" prefix. Everything else (withdrawal, an outgoing transfer)
+// is shown in red with a "-" prefix.
+const CREDIT_TYPES = new Set(['deposit', 'receive'])
+
 function TellerTransactionHistory({ account }) {
   const { token } = useAuth()
   const [transactions, setTransactions] = useState([])
@@ -42,28 +47,29 @@ function TellerTransactionHistory({ account }) {
       {transactions.length === 0 ? (
         <p className="text-sm text-slate-500">No transactions found.</p>
       ) : (
-        <table className="w-full text-left text-sm">
-          <thead>
-            <tr className="border-b border-slate-200 text-slate-500">
-              <th className="py-2 px-3 font-medium">Date</th>
-              <th className="py-2 px-3 font-medium">Type</th>
-              <th className="py-2 px-3 font-medium">Amount</th>
-              <th className="py-2 px-3 font-medium">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            {[...transactions]
-              .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-              .map((transaction) => (
-                <tr key={transaction.id} className="border-b border-slate-100 hover:bg-slate-50">
-                  <td className="py-2 px-3">{new Date(transaction.timestamp).toLocaleString()}</td>
-                  <td className="py-2 px-3">{transaction.transaction_type}</td>
-                  <td className="py-2 px-3">${transaction.amount.toFixed(2)}</td>
-                  <td className="py-2 px-3">{transaction.description || '—'}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <ul className="divide-y divide-slate-100">
+          {[...transactions]
+            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+            .map((transaction) => {
+              const isCredit = CREDIT_TYPES.has(transaction.transaction_type)
+
+              return (
+                <li key={transaction.id} className="flex items-center justify-between gap-4 py-3">
+                  <div>
+                    <p className="font-medium capitalize text-slate-900">
+                      {transaction.description || transaction.transaction_type}
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      {new Date(transaction.timestamp).toLocaleString()}
+                    </p>
+                  </div>
+                  <p className={`font-semibold ${isCredit ? 'text-emerald-600' : 'text-red-600'}`}>
+                    {isCredit ? '+' : '-'}${transaction.amount.toFixed(2)}
+                  </p>
+                </li>
+              )
+            })}
+        </ul>
       )}
     </div>
   )
