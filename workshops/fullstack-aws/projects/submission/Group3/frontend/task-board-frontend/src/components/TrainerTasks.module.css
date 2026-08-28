@@ -1,0 +1,427 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.label {
+  margin: 0 0 0.25rem;
+  color: #777;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+/* --------------------------------
+   Cards
+-------------------------------- */
+
+.card,
+.progressCard {
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.cardHeader {
+  margin-bottom: 1.25rem;
+}
+
+.cardHeader h2 {
+  margin: 0;
+  color: #222;
+  font-size: 1.4rem;
+}
+
+/* --------------------------------
+   Create task form
+-------------------------------- */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field label {
+  color: #333;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.field input,
+.field select,
+.field textarea {
+  padding: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.subtaskRow {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.subtaskRow input {
+  flex: 1;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.removeButton,
+.addButton {
+  padding: 0.5rem 0.9rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #f7f7f7;
+  color: #555;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.removeButton:hover,
+.addButton:hover {
+  background: #eee;
+}
+
+.addButton {
+  align-self: flex-start;
+  margin-top: 0.6rem;
+}
+
+.submitButton {
+  align-self: flex-start;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  background: #1d4fc4;
+}
+
+.submitButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* --------------------------------
+   Task list (shares look with the
+   trainee board, blue instead of
+   green accents)
+-------------------------------- */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header h2 {
+  margin: 0;
+  color: #222;
+  font-size: 1.75rem;
+}
+
+.taskCount {
+  margin: 0;
+  color: #666;
+}
+
+.taskList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.taskCard {
+  position: relative;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.taskCard:hover {
+  border-color: #2563eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.taskCardActive {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+.taskCardMain {
+  width: 100%;
+  padding: 1.25rem;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.taskCardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.taskCard h3 {
+  margin: 0;
+  color: #222;
+  font-size: 1.05rem;
+}
+
+.description {
+  margin: 0.75rem 0;
+  color: #666;
+  line-height: 1.5;
+}
+
+.taskMeta {
+  display: flex;
+  gap: 1rem;
+  color: #777;
+  font-size: 0.85rem;
+}
+
+.statusBadge {
+  flex-shrink: 0;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: #e8eefc;
+  color: #2563eb;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.deleteButton {
+  width: 100%;
+  padding: 0.6rem;
+  border: none;
+  border-top: 1px solid #eee;
+  background: #fff;
+  color: #b71c1c;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.deleteButton:hover {
+  background: #ffebee;
+}
+
+.empty {
+  padding: 3rem;
+  border: 1px dashed #ccc;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.empty h3 {
+  margin: 0 0 0.5rem;
+}
+
+.empty p {
+  margin: 0;
+  color: #777;
+}
+
+.error {
+  padding: 0.9rem 1.1rem;
+  border: 1px solid #e57373;
+  border-radius: 8px;
+  background: #ffebee;
+  color: #b71c1c;
+}
+
+/* --------------------------------
+   Task progress
+-------------------------------- */
+
+.averageBar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.averageBarTrack {
+  flex: 1;
+  height: 10px;
+  border-radius: 999px;
+  background: #eef1f5;
+  overflow: hidden;
+}
+
+.averageBarFill {
+  height: 100%;
+  border-radius: 999px;
+  background: #2563eb;
+  transition: width 0.3s ease;
+}
+
+.averageBar span {
+  flex-shrink: 0;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.traineeList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.traineeRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fafafa;
+  cursor: pointer;
+  text-align: left;
+}
+
+.traineeRow:hover {
+  border-color: #2563eb;
+}
+
+.traineeRowActive {
+  border-color: #2563eb;
+  background: #e8eefc;
+}
+
+.traineeName {
+  flex-shrink: 0;
+  width: 140px;
+  color: #222;
+  font-weight: 600;
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.traineeBarTrack {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.traineeBarFill {
+  height: 100%;
+  border-radius: 999px;
+  background: #2563eb;
+  transition: width 0.3s ease;
+}
+
+.traineeRow > span:last-child {
+  flex-shrink: 0;
+  width: 42px;
+  text-align: right;
+  color: #555;
+  font-size: 0.85rem;
+}
+
+/* --------------------------------
+   Trainee detail
+-------------------------------- */
+
+.traineeDetail {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.traineeDetail h3 {
+  margin: 0 0 0.75rem;
+}
+
+.traineeDetail h4 {
+  margin: 1rem 0 0.5rem;
+  font-size: 0.95rem;
+}
+
+.traineeDetailName {
+  margin: 0;
+  color: #333;
+  font-weight: 600;
+}
+
+.subtask {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.subtask input {
+  width: 1rem;
+  height: 1rem;
+}
+
+.historyItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  background: #f7f7f7;
+  margin-bottom: 0.5rem;
+}
+
+.historyItem strong {
+  color: #2563eb;
+}
+
+.historyItem span {
+  color: #555;
+}
+
+.historyItem small {
+  margin-left: auto;
+  color: #888;
+}
