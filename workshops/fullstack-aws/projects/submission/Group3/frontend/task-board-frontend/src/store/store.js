@@ -1,7 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-
-import TraineeSlice from "./TraineeStore";
-import TrainerSlice from "./TrainerStore";
+import TraineeSlice from "./TraineeSlice";
+import TraineeTasksSlice from "./TraineeTasksSlice";
 
 export const Store = configureStore({
   reducer: {

@@ -3,7 +3,10 @@ import styles from "./TraineeHeader.module.css";
 import { useSelector } from "react-redux";
 
 export default function TraineeHeader() {
-  const traineeName = useSelector((state) => state.trainee.name);
+  const trainee = useSelector((state) => state.trainee);
+
+  const traineeName = trainee.name;
+  const userId = trainee.userId;
 
   return (
     <div className={styles.traineeHeader}>
@@ -15,7 +18,11 @@ export default function TraineeHeader() {
         </h1>
 
         <p className={styles.traineeName}>
-          {traineeName ? `Welcome, ${traineeName}!` : "Welcome!"}
+          {traineeName
+            ? `Welcome, ${traineeName}!`
+            : userId
+              ? `Welcome, Trainee #${userId}!`
+              : "Welcome!"}
         </p>
 
         <p className={styles.description}>

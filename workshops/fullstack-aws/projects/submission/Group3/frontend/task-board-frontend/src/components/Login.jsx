@@ -1,9 +1,14 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import styles from "./Login.module.css";
+
+import { setCredentials } from "../store/TraineeSlice";
 
 const API_BASE_URL = "http://127.0.0.1:8000/api";
 
 export default function Login({ onLogin }) {
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -17,20 +22,32 @@ export default function Login({ onLogin }) {
     setError(null);
 
     try {
+      console.log("========== LOGIN REQUEST ==========");
+
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify({
           email,
           password,
         }),
       });
 
+      console.log("Status:", response.status);
+      console.log("OK:", response.ok);
+
       const data = await response.json();
 
-      // Handle FastAPI validation errors
+      console.log("Response Data:", data);
+
+      // --------------------------------
+      // Handle errors
+      // --------------------------------
+
       if (!response.ok) {
         if (Array.isArray(data.detail)) {
           const messages = data.detail
@@ -47,7 +64,6 @@ export default function Login({ onLogin }) {
           throw new Error(messages);
         }
 
-        // Handle normal FastAPI errors
         if (typeof data.detail === "string") {
           throw new Error(data.detail);
         }
@@ -55,26 +71,53 @@ export default function Login({ onLogin }) {
         throw new Error(`Login failed with status ${response.status}`);
       }
 
-      // Make sure the backend actually returned a token
+      // --------------------------------
+      // Validate login response
+      // --------------------------------
+
       if (!data.accessToken) {
         throw new Error("Login succeeded, but no access token was returned.");
       }
 
-      // Store authentication information
-      localStorage.setItem("access_token", data.accessToken);
+      if (!data.role) {
+        throw new Error("Login succeeded, but no role was returned.");
+      }
 
-      localStorage.setItem("role", data.role);
+      if (!data.userId) {
+        throw new Error("Login succeeded, but no user ID was returned.");
+      }
 
-      localStorage.setItem("user_id", data.userId);
+      // --------------------------------
+      // Save login information to Redux
+      // --------------------------------
 
-      console.log("Login successful");
+      dispatch(
+        setCredentials({
+          accessToken: data.accessToken,
+          tokenType: data.tokenType,
+          role: data.role,
+          userId: data.userId,
+        }),
+      );
 
-      // Tell App.jsx that the user is now logged in
+      console.log("========== LOGIN SUCCESS ==========");
+      console.log("User ID:", data.userId);
+      console.log("Role:", data.role);
+      console.log("Token Type:", data.tokenType);
+      console.log("Access Token Received:", !!data.accessToken);
+      console.log("===================================");
+
+      // --------------------------------
+      // Tell App.jsx login succeeded
+      // --------------------------------
+
       if (onLogin) {
         onLogin();
       }
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error("========== LOGIN ERROR ==========");
+      console.error(error);
+      console.error("=================================");
 
       setError(error instanceof Error ? error.message : "Unable to log in.");
     } finally {
