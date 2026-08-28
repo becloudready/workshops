@@ -24,8 +24,8 @@ export default function ManagerDash() {
     ]);
   }, []);
 
-  const displayedLogs = filterUrgentOnly 
-    ? traineeLogs.filter(log => log.isUrgent) 
+  const displayedLogs = filterUrgentOnly
+    ? traineeLogs.filter(log => log.isUrgent)
     : traineeLogs;
 
   return (
