@@ -303,7 +303,37 @@ for `GET`, `POST`, `PUT`, `DELETE`, `OPTIONS` on `/api/**`. **Mark must get the 
 
 ---
 
-## 10. Team Responsibilities
+## 10. How to Test This
+
+Two layers of testing exist, covering different purposes:
+
+### Automated (JUnit)
+
+`backend/src/test/java/com/edtech/noticeboard/service/CurriculumServiceTest.java` — 5 Mockito-based unit tests covering `CurriculumService`: listing, 404-on-missing-id (read and delete), id-stripping on create, and field updates on PUT. No real MongoDB needed — the repository is mocked, so these run fast and don't touch Atlas.
+
+Run them:
+
+```bash
+cd backend
+mvn test
+```
+
+These are what a grader/CI checks for TDD coverage. New backend logic should get tests here, not just manual Postman checks.
+
+### Manual (Postman)
+
+`backend/postman/NoticeBoardTracker-Curriculum.postman_collection.json` — import this into Postman. Two folders:
+
+- **Happy Path** — Create → List → Get By Id → Update → Delete, run top-to-bottom (or via Collection Runner). Each request has `pm.test()` assertions on status code and response shape, and the Create request auto-captures the generated `id` into a collection variable so the rest of the chain uses it automatically. The Delete step cleans up after itself, so running this doesn't leave junk data in the shared Atlas cluster.
+- **Error Cases** — blank-title create (400), get/delete on a non-existent id (404). Demonstrates the `{"message": "..."}` error format from section 5.
+
+Collection variable `baseUrl` defaults to `http://localhost:8080` — change it if testing against a deployed instance instead of local.
+
+Before running either folder, start the backend locally with a real `MONGODB_URI` set (see section 6), or point `baseUrl` at wherever it's already running.
+
+---
+
+## 11. Team Responsibilities
 
 ### Aaron — Backend + MongoDB CRUD
 
@@ -323,7 +353,7 @@ Owns `AuthController`/`AuthService`, `CohortController`/`CohortService`, `Securi
 
 ---
 
-## 11. Change Rules
+## 12. Change Rules
 
 When a contract change is required:
 
@@ -343,4 +373,8 @@ When a contract change is required:
              what's implemented on feature/backend, after the team
              decided to keep the existing Java/Spring Boot backend
              rather than rewrite it to match the original draft.
+
+2026-08-28 — Added section 10 (How to Test This): CurriculumServiceTest
+             (5 JUnit/Mockito unit tests) and a Postman collection at
+             backend/postman/NoticeBoardTracker-Curriculum.postman_collection.json.
 ```
