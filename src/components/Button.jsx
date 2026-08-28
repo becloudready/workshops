@@ -1,6 +1,6 @@
 // Reusable styled button component.
 // Use this instead of creating different button styles throughout the application.
-
+//comment
 function Button({ children, type = "button", className = "", ...props }) {
   return (
     <button
