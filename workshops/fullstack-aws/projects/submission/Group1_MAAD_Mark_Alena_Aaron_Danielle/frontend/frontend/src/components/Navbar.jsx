@@ -1,65 +1,85 @@
 import React from 'react';
 
-export default function Navbar({ activePage, onNavigate }) {
+export default function Navbar({ activePage, onNavigate, darkMode, setDarkMode }) {
+  const isDark = darkMode;
+
   return (
     <header style={{
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      padding: '16px 32px',
-      backgroundColor: '#1e293b',
-      color: '#ffffff'
+      padding: '18px 36px',
+      backgroundColor: isDark ? '#1A1517' : '#FDF6F8',
+      borderBottom: `1.5px solid ${isDark ? '#45353D' : '#F7D6E0'}`,
+      fontFamily: '"Playfair Display", "Georgia", serif',
+      transition: 'background-color 0.3s ease'
     }}>
-      {/* Brand Title / Logo */}
-      <div
-        onClick={() => onNavigate('home')}
-        style={{ fontWeight: 'bold', fontSize: '18px', cursor: 'pointer' }}
+      {/* Brand Logo */}
+      <div 
+        onClick={() => onNavigate('home')} 
+        style={{
+          fontWeight: 'bold',
+          fontSize: '20px',
+          color: isDark ? '#FDF6F8' : '#E06287',
+          cursor: 'pointer'
+        }}
       >
-        Notice Board Tracker
+        ✦ NoticeBoardTracker
       </div>
 
-      {/* Navigation Controls */}
-      <nav style={{ display: 'flex', gap: '10px' }}>
+      {/* Navigation and Theme Switcher */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontFamily: 'sans-serif' }}>
+        
         <button
           onClick={() => onNavigate('home')}
           style={{
-            backgroundColor: activePage === 'home' ? '#3b82f6' : 'transparent',
-            color: '#ffffff',
-            border: '1px solid #475569',
-            padding: '6px 12px',
-            borderRadius: '4px',
+            backgroundColor: activePage === 'home' ? '#F28DA8' : 'transparent',
+            color: activePage === 'home' ? '#FFFFFF' : isDark ? '#C4B5BC' : '#8A7A83',
+            border: 'none',
+            padding: '8px 18px',
+            borderRadius: '999px',
+            fontSize: '12px',
+            fontWeight: 'bold',
             cursor: 'pointer'
           }}
         >
           Home
         </button>
+
         <button
-          onClick={() => onNavigate('manager')}
+          onClick={() => onNavigate('roleselect')}
           style={{
-            backgroundColor: activePage === 'manager' ? '#3b82f6' : 'transparent',
-            color: '#ffffff',
-            border: '1px solid #475569',
-            padding: '6px 12px',
-            borderRadius: '4px',
+            backgroundColor: activePage === 'roleselect' ? '#F28DA8' : 'transparent',
+            color: activePage === 'roleselect' ? '#FFFFFF' : isDark ? '#C4B5BC' : '#8A7A83',
+            border: 'none',
+            padding: '8px 18px',
+            borderRadius: '999px',
+            fontSize: '12px',
+            fontWeight: 'bold',
             cursor: 'pointer'
           }}
         >
-            Manager View
+          Select Role
         </button>
+
         <button
-          onClick={() => onNavigate('trainee')}
+          onClick={() => setDarkMode(!darkMode)}
           style={{
-            backgroundColor: activePage === 'trainee' ? '#3b82f6' : 'transparent',
-            color: '#ffffff',
-            border: '1px solid #475569',
-            padding: '6px 12px',
-            borderRadius: '4px',
-            cursor: 'pointer'
+            backgroundColor: isDark ? '#2D1F26' : '#FDE8EE',
+            color: isDark ? '#FDF6F8' : '#E06287',
+            border: `1px solid ${isDark ? '#5C3848' : '#F7D6E0'}`,
+            padding: '8px 14px',
+            borderRadius: '999px',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            marginLeft: '8px'
           }}
         >
-            Trainee View (WIP)
+          {darkMode ? '☀️ Light' : '🌙 Dark'}
         </button>
-      </nav>
+
+      </div>
     </header>
   );
 }
