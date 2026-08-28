@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import "./TraineeSidebar.css";
 
-const TraineeSidebar = () => {
+const TraineeSidebar = ({ onLogout }) => {
   const traineeName = useSelector((state) => state.trainee.name);
 
   return (
@@ -55,7 +55,11 @@ const TraineeSidebar = () => {
           <span>Profile</span>
         </a>
 
-        <button className="sidebar-link logout-button">
+        <button
+          type="button"
+          className="sidebar-link logout-button"
+          onClick={onLogout}
+        >
           <span>⇥</span>
           <span>Logout</span>
         </button>
