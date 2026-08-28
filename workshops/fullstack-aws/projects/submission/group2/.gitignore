@@ -1,0 +1,6 @@
+# The agent harness is working material, not a deliverable.
+#
+# Scoped to this directory rather than added to a .gitignore higher up: those files are
+# tracked and belong to the upstream repo, and this clone is a training exercise that will
+# not be merged back. Keeping the rule local means nothing outside group2/ is touched.
+AGENTS.md
