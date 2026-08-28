@@ -1,23 +1,43 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import styles from "./TraineeTasks.module.css";
 
 const API_BASE_URL = "http://127.0.0.1:8000/api";
 
-function getAuthHeaders() {
-  const token = localStorage.getItem("access_token");
-
-  return {
-    Authorization: `Bearer ${token}`,
-  };
-}
-
 export default function TraineeTasks() {
+  // ============================================================
+  // Redux authentication
+  // ============================================================
+
+  const { accessToken, tokenType, userId, role, isAuthenticated } = useSelector(
+    (state) => state.trainee,
+  );
+
+  // ============================================================
+  // Local state
+  // ============================================================
+
   const [tasks, setTasks] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
   const [progressHistory, setProgressHistory] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // ============================================================
+  // Authentication headers
+  // ============================================================
+
+  function getAuthHeaders() {
+    if (!accessToken) {
+      throw new Error("You are not logged in.");
+    }
+
+    return {
+      Authorization: `${tokenType || "Bearer"} ${accessToken}`,
+      "Content-Type": "application/json",
+    };
+  }
 
   // ============================================================
   // GET /api/student/tasks
@@ -29,16 +49,23 @@ export default function TraineeTasks() {
         setLoading(true);
         setError(null);
 
-        const token = localStorage.getItem("access_token");
-
-        if (!token) {
+        // Make sure Redux has authentication information
+        if (!isAuthenticated || !accessToken) {
           throw new Error("You are not logged in.");
         }
+
+        console.log("========== FETCHING TRAINEE TASKS ==========");
+        console.log("User ID:", userId);
+        console.log("Role:", role);
+        console.log("Token available:", !!accessToken);
+        console.log("=============================================");
 
         const response = await fetch(`${API_BASE_URL}/student/tasks`, {
           method: "GET",
           headers: getAuthHeaders(),
         });
+
+        console.log("Tasks response status:", response.status);
 
         if (response.status === 401) {
           throw new Error("Your session has expired. Please log in again.");
@@ -50,18 +77,22 @@ export default function TraineeTasks() {
 
         const data = await response.json();
 
+        console.log("Trainee tasks response:", data);
+
         setTasks(data);
       } catch (error) {
         console.error("Error fetching trainee tasks:", error);
 
-        setError(error.message);
+        setError(
+          error instanceof Error ? error.message : "Unable to load tasks.",
+        );
       } finally {
         setLoading(false);
       }
     }
 
     fetchTasks();
-  }, []);
+  }, [accessToken, tokenType, userId, role, isAuthenticated]);
 
   // ============================================================
   // GET /api/student/tasks/{task_id}
@@ -73,16 +104,18 @@ export default function TraineeTasks() {
       setSelectedTask(null);
       setProgressHistory([]);
 
-      const token = localStorage.getItem("access_token");
-
-      if (!token) {
+      if (!isAuthenticated || !accessToken) {
         throw new Error("You are not logged in.");
       }
+
+      console.log("Fetching task:", taskId);
 
       const response = await fetch(`${API_BASE_URL}/student/tasks/${taskId}`, {
         method: "GET",
         headers: getAuthHeaders(),
       });
+
+      console.log("Task response status:", response.status);
 
       if (response.status === 401) {
         throw new Error("Your session has expired. Please log in again.");
@@ -94,13 +127,15 @@ export default function TraineeTasks() {
 
       const data = await response.json();
 
+      console.log("Task response:", data);
+
       setSelectedTask(data);
 
       await fetchProgressHistory(taskId);
     } catch (error) {
       console.error("Error fetching task:", error);
 
-      setError(error.message);
+      setError(error instanceof Error ? error.message : "Unable to load task.");
     }
   }
 
@@ -110,11 +145,11 @@ export default function TraineeTasks() {
 
   async function fetchProgressHistory(taskId) {
     try {
-      const token = localStorage.getItem("access_token");
-
-      if (!token) {
+      if (!isAuthenticated || !accessToken) {
         throw new Error("You are not logged in.");
       }
+
+      console.log("Fetching progress history for task:", taskId);
 
       const response = await fetch(
         `${API_BASE_URL}/student/tasks/${taskId}/progress/history`,
@@ -123,6 +158,8 @@ export default function TraineeTasks() {
           headers: getAuthHeaders(),
         },
       );
+
+      console.log("Progress history response status:", response.status);
 
       if (response.status === 401) {
         throw new Error("Your session has expired. Please log in again.");
@@ -134,11 +171,17 @@ export default function TraineeTasks() {
 
       const data = await response.json();
 
+      console.log("Progress history response:", data);
+
       setProgressHistory(data);
     } catch (error) {
       console.error("Error fetching progress history:", error);
 
-      setError(error.message);
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Unable to load progress history.",
+      );
     }
   }
 
