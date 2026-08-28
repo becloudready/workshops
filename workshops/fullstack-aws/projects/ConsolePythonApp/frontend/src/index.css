@@ -1,0 +1,40 @@
+:root {
+  --text: #667477;
+  --text-h: #172d2c;
+  --bg: #f4f8f6;
+  --surface: #ffffff;
+  --border: #dce8e3;
+  --accent: #087f73;
+  --accent-bg: #e2f3ee;
+  --green: #25835c;
+  --red: #bd4b4b;
+  --ink: #173b3a;
+
+  --sans: 'Avenir Next', 'Trebuchet MS', sans-serif;
+  --heading: 'Avenir Next', 'Trebuchet MS', sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 16px/145% var(--sans);
+  letter-spacing: 0;
+  color-scheme: light;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+#root { min-height: 100svh; }
+
+body {
+  margin: 0;
+}
+
+h1, h2, h3 { font-family: var(--heading); font-weight: 700; }
+p { margin: 0; }
+button { font-family: inherit; }
