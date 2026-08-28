@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import styles from "./TrainerTasks.module.css";
 
 const API_BASE_URL = "http://127.0.0.1:8000/api";
@@ -14,21 +15,27 @@ const EMPTY_FORM = {
   subtasks: [""],
 };
 
-function getAuthHeaders(withJson = false) {
-  const token = localStorage.getItem("access_token");
+export default function TrainerTasks() {
+  // The "trainee" slice holds the current auth session for any
+  // logged-in user, manager included - see the note in App.jsx.
+  const { accessToken, tokenType } = useSelector((state) => state.trainee);
 
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
+  function getAuthHeaders(withJson = false) {
+    if (!accessToken) {
+      throw new Error("You are not logged in.");
+    }
 
-  if (withJson) {
-    headers["Content-Type"] = "application/json";
+    const headers = {
+      Authorization: `${tokenType || "Bearer"} ${accessToken}`,
+    };
+
+    if (withJson) {
+      headers["Content-Type"] = "application/json";
+    }
+
+    return headers;
   }
 
-  return headers;
-}
-
-export default function TrainerTasks() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

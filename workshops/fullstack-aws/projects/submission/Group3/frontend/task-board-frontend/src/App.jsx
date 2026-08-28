@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import Login from "./components/Login";
 import TraineeHeader from "./components/TraineeHeader";
@@ -9,7 +9,7 @@ import TrainerHeader from "./components/TrainerHeader";
 import TrainerSidebar from "./components/TrainerSidebar";
 import TrainerTasks from "./components/TrainerTasks";
 
-import { setName as setTraineeName } from "./store/TraineeStore";
+import { logout, setName as setTraineeName } from "./store/TraineeSlice";
 import { setName as setTrainerName } from "./store/TrainerStore";
 
 import "./App.css";
@@ -19,10 +19,11 @@ const API_BASE_URL = "http://127.0.0.1:8000/api";
 function App() {
   const dispatch = useDispatch();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    !!localStorage.getItem("access_token"),
+  // The "trainee" slice is the single auth session for any logged-in
+  // user, manager included - the name is a holdover, not a scoping bug.
+  const { accessToken, tokenType, role, isAuthenticated } = useSelector(
+    (state) => state.trainee,
   );
-  const [role, setRole] = useState(localStorage.getItem("role"));
 
   // ============================================================
   // GET /api/auth/me - populate the header/sidebar with the
@@ -31,14 +32,14 @@ function App() {
   // ============================================================
 
   useEffect(() => {
-    if (!isLoggedIn) return;
+    if (!isAuthenticated || !accessToken) return;
 
     async function fetchProfile() {
       try {
-        const token = localStorage.getItem("access_token");
-
         const response = await fetch(`${API_BASE_URL}/auth/me`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `${tokenType || "Bearer"} ${accessToken}`,
+          },
         });
 
         if (!response.ok) return;
@@ -56,35 +57,21 @@ function App() {
     }
 
     fetchProfile();
-  }, [isLoggedIn, dispatch]);
-
-  function handleLogin() {
-    setIsLoggedIn(true);
-    setRole(localStorage.getItem("role"));
-  }
+  }, [isAuthenticated, accessToken, tokenType, dispatch]);
 
   function handleLogout() {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("user_id");
-
-    setIsLoggedIn(false);
-    setRole(null);
+    dispatch(logout());
   }
 
-  if (!isLoggedIn) {
-    return <Login onLogin={handleLogin} />;
+  if (!isAuthenticated) {
+    return <Login />;
   }
 
   const isManager = role === "manager";
 
   return (
     <div className="app-layout">
-      {isManager ? (
-        <TrainerSidebar onLogout={handleLogout} />
-      ) : (
-        <TraineeSidebar onLogout={handleLogout} />
-      )}
+      {isManager ? <TrainerSidebar onLogout={handleLogout} /> : <TraineeSidebar />}
 
       <div className="app-main">
         {isManager ? <TrainerHeader /> : <TraineeHeader />}
