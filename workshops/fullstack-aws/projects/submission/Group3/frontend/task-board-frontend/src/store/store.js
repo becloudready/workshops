@@ -5,7 +5,7 @@ import TraineeTasksSlice from "./TraineeTasksSlice";
 export const Store = configureStore({
   reducer: {
     trainee: TraineeSlice,
-    traineeTasks: TraineeTasksSlice,
+    trainer: TrainerSlice,
   },
 });
 
