@@ -21,12 +21,13 @@ resource "random_id" "suffix" {
 }
 
 locals {
-  # Pattern: student-<name>-notice-board-<random>
+  # Pattern: student-<name>-task-tracker-<random>
+  # Example: student-john-smith-task-tracker-a1b2c3d4
   name = "student-${var.student_name}-${var.project_name}-${random_id.suffix.hex}"
 }
 
 # ─────────────────────────────────────────────
-# S3 — Frontend Hosting (Tier 3: private, served only via CloudFront)
+# S3 — Frontend Hosting
 # ─────────────────────────────────────────────
 
 resource "aws_s3_bucket" "frontend" {
@@ -41,31 +42,15 @@ resource "aws_s3_bucket_public_access_block" "frontend" {
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_policy" "frontend" {
+resource "aws_s3_bucket_website_configuration" "frontend" {
   bucket = aws_s3_bucket.frontend.id
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect    = "Allow"
-      Principal = { Service = "cloudfront.amazonaws.com" }
-      Action    = "s3:GetObject"
-      Resource  = "${aws_s3_bucket.frontend.arn}/*"
-      Condition = {
-        StringEquals = {
-          "AWS:SourceArn" = aws_cloudfront_distribution.cdn.arn
-        }
-      }
-    }]
-  })
-
-  depends_on = [aws_s3_bucket_public_access_block.frontend]
+  index_document { suffix = "index.html" }
+  error_document { key = "index.html" }
 }
 
 # ─────────────────────────────────────────────
-# CloudFront — CDN with Origin Access Control
+# CloudFront — CDN with OAC
 # ─────────────────────────────────────────────
-# OAC lets CloudFront authenticate to S3 directly (via the bucket's REST API
-# endpoint, not the public "website" endpoint) using SigV4-signed requests.
 
 resource "aws_cloudfront_origin_access_control" "oac" {
   name                              = "${local.name}-oac"
@@ -96,6 +81,12 @@ resource "aws_cloudfront_distribution" "cdn" {
     }
   }
 
+  custom_error_response {
+    error_code         = 404
+    response_code      = 200
+    response_page_path = "/index.html"
+  }
+
   restrictions {
     geo_restriction { restriction_type = "none" }
   }
@@ -105,41 +96,54 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 }
 
+resource "aws_s3_bucket_policy" "frontend" {
+  bucket = aws_s3_bucket.frontend.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = { Service = "cloudfront.amazonaws.com" }
+      Action    = "s3:GetObject"
+      Resource  = "${aws_s3_bucket.frontend.arn}/*"
+      Condition = {
+        StringEquals = {
+          "AWS:SourceArn" = aws_cloudfront_distribution.cdn.arn
+        }
+      }
+    }]
+  })
+}
+
 # ─────────────────────────────────────────────
 # Lambda — Backend API
 # ─────────────────────────────────────────────
 # Run build.py before terraform apply to generate backend/lambda.zip
+#
 # Uses the shared Lambda execution role your instructor pre-created for the
 # cohort (no student-managed IAM). Pass its ARN with -var=lambda_role_arn=...
-#
-# TODO(step 3): aws_lambda_function
 
 resource "aws_lambda_function" "api" {
   function_name = "student-${var.student_name}-${var.project_name}-api"
   role          = var.lambda_role_arn
   runtime       = "python3.12"
   handler       = "lambda_function.lambda_handler"
-  filename         = "${path.module}/../backend/lambda.zip"
-  source_code_hash = filebase64sha256("${path.module}/../backend/lambda.zip")
-  timeout          = 15
+  filename      = "${path.module}/../backend/lambda.zip"
+  timeout       = 15
 
   environment {
     variables = {
-      MONGO_HOST = var.mongo_host
-      MONGO_PORT = "27017"
+      PG_HOST     = var.postgres_host
+      PG_PORT     = var.postgres_port
+      PG_DATABASE = var.postgres_db
+      PG_USER     = var.postgres_user
+      PG_PASSWORD = var.postgres_password
     }
   }
 }
 
-
 # ─────────────────────────────────────────────
 # API Gateway — HTTP API
 # ─────────────────────────────────────────────
-# TODO(step 4): aws_apigatewayv2_api
-# TODO(step 4): aws_apigatewayv2_integration
-# TODO(step 4): aws_apigatewayv2_route
-# TODO(step 4): aws_apigatewayv2_stage
-# TODO(step 4): aws_lambda_permission (let API Gateway invoke the Lambda)
 
 resource "aws_apigatewayv2_api" "api" {
   name          = "student-${var.student_name}-${var.project_name}-api"
@@ -147,7 +151,7 @@ resource "aws_apigatewayv2_api" "api" {
 
   cors_configuration {
     allow_origins = ["*"]
-    allow_methods = ["GET", "POST", "DELETE", "OPTIONS"]
+    allow_methods = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     allow_headers = ["Content-Type"]
   }
 }

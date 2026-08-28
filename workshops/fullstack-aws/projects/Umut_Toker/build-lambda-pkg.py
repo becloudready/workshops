@@ -46,6 +46,7 @@ def build():
 
     with zipfile.ZipFile(ZIP_PATH, "w", zipfile.ZIP_DEFLATED) as zf:
         for root, dirs, files in os.walk(BUILD_DIR):
+            # Skip __pycache__ folders
             dirs[:] = [d for d in dirs if d != "__pycache__"]
             for file in files:
                 if file.endswith(".pyc"):
