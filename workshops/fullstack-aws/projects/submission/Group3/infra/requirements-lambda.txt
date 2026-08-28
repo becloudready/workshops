@@ -2,7 +2,7 @@
 # replaces it inside Lambda) and alembic (migrations run locally against the
 # DB before a deploy, never inside the Lambda itself).
 fastapi>=0.115
-pydantic>=2.7
+pydantic[email]>=2.7
 pydantic-settings>=2.3
 sqlalchemy>=2.0
 psycopg2-binary>=2.9
