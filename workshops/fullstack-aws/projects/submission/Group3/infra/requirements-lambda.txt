@@ -1,0 +1,13 @@
+# Mirrors ../requirements.txt, minus uvicorn (local dev server only, Mangum
+# replaces it inside Lambda) and alembic (migrations run locally against the
+# DB before a deploy, never inside the Lambda itself).
+fastapi>=0.115
+pydantic>=2.7
+pydantic-settings>=2.3
+sqlalchemy>=2.0
+psycopg2-binary>=2.9
+python-jose[cryptography]>=3.3
+passlib[bcrypt]>=1.7
+bcrypt<4.0
+python-multipart>=0.0.9
+mangum>=0.17
