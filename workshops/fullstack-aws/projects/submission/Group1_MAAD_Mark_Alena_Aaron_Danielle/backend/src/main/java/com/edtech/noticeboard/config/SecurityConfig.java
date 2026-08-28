@@ -10,7 +10,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // TODO(Mark): wire up JWT/session auth rules and role-based access
+        // TODO(Mark): replace with real JWT/session auth + role-based access.
+        // Left open for now so the other controllers are testable before login exists.
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
         return http.build();
     }
 }
