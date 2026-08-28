@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.zip
+backend/_build/
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfvars
+.env
