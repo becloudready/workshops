@@ -17,7 +17,7 @@ def run() -> None:
     db = SessionLocal()
     try:
         manager = User(
-            email="manager@noticeboard.test",
+            email="manager@noticeboardtracker.dev",
             hashed_password=hash_password("Manager123!"),
             full_name="Morgan Manager",
             role=UserRole.manager,
@@ -31,7 +31,7 @@ def run() -> None:
 
         trainees = [
             User(
-                email=f"trainee{i}@noticeboard.test",
+                email=f"trainee{i}@noticeboardtracker.dev",
                 hashed_password=hash_password("Trainee123!"),
                 full_name=f"Trainee {i}",
                 role=UserRole.trainee,
@@ -43,9 +43,9 @@ def run() -> None:
         db.commit()
 
         print("Seeded:")
-        print("  manager   -> manager@noticeboard.test / Manager123!")
-        print(f"  trainee 1 -> trainee1@noticeboard.test / Trainee123!  (cohort_id={cohort.id})")
-        print(f"  trainee 2 -> trainee2@noticeboard.test / Trainee123!  (cohort_id={cohort.id})")
+        print("  manager   -> manager@noticeboardtracker.dev / Manager123!")
+        print(f"  trainee 1 -> trainee1@noticeboardtracker.dev / Trainee123!  (cohort_id={cohort.id})")
+        print(f"  trainee 2 -> trainee2@noticeboardtracker.dev / Trainee123!  (cohort_id={cohort.id})")
     finally:
         db.close()
 

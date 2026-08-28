@@ -204,28 +204,27 @@ export default function TraineeTasks() {
         ) : (
           tasks.map((task) => (
             <button
-              key={task.id}
+              key={task.taskId}
               className={styles.taskCard}
-              onClick={() => fetchTask(task.id)}
+              onClick={() => fetchTask(task.taskId)}
             >
               <div className={styles.taskCardHeader}>
-                <h3>{task.title || `Task ${task.id}`}</h3>
+                <h3>{task.title || `Task ${task.taskId}`}</h3>
 
-                {task.status && (
-                  <span className={styles.statusBadge}>{task.status}</span>
+                {task.urgency && (
+                  <span className={styles.statusBadge}>{task.urgency}</span>
                 )}
               </div>
 
-              {task.description && (
-                <p className={styles.description}>{task.description}</p>
-              )}
-
               <div className={styles.taskMeta}>
-                {task.due_date && <span>Due: {task.due_date}</span>}
+                {task.dueDate && <span>Due: {task.dueDate}</span>}
 
-                {task.progress !== undefined && task.progress !== null && (
-                  <span>Progress: {task.progress}%</span>
-                )}
+                {task.currentPercentage !== undefined &&
+                  task.currentPercentage !== null && (
+                    <span>Progress: {task.currentPercentage}%</span>
+                  )}
+
+                {task.subtaskSummary && <span>{task.subtaskSummary}</span>}
               </div>
             </button>
           ))
@@ -245,8 +244,8 @@ export default function TraineeTasks() {
               <h2>{selectedTask.title || `Task ${selectedTask.id}`}</h2>
             </div>
 
-            {selectedTask.status && (
-              <span className={styles.statusBadge}>{selectedTask.status}</span>
+            {selectedTask.urgency && (
+              <span className={styles.statusBadge}>{selectedTask.urgency}</span>
             )}
           </div>
 
@@ -258,22 +257,22 @@ export default function TraineeTasks() {
 
           {/* Due Date */}
 
-          {selectedTask.due_date && (
+          {selectedTask.dueDate && (
             <div className={styles.taskInfo}>
               <strong>Due Date</strong>
 
-              <span>{selectedTask.due_date}</span>
+              <span>{selectedTask.dueDate}</span>
             </div>
           )}
 
           {/* Progress */}
 
-          {selectedTask.progress !== undefined &&
-            selectedTask.progress !== null && (
+          {selectedTask.currentPercentage !== undefined &&
+            selectedTask.currentPercentage !== null && (
               <div className={styles.taskInfo}>
                 <strong>Progress</strong>
 
-                <span>{selectedTask.progress}%</span>
+                <span>{selectedTask.currentPercentage}%</span>
               </div>
             )}
 
@@ -289,13 +288,11 @@ export default function TraineeTasks() {
                 <div key={subtask.id} className={styles.subtask}>
                   <input
                     type="checkbox"
-                    checked={subtask.is_completed || false}
+                    checked={subtask.isCompleted || false}
                     readOnly
                   />
 
-                  <span>
-                    {subtask.title || subtask.name || `Subtask ${subtask.id}`}
-                  </span>
+                  <span>{subtask.title || `Subtask ${subtask.id}`}</span>
                 </div>
               ))}
             </div>
@@ -318,7 +315,7 @@ export default function TraineeTasks() {
 
                     {update.comment && <span>{update.comment}</span>}
 
-                    {update.created_at && <small>{update.created_at}</small>}
+                    {update.createdAt && <small>{update.createdAt}</small>}
                   </div>
                 ))}
               </div>

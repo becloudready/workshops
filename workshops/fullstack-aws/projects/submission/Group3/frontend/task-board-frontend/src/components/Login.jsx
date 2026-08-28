@@ -56,16 +56,16 @@ export default function Login({ onLogin }) {
       }
 
       // Make sure the backend actually returned a token
-      if (!data.access_token) {
+      if (!data.accessToken) {
         throw new Error("Login succeeded, but no access token was returned.");
       }
 
       // Store authentication information
-      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("access_token", data.accessToken);
 
       localStorage.setItem("role", data.role);
 
-      localStorage.setItem("user_id", data.user_id);
+      localStorage.setItem("user_id", data.userId);
 
       console.log("Login successful");
 
