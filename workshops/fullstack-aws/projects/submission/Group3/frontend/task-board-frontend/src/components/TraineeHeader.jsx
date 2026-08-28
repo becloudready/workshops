@@ -3,7 +3,7 @@ import styles from "./TraineeHeader.module.css";
 import { useSelector } from "react-redux";
 
 export default function TraineeHeader() {
-  const traineeName = useSelector((state) => state.TraineeSlice.name);
+  const traineeName = useSelector((state) => state.trainee.name);
 
   return (
     <div className={styles.traineeHeader}>

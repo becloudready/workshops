@@ -1,10 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = {
+  name: "Test Trainee",
+};
+
 const TraineeSlice = createSlice({
-  name: "TraineeSlice",
-  initialState: {
-    name: "test",
-  },
+  name: "trainee",
+
+  initialState,
+
   reducers: {
     setName: (state, action) => {
       state.name = action.payload;
@@ -13,4 +17,5 @@ const TraineeSlice = createSlice({
 });
 
 export const { setName } = TraineeSlice.actions;
+
 export default TraineeSlice.reducer;
