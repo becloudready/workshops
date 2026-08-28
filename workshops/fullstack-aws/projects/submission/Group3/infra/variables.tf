@@ -23,9 +23,9 @@ variable "jwt_secret_key" {
 }
 
 variable "allowed_origins" {
-  description = "Comma-separated list of origins allowed by CORS"
+  description = "Comma-separated list of origins allowed by CORS. Use \"*\" to allow all origins."
   type        = string
-  default     = "http://localhost:5173,http://127.0.0.1:5173"
+  default     = "*"
 }
 
 variable "lambda_exec_role_arn" {
