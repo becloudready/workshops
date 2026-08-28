@@ -14,6 +14,35 @@ from app.schemas.progress import (
 )
 from app.services.progress_service import ProgressService
 
+
+# ============================================================
+# STUDENT / TRAINEE ENDPOINTS
+#
+# Base prefix: /student
+#
+# GET    /student/tasks
+#        Get all tasks assigned to the current trainee.
+#
+# GET    /student/tasks/{task_id}
+#        Get details for a specific task.
+#
+# PATCH  /student/subtasks/{subtask_id}
+#        Toggle a subtask's completion status.
+#
+# POST   /student/tasks/{task_id}/progress
+#        Submit a progress update for a task.
+#
+# GET    /student/tasks/{task_id}/progress/history
+#        Get the progress history for a task.
+#
+# NOTE:
+# The application may add an additional prefix such as
+# /api/v1 when this router is included in main.py.
+#
+# Example:
+# /api/v1/student/tasks
+# ============================================================
+
 router = APIRouter(prefix="/student", tags=["student"])
 
 
@@ -28,7 +57,9 @@ def list_tasks(
 
 @router.get("/tasks/{task_id}", response_model=StudentTaskDetail)
 def task_detail(
-    task_id: int, db: Session = Depends(get_db), trainee: User = Depends(get_current_trainee)
+    task_id: int,
+    db: Session = Depends(get_db),
+    trainee: User = Depends(get_current_trainee),
 ) -> dict:
     return ProgressService(db).get_student_task_detail(trainee.id, task_id)
 
@@ -40,22 +71,40 @@ def toggle_subtask(
     db: Session = Depends(get_db),
     trainee: User = Depends(get_current_trainee),
 ) -> dict:
-    return ProgressService(db).toggle_subtask(trainee.id, subtask_id, payload.is_completed)
+    return ProgressService(db).toggle_subtask(
+        trainee.id,
+        subtask_id,
+        payload.is_completed,
+    )
 
 
-@router.post("/tasks/{task_id}/progress", response_model=ProgressUpdateOut, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/tasks/{task_id}/progress",
+    response_model=ProgressUpdateOut,
+    status_code=status.HTTP_201_CREATED,
+)
 def submit_progress(
     task_id: int,
     payload: ProgressUpdateCreate,
     db: Session = Depends(get_db),
     trainee: User = Depends(get_current_trainee),
 ) -> dict:
-    return ProgressService(db).submit_progress_update(trainee.id, task_id, payload.percentage, payload.comment)
+    return ProgressService(db).submit_progress_update(
+        trainee.id,
+        task_id,
+        payload.percentage,
+        payload.comment,
+    )
 
 
-@router.get("/tasks/{task_id}/progress/history", response_model=list[ProgressUpdateOut])
+@router.get(
+    "/tasks/{task_id}/progress/history",
+    response_model=list[ProgressUpdateOut],
+)
 def progress_history(
-    task_id: int, db: Session = Depends(get_db), trainee: User = Depends(get_current_trainee)
+    task_id: int,
+    db: Session = Depends(get_db),
+    trainee: User = Depends(get_current_trainee),
 ) -> list[ProgressUpdateOut]:
     history = ProgressService(db).get_progress_history(trainee.id, task_id)
     return [ProgressUpdateOut(task_id=task_id, **entry) for entry in history]
