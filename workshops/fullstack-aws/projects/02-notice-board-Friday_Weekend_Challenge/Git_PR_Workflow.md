@@ -1,4 +1,4 @@
----- Explaination for Git and PR Workdlow ------------------------
+---- Explaination for Git and PR Workflow ------------------------
 
 (1)
 Group1 has 5 members:
