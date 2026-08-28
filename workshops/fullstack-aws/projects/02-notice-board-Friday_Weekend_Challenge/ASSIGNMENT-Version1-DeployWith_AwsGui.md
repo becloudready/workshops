@@ -1,4 +1,4 @@
-This guide provides a step-by-step tutorial for your students to deploy a full-stack **Notice Board Application** using the AWS Web Console.
+This guide provides a step-by-step tutorial for your students to deploy a full-stack **Notice Board Application** using the AWS Web GUI
 
 ---
 
