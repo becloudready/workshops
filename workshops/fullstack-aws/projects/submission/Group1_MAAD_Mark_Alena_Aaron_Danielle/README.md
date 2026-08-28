@@ -7,7 +7,7 @@ Danielle (danielle-jack)  — Group USP + UX: Build the team's unique feature su
 Mark (MarkPaulRosenthal)  — Deployment + CI/CD + Integration: Package/deploy Lambda, API Gateway, S3 frontend, environment variables, and GitHub Actions, while also handling integration fixes needed for deployment.
 
 
-
+```text
 Group1_MAAD_Mark_Alena_Aaron_Danielle/
 ├── backend/
 │   ├── src/
@@ -50,3 +50,4 @@ Group1_MAAD_Mark_Alena_Aaron_Danielle/
 ├── .gitignore
 ├── README.md
 └── docker-compose.yml
+```
