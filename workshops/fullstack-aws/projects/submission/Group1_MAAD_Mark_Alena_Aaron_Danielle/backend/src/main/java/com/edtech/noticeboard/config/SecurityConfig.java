@@ -1,0 +1,16 @@
+package com.edtech.noticeboard.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // TODO(Mark): wire up JWT/session auth rules and role-based access
+        return http.build();
+    }
+}
