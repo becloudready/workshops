@@ -1,5 +1,6 @@
 import TraineeHeader from "./components/TraineeHeader";
 import TraineeSidebar from "./components/TraineeSidebar";
+import "./App.css";
 
 function App() {
   return (
