@@ -1,17 +1,15 @@
 import { useSelector } from "react-redux";
 import "./TraineeSidebar.css";
 
-const TraineeSidebar = () => {
+const TraineeSidebar = ({ onLogout }) => {
   const traineeName = useSelector((state) => state.trainee.name);
 
   return (
     <aside className="trainee-sidebar">
-      {/* Logo / Application Name */}
       <div className="sidebar-header">
         <h2>Task Board</h2>
       </div>
 
-      {/* Trainee Information */}
       <div className="trainee-profile">
         <div className="trainee-avatar">
           {traineeName?.charAt(0).toUpperCase()}
@@ -23,7 +21,6 @@ const TraineeSidebar = () => {
         </div>
       </div>
 
-      {/* Navigation */}
       <nav className="sidebar-navigation">
         <p className="navigation-title">MENU</p>
 
@@ -48,14 +45,17 @@ const TraineeSidebar = () => {
         </a>
       </nav>
 
-      {/* Bottom Navigation */}
       <div className="sidebar-bottom">
         <a href="/trainee/profile" className="sidebar-link">
           <span>⚙</span>
           <span>Profile</span>
         </a>
 
-        <button className="sidebar-link logout-button">
+        <button
+          type="button"
+          className="sidebar-link logout-button"
+          onClick={onLogout}
+        >
           <span>⇥</span>
           <span>Logout</span>
         </button>

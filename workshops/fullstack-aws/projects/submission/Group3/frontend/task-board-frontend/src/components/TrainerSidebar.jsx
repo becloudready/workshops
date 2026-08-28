@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import styles from "./TrainerSidebar.module.css";
 
-export default function TrainerSidebar() {
+export default function TrainerSidebar({ onLogout }) {
   const trainerName = useSelector((state) => state.trainer.name);
 
   const initial = trainerName
@@ -90,7 +90,7 @@ export default function TrainerSidebar() {
         <button
           type="button"
           className={styles.logoutButton}
-          onClick={() => console.log("Trainer logout clicked")}
+          onClick={onLogout}
         >
           <span className={styles.icon}>⇥</span>
           <span>Logout</span>

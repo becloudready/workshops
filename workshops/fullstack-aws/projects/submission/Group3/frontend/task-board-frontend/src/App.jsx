@@ -30,7 +30,7 @@ function App() {
 
   return (
     <div className="app-layout">
-      <TraineeSidebar />
+      <TraineeSidebar onLogout={handleLogout} />
 
       <div className="app-main">
         <TraineeHeader />
