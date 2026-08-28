@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 
+import TraineeSlice from "./TraineeStore";
+
 export const Store = configureStore({
   reducer: {
-    TraineeSlice: require("./TraineeStore").default,
+    TraineeSlice: TraineeSlice,
   },
   middleware: (getDefault) => getDefault(),
 });
