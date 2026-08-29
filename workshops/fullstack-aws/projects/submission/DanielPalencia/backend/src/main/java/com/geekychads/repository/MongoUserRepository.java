@@ -132,21 +132,28 @@ public class MongoUserRepository implements UserRepository
         return mongo.findByRole(role);
     }
 
-    // TODO - editUser(int id, User data).
-    //
-    //   Full replacement, and there is a trap here you have already fallen into once.
-    //
-    //   The obvious implementation builds a fresh User from `data` and saves it. That is what
-    //   Banking_App does, and it is WRONG here, because our User carries completedModules and
-    //   totalModules that `data` does not meaningfully hold - so a profile edit would silently
-    //   reset every trainee's progress to zero. It is the exact bug caught in the in-memory
-    //   addUser, resurfacing in a new implementation because the shape invited it again.
-    //
-    //   Load the stored user, apply only the fields an edit may change - username, email,
-    //   role - and save that. The in-memory version does this by mutating the object already
-    //   in the map; here you have to save explicitly, because mutating a detached object
-    //   changes nothing in Atlas.
-    //
-    //   Return Optional.empty() when no user has that id. mongo.existsById or findById will
-    //   tell you; pick whichever leaves you holding what you need next.
+    @Override
+    public Optional<User> editUser(int id, User data)
+    {
+        return mongo.findById(id)
+                .map(existing ->
+                {
+                    // only the fields an edit may change. completedModules, totalModules and
+                    // passwordHash are preserved by NOT being touched - building a fresh User
+                    // from `data` would compile, save cleanly, and silently zero every
+                    // trainee's progress. that is the in-memory addUser bug in a new costume,
+                    // and the shape of this method is what invites it back.
+                    existing.setUsername(data.getUsername());
+                    existing.setEmail(data.getEmail());
+                    existing.setRole(data.getRole());
+
+                    // explicit save, unlike the map version. that one mutated the object
+                    // already held in storage, so the write had happened by the time the
+                    // setter returned. this object is detached - mutating it changes nothing
+                    // in Atlas until it is sent back.
+                    return mongo.save(existing);
+                });
+        // empty Optional passes straight through: no user with that id, which the controller
+        // reads as 404. the id is never taken from `data`, so the path stays the identity.
+    }
 }
