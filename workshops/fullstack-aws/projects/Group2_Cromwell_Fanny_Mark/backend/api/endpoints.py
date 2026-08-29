@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
-
-from model import Manager, Student, Group, Task
-
+from .model import ManagerIn, ManagerOut, StudentIn, StudentOut, GroupIn, GroupOut, TaskIn, TaskOut
+from bson import ObjectId
+from database import managers, students, groups, tasks
 
 router = APIRouter()
 
@@ -10,38 +10,26 @@ router = APIRouter()
 # MANAGERS
 # =========================
 
-managers = []
-manager_id = 1
-
-
-@router.post("/managers", response_model=Manager)
-def create_manager(manager: Manager):
-
-    global manager_id
-
-    new_manager = Manager(
-        id=manager_id,
-        name=manager.name,
-        email=manager.email
-    )
-
-    managers.append(new_manager)
-    manager_id += 1
+@router.post("/managers", response_model=ManagerOut)
+def create_manager(manager: ManagerIn):
+    new_manager = manager.model_dump()
+    result = managers.insert_one(new_manager)
+    new_manager["id"] = result.inserted_id
 
     return new_manager
 
 
-@router.get("/managers", response_model=list[Manager])
+@router.get("/managers", response_model=list[ManagerOut])
 def get_managers():
-    return managers
+    managersList = managers.find().to_list()
+    return managersList
 
 
-@router.get("/managers/{id}", response_model=Manager)
-def get_manager(id: int):
-
-    for manager in managers:
-        if manager.id == id:
-            return manager
+@router.get("/managers/{id}", response_model=ManagerOut)
+def get_manager(id: str):
+    manager = managers.find_one({"_id": ObjectId(id)})
+    if manager is not None:
+        return manager
 
     raise HTTPException(
         status_code=404,
@@ -50,13 +38,10 @@ def get_manager(id: int):
 
 
 @router.delete("/managers/{id}")
-def delete_manager(id: int):
-
-    for manager in managers:
-        if manager.id == id:
-            managers.remove(manager)
-
-            return {"message": "Manager deleted"}
+def delete_manager(id: str):
+    result = managers.delete_one({"_id": ObjectId(id)})
+    if result.deleted_count == 1:
+        return {"message": "Manager deleted"}
 
     raise HTTPException(
         status_code=404,
@@ -68,38 +53,34 @@ def delete_manager(id: int):
 # STUDENTS
 # =========================
 
-students = []
-student_id = 1
-
-
-@router.post("/students", response_model=Student)
-def create_student(student: Student):
-
-    global student_id
-
-    new_student = Student(
-        id=student_id,
-        name=student.name,
-        email=student.email
-    )
-
-    students.append(new_student)
-    student_id += 1
+@router.post("/students", response_model=StudentOut)
+def create_student(student: StudentIn):
+    new_student = student.model_dump()
+    result = students.insert_one(new_student)
+    new_student["id"] = result.inserted_id
 
     return new_student
 
 
-@router.get("/students", response_model=list[Student])
+@router.get("/students", response_model=list[StudentOut])
 def get_students():
-    return students
+    students_list = students.find().to_list()
+
+    if not students_list:
+        raise HTTPException(
+            status_code=404,
+            detail="No students found"
+        )
+
+    return students_list
 
 
-@router.get("/students/{id}", response_model=Student)
-def get_student(id: int):
+@router.get("/students/{id}", response_model=StudentOut)
+def get_student(id: str):
+    student = students.find_one({"_id": ObjectId(id)})
 
-    for student in students:
-        if student.id == id:
-            return student
+    if student is not None:
+        return student
 
     raise HTTPException(
         status_code=404,
@@ -108,13 +89,11 @@ def get_student(id: int):
 
 
 @router.delete("/students/{id}")
-def delete_student(id: int):
+def delete_student(id: str):
+    result = students.delete_one({"_id": ObjectId(id)})
 
-    for student in students:
-        if student.id == id:
-            students.remove(student)
-
-            return {"message": "Student deleted"}
+    if result.deleted_count == 1:
+        return {"message": "Student deleted"}
 
     raise HTTPException(
         status_code=404,
@@ -126,38 +105,34 @@ def delete_student(id: int):
 # GROUPS
 # =========================
 
-groups = []
-group_id = 1
-
-
-@router.post("/groups", response_model=Group)
-def create_group(group: Group):
-
-    global group_id
-
-    new_group = Group(
-        id=group_id,
-        name=group.name,
-        manager_id=group.manager_id
-    )
-
-    groups.append(new_group)
-    group_id += 1
+@router.post("/groups", response_model=GroupOut)
+def create_group(group: GroupIn):
+    new_group = group.model_dump()
+    result = groups.insert_one(new_group)
+    new_group["id"] = result.inserted_id
 
     return new_group
 
 
-@router.get("/groups", response_model=list[Group])
+@router.get("/groups", response_model=list[GroupOut])
 def get_groups():
-    return groups
+    groups_list = groups.find().to_list()
+
+    if not groups_list:
+        raise HTTPException(
+            status_code=404,
+            detail="No groups found"
+        )
+
+    return groups_list
 
 
-@router.get("/groups/{id}", response_model=Group)
-def get_group(id: int):
+@router.get("/groups/{id}", response_model=GroupOut)
+def get_group(id: str):
+    group = groups.find_one({"_id": ObjectId(id)})
 
-    for group in groups:
-        if group.id == id:
-            return group
+    if group is not None:
+        return group
 
     raise HTTPException(
         status_code=404,
@@ -166,59 +141,11 @@ def get_group(id: int):
 
 
 @router.delete("/groups/{id}")
-def delete_group(id: int):
+def delete_group(id: str):
+    result = groups.delete_one({"_id": ObjectId(id)})
 
-    for group in groups:
-        if group.id == id:
-            groups.remove(group)
-
-            return {"message": "Group deleted"}
-
-    raise HTTPException(
-        status_code=404,
-        detail="Group not found"
-    )
-
-
-# Add student to group
-@router.post("/groups/{group_id}/students/{student_id}")
-def add_student_to_group(
-    group_id: int,
-    student_id: int
-):
-
-    for group in groups:
-
-        if group.id == group_id:
-
-            for student in students:
-
-                if student.id == student_id:
-
-                    if student_id not in group.student_ids:
-                        group.student_ids.append(student_id)
-
-                    return group
-
-            raise HTTPException(
-                status_code=404,
-                detail="Student not found"
-            )
-
-    raise HTTPException(
-        status_code=404,
-        detail="Group not found"
-    )
-
-
-# Get students in group
-@router.get("/groups/{group_id}/students")
-def get_group_students(group_id: int):
-
-    for group in groups:
-
-        if group.id == group_id:
-            return group.student_ids
+    if result.deleted_count == 1:
+        return {"message": "Group deleted"}
 
     raise HTTPException(
         status_code=404,
@@ -230,68 +157,34 @@ def get_group_students(group_id: int):
 # TASKS
 # =========================
 
-tasks = []
-task_id = 1
+@router.post("/tasks", response_model=TaskOut)
+def create_task(task: TaskIn):
+    new_task = task.model_dump()
+    result = tasks.insert_one(new_task)
+    new_task["id"] = result.inserted_id
+
+    return new_task
 
 
-@router.post("/groups/{group_id}/tasks", response_model=Task)
-def create_task(
-    group_id: int,
-    task: Task
-):
+@router.get("/tasks", response_model=list[TaskOut])
+def get_tasks():
+    tasks_list = tasks.find().to_list()
 
-    global task_id
+    if not tasks_list:
+        raise HTTPException(
+            status_code=404,
+            detail="No tasks found"
+        )
 
-    for group in groups:
-
-        if group.id == group_id:
-
-            new_task = Task(
-                id=task_id,
-                title=task.title,
-                description=task.description,
-                group_id=group_id
-            )
-
-            tasks.append(new_task)
-            group.task_ids.append(task_id)
-
-            task_id += 1
-
-            return new_task
-
-    raise HTTPException(
-        status_code=404,
-        detail="Group not found"
-    )
+    return tasks_list
 
 
-@router.get("/groups/{group_id}/tasks")
-def get_group_tasks(group_id: int):
+@router.get("/tasks/{id}", response_model=TaskOut)
+def get_task(id: str):
+    task = tasks.find_one({"_id": ObjectId(id)})
 
-    for group in groups:
-
-        if group.id == group_id:
-
-            return [
-                task
-                for task in tasks
-                if task.group_id == group_id
-            ]
-
-    raise HTTPException(
-        status_code=404,
-        detail="Group not found"
-    )
-
-
-@router.get("/tasks/{id}", response_model=Task)
-def get_task(id: int):
-
-    for task in tasks:
-
-        if task.id == id:
-            return task
+    if task is not None:
+        return task
 
     raise HTTPException(
         status_code=404,
@@ -300,17 +193,104 @@ def get_task(id: int):
 
 
 @router.delete("/tasks/{id}")
-def delete_task(id: int):
+def delete_task(id: str):
+    result = tasks.delete_one({"_id": ObjectId(id)})
 
-    for task in tasks:
-
-        if task.id == id:
-
-            tasks.remove(task)
-
-            return {"message": "Task deleted"}
+    if result.deleted_count == 1:
+        return {"message": "Task deleted"}
 
     raise HTTPException(
         status_code=404,
         detail="Task not found"
     )
+
+# Add student to group
+
+
+@router.post("/groups/{group_id}/students/{student_id}")
+def add_student_to_group(
+    group_id: str,
+    student_id: str
+):
+    group = groups.find_one({"_id": ObjectId(group_id)})
+    student = students.find_one({"_id": ObjectId(student_id)})
+
+    if group is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Group not found"
+        )
+
+    if student is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Student not found"
+        )
+
+    res = groups.update_one(
+        {"_id": ObjectId(group_id)},
+        {"$addToSet": {"student_ids": ObjectId(student_id)}}
+    )
+
+    if res is not None:
+        return {"message": f"Student {student_id} added to group {group_id}"}
+
+
+# Get students in group
+
+
+@router.get("/groups/{group_id}/students", response_model=list[StudentOut])
+def get_group_students(group_id: str):
+    group = groups.find_one({"_id": ObjectId(group_id)})
+    if group is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Group not found"
+        )
+
+    studentsOut = []
+    for student_id in group["student_ids"]:
+        studentsOut.append(students.find_one({"_id": ObjectId(student_id)}))
+
+    return studentsOut
+
+
+@router.post("/groups/{group_id}/tasks", response_model=TaskOut)
+def create_task(group_id: str, task: TaskIn):
+    group = groups.find_one({"_id": ObjectId(group_id)})
+
+    if group is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Group not found"
+        )
+
+    new_task = task.model_dump()
+    new_task["group_id"] = ObjectId(group_id)
+
+    result = tasks.insert_one(new_task)
+
+    new_task["id"] = result.inserted_id
+
+    groups.update_one(
+        {"_id": ObjectId(group_id)},
+        {"$addToSet": {"task_ids": result.inserted_id}}
+    )
+
+    return new_task
+
+
+@router.get("/groups/{group_id}/tasks", response_model=list[TaskOut])
+def get_group_tasks(group_id: str):
+    group = groups.find_one({"_id": ObjectId(group_id)})
+    if group is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Group not found"
+        )
+
+    tasksOut = []
+    for task_id in group["task_ids"]:
+        tasksOut.append(tasks.find_one({"_id": ObjectId(task_id)}))
+
+    return tasksOut

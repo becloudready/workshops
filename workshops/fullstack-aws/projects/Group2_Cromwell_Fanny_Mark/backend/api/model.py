@@ -1,28 +1,53 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, BeforeValidator, Field
+# from typing import Optional, List
+from typing_extensions import Annotated
+
+PyObjectId = Annotated[str, BeforeValidator(str)]
 
 
-class Manager(BaseModel):
-    id: int
+class ManagerIn(BaseModel):
     name: str
     email: EmailStr
 
 
-class Student(BaseModel):
-    id: int
+class ManagerOut(BaseModel):
+    id: PyObjectId = Field(alias="_id")
     name: str
     email: EmailStr
 
 
-class Group(BaseModel):
-    id: int
+class StudentIn(BaseModel):
+    name: str
+    email: EmailStr
+
+
+class StudentOut(BaseModel):
+    id: PyObjectId = Field(alias="_id")
+    name: str
+    email: EmailStr
+
+
+class GroupIn(BaseModel):
     name: str
     manager_id: int
-    student_ids: list[int] = []
-    task_ids: list[int] = []
+    student_ids: list[PyObjectId] = []
+    task_ids: list[PyObjectId] = []
 
 
-class Task(BaseModel):
-    id: int
+class GroupOut(BaseModel):
+    id: PyObjectId = Field(alias="_id")
+    name: str
+    manager_id: int
+    student_ids: list[PyObjectId] = []
+    task_ids: list[PyObjectId] = []
+
+
+class TaskIn(BaseModel):
     title: str
     description: str
-    group_id: int
+
+
+class TaskOut(BaseModel):
+    id: PyObjectId = Field(alias="_id")
+    title: str
+    description: str
