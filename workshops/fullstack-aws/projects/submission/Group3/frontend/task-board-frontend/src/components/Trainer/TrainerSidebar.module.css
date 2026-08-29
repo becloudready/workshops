@@ -1,0 +1,197 @@
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background: #111827;
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 24px 16px;
+
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.header {
+  padding: 0 12px 24px;
+  border-bottom: 1px solid #374151;
+}
+
+.header h2 {
+  margin: 0;
+
+  font-size: 22px;
+  font-weight: 700;
+
+  text-transform: capitalize;
+}
+
+/* ============================================================
+   TRAINER PROFILE
+============================================================ */
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 24px 12px;
+
+  border-bottom: 1px solid #374151;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #2563eb;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.details {
+  min-width: 0;
+}
+
+.details h3 {
+  margin: 0;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.details span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #9ca3af;
+
+  font-size: 13px;
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+
+.navigation {
+  flex: 1;
+  padding-top: 24px;
+}
+
+.navigationTitle {
+  margin: 0 12px 10px;
+
+  color: #6b7280;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+}
+
+/* ============================================================
+   NAVIGATION LINKS
+============================================================ */
+
+.link {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 11px 12px;
+  margin-bottom: 5px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #d1d5db;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  text-align: left;
+  text-decoration: none;
+
+  box-sizing: border-box;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.link span:first-child {
+  width: 20px;
+
+  text-align: center;
+
+  flex-shrink: 0;
+}
+
+.link:hover {
+  background: #1f2937;
+  color: white;
+}
+
+.link.active {
+  background: #2563eb;
+  color: white;
+}
+
+/* ============================================================
+   BOTTOM
+============================================================ */
+
+.bottom {
+  border-top: 1px solid #374151;
+
+  padding-top: 16px;
+}
+
+.logoutButton {
+  background: transparent;
+  border: none;
+
+  cursor: pointer;
+
+  font-family: inherit;
+  text-align: left;
+}
+
+.logoutButton:hover {
+  background: #1f2937;
+  color: white;
+}
+
+/* ============================================================
+   BUTTON RESET
+============================================================ */
+
+button.link {
+  appearance: none;
+  -webkit-appearance: none;
+}

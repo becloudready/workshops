@@ -18,6 +18,23 @@ const TraineeTaskSlice = createSlice({
       state.tasks = action.payload;
     },
 
+    updateTask: (state, action) => {
+      const updatedTask = action.payload;
+
+      const taskId = updatedTask.taskId ?? updatedTask.id;
+
+      const index = state.tasks.findIndex(
+        (task) => (task.taskId ?? task.id) === taskId,
+      );
+
+      if (index !== -1) {
+        state.tasks[index] = {
+          ...state.tasks[index],
+          ...updatedTask,
+        };
+      }
+    },
+
     setSelectedTask: (state, action) => {
       state.selectedTask = action.payload;
     },
@@ -47,6 +64,7 @@ const TraineeTaskSlice = createSlice({
 
 export const {
   setTasks,
+  updateTask,
   setSelectedTask,
   setProgressHistory,
   setLoading,
