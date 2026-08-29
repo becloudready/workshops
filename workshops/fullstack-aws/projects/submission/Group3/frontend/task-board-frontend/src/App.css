@@ -7,6 +7,16 @@
   background: #f8fafc;
 }
 
+/* Sidebar stays visible while the right side scrolls */
+
+.app-layout > aside {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
 /* Right side of the sidebar */
 
 .app-main {
@@ -39,6 +49,13 @@
 @media (max-width: 768px) {
   .app-layout {
     flex-direction: column;
+  }
+
+  .app-layout > aside {
+    position: static;
+    width: 100%;
+    height: auto;
+    overflow: visible;
   }
 
   .app-main {

@@ -2,33 +2,44 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Login from "./components/Login";
-import TraineeHeader from "./components/TraineeHeader";
-import TraineeSidebar from "./components/TraineeSidebar";
-import TraineeTasks from "./components/TraineeTasks";
-import TrainerHeader from "./components/TrainerHeader";
-import TrainerSidebar from "./components/TrainerSidebar";
-import TrainerTasks from "./components/TrainerTasks";
+
+import TraineeHeader from "./components/Trainee/TraineeHeader";
+import TraineeSidebar from "./components/Trainee/TraineeSidebar";
+import TraineeTasks from "./components/Trainee/TraineeTasks";
+
+import TrainerHeader from "./components/Trainer/TrainerHeader";
+import TrainerSidebar from "./components/Trainer/TrainerSidebar";
+import TrainerTasks from "./components/Trainer/TrainerTasks";
+import TrainerCohorts from "./components/Trainer/TrainerCohorts";
+import TrainerTrainees from "./components/Trainer/TrainerTrainees";
 
 import { logout, setName as setTraineeName } from "./store/TraineeSlice";
-import { setName as setTrainerName } from "./store/TrainerStore";
+import { setName as setTrainerName } from "./store/TrainerSlice";
 
 import "./App.css";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
 
 function App() {
   const dispatch = useDispatch();
 
-  // The "trainee" slice is the single auth session for any logged-in
-  // user, manager included - the name is a holdover, not a scoping bug.
+  // ============================================================
+  // Authentication
+  // ============================================================
+
   const { accessToken, tokenType, role, isAuthenticated } = useSelector(
     (state) => state.trainee,
   );
 
   // ============================================================
-  // GET /api/auth/me - populate the header/sidebar with the
-  // logged-in user's real name instead of the "Test Trainee" /
-  // "Test Trainer" placeholder.
+  // Trainer navigation
+  // ============================================================
+
+  const trainerTab = useSelector((state) => state.trainer.tab);
+
+  // ============================================================
+  // GET /api/auth/me
   // ============================================================
 
   useEffect(() => {
@@ -59,25 +70,65 @@ function App() {
     fetchProfile();
   }, [isAuthenticated, accessToken, tokenType, dispatch]);
 
+  // ============================================================
+  // Logout
+  // ============================================================
+
   function handleLogout() {
     dispatch(logout());
   }
+
+  // ============================================================
+  // Login
+  // ============================================================
 
   if (!isAuthenticated) {
     return <Login />;
   }
 
+  // ============================================================
+  // Determine role
+  // ============================================================
+
   const isManager = role === "manager";
+
+  // ============================================================
+  // Trainer content
+  // ============================================================
+
+  function renderTrainerContent() {
+    switch (trainerTab) {
+      case "cohorts":
+        return <TrainerCohorts />;
+
+      case "trainees":
+        return <TrainerTrainees />;
+
+      case "tasks":
+        return <TrainerTasks />;
+
+      default:
+        return <TrainerCohorts />;
+    }
+  }
+
+  // ============================================================
+  // Render
+  // ============================================================
 
   return (
     <div className="app-layout">
-      {isManager ? <TrainerSidebar onLogout={handleLogout} /> : <TraineeSidebar />}
+      {isManager ? (
+        <TrainerSidebar onLogout={handleLogout} />
+      ) : (
+        <TraineeSidebar />
+      )}
 
       <div className="app-main">
         {isManager ? <TrainerHeader /> : <TraineeHeader />}
 
         <main className="main-content">
-          {isManager ? <TrainerTasks /> : <TraineeTasks />}
+          {isManager ? renderTrainerContent() : <TraineeTasks />}
         </main>
       </div>
     </div>

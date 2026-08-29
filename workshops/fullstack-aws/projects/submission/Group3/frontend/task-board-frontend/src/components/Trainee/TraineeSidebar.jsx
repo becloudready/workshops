@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../store/TraineeSlice";
+import { logout } from "../../store/TraineeSlice";
 import "./TraineeSidebar.css";
 
 const TraineeSidebar = () => {
@@ -9,7 +9,6 @@ const TraineeSidebar = () => {
 
   const traineeName = trainee.name;
   const traineeRole = trainee.role;
-  const traineeUserId = trainee.userId;
 
   function handleLogout() {
     dispatch(logout());
@@ -56,31 +55,11 @@ const TraineeSidebar = () => {
           <span>▣</span>
           <span>Dashboard</span>
         </a>
-
-        <a href="/trainee/tasks" className="sidebar-link">
-          <span>✓</span>
-          <span>My Tasks</span>
-        </a>
-
-        <a href="/trainee/in-progress" className="sidebar-link">
-          <span>◷</span>
-          <span>In Progress</span>
-        </a>
-
-        <a href="/trainee/completed" className="sidebar-link">
-          <span>✓</span>
-          <span>Completed</span>
-        </a>
       </nav>
 
       {/* Bottom Navigation */}
 
       <div className="sidebar-bottom">
-        <a href="/trainee/profile" className="sidebar-link">
-          <span>⚙</span>
-          <span>Profile</span>
-        </a>
-
         <button
           type="button"
           className="sidebar-link logout-button"
