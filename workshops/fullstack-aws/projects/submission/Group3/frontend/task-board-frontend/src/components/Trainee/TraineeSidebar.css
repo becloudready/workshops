@@ -1,8 +1,8 @@
 .trainee-sidebar {
   width: 260px;
   height: 100vh;
-  background: #111827;
-  color: white;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
   display: flex;
   flex-direction: column;
   padding: 24px 16px;
@@ -11,7 +11,7 @@
 
 .sidebar-header {
   padding: 0 12px 24px;
-  border-bottom: 1px solid #374151;
+  border-bottom: 1px solid var(--sidebar-border);
 }
 
 .sidebar-header h2 {
@@ -28,14 +28,14 @@
   align-items: center;
   gap: 12px;
   padding: 24px 12px;
-  border-bottom: 1px solid #374151;
+  border-bottom: 1px solid var(--sidebar-border);
 }
 
 .trainee-avatar {
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: #2563eb;
+  background: var(--accent-trainer);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,7 +59,7 @@
 .trainee-details span {
   display: block;
   margin-top: 3px;
-  color: #9ca3af;
+  color: var(--sidebar-text-muted);
   font-size: 13px;
 }
 
@@ -72,7 +72,7 @@
 
 .navigation-title {
   margin: 0 12px 10px;
-  color: #6b7280;
+  color: var(--sidebar-text-muted);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -85,12 +85,25 @@
   gap: 12px;
   padding: 11px 12px;
   margin-bottom: 5px;
+  border: none;
   border-radius: 8px;
-  color: #d1d5db;
+  background: transparent;
+  color: var(--sidebar-text);
   text-decoration: none;
+  font-family: inherit;
   font-size: 14px;
   box-sizing: border-box;
+  cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* Reset native <button> chrome - without this, buttons using only
+   .sidebar-link (Profile Settings, theme toggle) show the browser's
+   default white/bordered button box instead of blending in like the
+   <a> nav links do. */
+button.sidebar-link {
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .sidebar-link span:first-child {
@@ -99,26 +112,58 @@
 }
 
 .sidebar-link:hover {
-  background: #1f2937;
-  color: white;
+  background: var(--sidebar-hover);
+  color: var(--sidebar-text);
 }
 
 .sidebar-link.active {
-  background: #2563eb;
+  background: var(--accent-trainer);
   color: white;
 }
 
 /* Bottom section */
 
 .sidebar-bottom {
-  border-top: 1px solid #374151;
-  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-top: 1px solid var(--sidebar-border);
+  padding-top: 12px;
+}
+
+/* Utility actions (Profile Settings, theme toggle) read as
+   secondary/quiet compared to primary nav - muted by default,
+   brightening only on hover, with a smaller icon so they don't
+   compete visually with the main navigation above. */
+.utility-link {
+  color: var(--sidebar-text-muted);
+  font-size: 13px;
+}
+
+.utility-link span:first-child {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.utility-link:hover {
+  background: var(--sidebar-hover);
+  color: var(--sidebar-text);
 }
 
 .logout-button {
   background: transparent;
   border: none;
+  margin-top: 6px;
+  padding-top: 13px;
+  border-top: 1px solid var(--sidebar-border);
+  border-radius: 0;
+  color: var(--sidebar-text-muted);
   cursor: pointer;
   font-family: inherit;
   text-align: left;
+}
+
+.logout-button:hover {
+  background: var(--sidebar-danger-bg);
+  color: var(--sidebar-danger);
 }

@@ -1,8 +1,8 @@
 .sidebar {
   width: 260px;
   height: 100vh;
-  background: #111827;
-  color: white;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
 
   display: flex;
   flex-direction: column;
@@ -18,7 +18,7 @@
 
 .header {
   padding: 0 12px 24px;
-  border-bottom: 1px solid #374151;
+  border-bottom: 1px solid var(--sidebar-border);
 }
 
 .header h2 {
@@ -41,7 +41,7 @@
 
   padding: 24px 12px;
 
-  border-bottom: 1px solid #374151;
+  border-bottom: 1px solid var(--sidebar-border);
 }
 
 .avatar {
@@ -52,7 +52,7 @@
 
   border-radius: 50%;
 
-  background: #2563eb;
+  background: var(--accent-trainer);
 
   display: flex;
   align-items: center;
@@ -82,7 +82,7 @@
 
   margin-top: 3px;
 
-  color: #9ca3af;
+  color: var(--sidebar-text-muted);
 
   font-size: 13px;
 }
@@ -99,7 +99,7 @@
 .navigationTitle {
   margin: 0 12px 10px;
 
-  color: #6b7280;
+  color: var(--sidebar-text-muted);
 
   font-size: 11px;
   font-weight: 700;
@@ -127,7 +127,7 @@
 
   background: transparent;
 
-  color: #d1d5db;
+  color: var(--sidebar-text);
 
   font-family: inherit;
   font-size: 14px;
@@ -153,12 +153,12 @@
 }
 
 .link:hover {
-  background: #1f2937;
-  color: white;
+  background: var(--sidebar-hover);
+  color: var(--sidebar-text);
 }
 
 .link.active {
-  background: #2563eb;
+  background: var(--accent-trainer);
   color: white;
 }
 
@@ -167,14 +167,45 @@
 ============================================================ */
 
 .bottom {
-  border-top: 1px solid #374151;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 
-  padding-top: 16px;
+  border-top: 1px solid var(--sidebar-border);
+
+  padding-top: 12px;
+}
+
+/* Utility actions (Profile Settings, theme toggle) read as
+   secondary/quiet compared to primary nav - muted by default,
+   brightening only on hover, with a smaller icon so they don't
+   compete visually with the main navigation above. */
+.utilityButton {
+  color: var(--sidebar-text-muted);
+  font-size: 13px;
+}
+
+.utilityButton span:first-child {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.utilityButton:hover {
+  background: var(--sidebar-hover);
+  color: var(--sidebar-text);
 }
 
 .logoutButton {
   background: transparent;
   border: none;
+
+  margin-top: 6px;
+  padding-top: 13px;
+
+  border-top: 1px solid var(--sidebar-border);
+  border-radius: 0;
+
+  color: var(--sidebar-text-muted);
 
   cursor: pointer;
 
@@ -183,8 +214,8 @@
 }
 
 .logoutButton:hover {
-  background: #1f2937;
-  color: white;
+  background: var(--sidebar-danger-bg);
+  color: var(--sidebar-danger);
 }
 
 /* ============================================================

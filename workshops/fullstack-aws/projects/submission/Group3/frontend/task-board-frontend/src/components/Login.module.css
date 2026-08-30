@@ -1,19 +1,26 @@
+/* Deliberately not themed - the login screen always renders light,
+   regardless of whichever theme was last toggled (which persists in
+   localStorage independent of being logged in). Colors below are the
+   light-theme token values from theme.css, hardcoded rather than
+   referenced via var(), so a returning dark-mode user doesn't land
+   on a dark login page before they've even signed in. */
+
 .loginContainer {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: #f4f5f3;
+  background: #f2ead9;
 }
 
 .loginCard {
   width: 100%;
   max-width: 420px;
   padding: 2.5rem;
-  border: 1px solid #ddd;
+  border: 1px solid #d6c4a1;
   border-radius: 12px;
-  background: #fff;
+  background: #fdf9f0;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
@@ -24,7 +31,7 @@
 
 .label {
   margin: 0 0 0.5rem;
-  color: #2f6f4e;
+  color: #6d7f45;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -32,12 +39,12 @@
 
 .header h1 {
   margin: 0 0 0.5rem;
-  color: #222;
+  color: #241a10;
 }
 
 .header p:last-child {
   margin: 0;
-  color: #777;
+  color: #7c6a51;
 }
 
 .inputGroup {
@@ -48,20 +55,22 @@
 }
 
 .inputGroup label {
-  color: #333;
+  color: #3b2f22;
   font-weight: 600;
 }
 
 .inputGroup input {
   padding: 0.8rem;
-  border: 1px solid #ccc;
+  border: 1px solid #d6c4a1;
   border-radius: 6px;
+  background: #fdf9f0;
+  color: #3b2f22;
   font-size: 1rem;
 }
 
 .inputGroup input:focus {
   outline: none;
-  border-color: #2f6f4e;
+  border-color: #6d7f45;
 }
 
 /* Only buttons inside this Login component */
@@ -70,7 +79,7 @@
   padding: 0.85rem;
   border: none;
   border-radius: 6px;
-  background: #2f6f4e;
+  background: #6d7f45;
   color: white;
   font-size: 1rem;
   font-weight: 600;
@@ -78,7 +87,7 @@
 }
 
 .loginCard button:hover {
-  background: #245a3e;
+  background: #576636;
 }
 
 .loginCard button:disabled {
@@ -89,8 +98,8 @@
 .error {
   margin-bottom: 1rem;
   padding: 0.75rem;
-  border: 1px solid #e57373;
+  border: 1px solid #d3a293;
   border-radius: 6px;
-  background: #ffebee;
-  color: #b71c1c;
+  background: #f3e0da;
+  color: #a13f34;
 }

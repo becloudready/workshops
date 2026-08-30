@@ -2,8 +2,8 @@
   width: 100%;
   padding: 2rem;
   border-radius: 12px;
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
   box-sizing: border-box;
 }
 
@@ -15,7 +15,7 @@
 
 .welcomeLabel {
   margin: 0;
-  color: #666666;
+  color: var(--text-muted);
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -23,18 +23,18 @@
 
 .traineeHeader h1 {
   margin: 0;
-  color: #222222;
+  color: var(--text-strong);
   font-size: 2rem;
   font-weight: 700;
 }
 
 .traineeHeader h1 span {
-  color: #2f6f4e;
+  color: var(--accent-trainee);
 }
 
 .traineeName {
   margin: 0.25rem 0 0;
-  color: #333333;
+  color: var(--text);
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -42,7 +42,7 @@
 .description {
   max-width: 650px;
   margin: 0.25rem 0 0;
-  color: #666666;
+  color: var(--text-muted);
   font-size: 0.95rem;
   line-height: 1.5;
 }

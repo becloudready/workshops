@@ -711,7 +711,7 @@ export default function TrainerCohorts() {
   // ============================================================
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} themeInvert`}>
       {/* ========================================================
           HEADER
       ======================================================== */}
