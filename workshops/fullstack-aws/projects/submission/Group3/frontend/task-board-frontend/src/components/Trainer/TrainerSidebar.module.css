@@ -154,7 +154,7 @@
 
 .link:hover {
   background: var(--sidebar-hover);
-  color: white;
+  color: var(--sidebar-text);
 }
 
 .link.active {

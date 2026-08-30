@@ -85,12 +85,25 @@
   gap: 12px;
   padding: 11px 12px;
   margin-bottom: 5px;
+  border: none;
   border-radius: 8px;
+  background: transparent;
   color: var(--sidebar-text);
   text-decoration: none;
+  font-family: inherit;
   font-size: 14px;
   box-sizing: border-box;
+  cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* Reset native <button> chrome - without this, buttons using only
+   .sidebar-link (Profile Settings, theme toggle) show the browser's
+   default white/bordered button box instead of blending in like the
+   <a> nav links do. */
+button.sidebar-link {
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .sidebar-link span:first-child {
@@ -100,7 +113,7 @@
 
 .sidebar-link:hover {
   background: var(--sidebar-hover);
-  color: white;
+  color: var(--sidebar-text);
 }
 
 .sidebar-link.active {
