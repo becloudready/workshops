@@ -8,7 +8,7 @@
   margin: 0 auto;
   padding: 32px 24px 48px;
   box-sizing: border-box;
-  color: #1f2937;
+  color: var(--text);
 }
 
 /* ============================================================
@@ -25,7 +25,7 @@
 
 .header h2 {
   margin: 4px 0 0;
-  color: #111827;
+  color: var(--text-strong);
   font-size: 28px;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -33,7 +33,7 @@
 
 .label {
   margin: 0;
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -43,10 +43,10 @@
 .taskCount {
   margin: 0;
   padding: 8px 14px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   border-radius: 999px;
-  background: #f9fafb;
-  color: #6b7280;
+  background: var(--surface-alt);
+  color: var(--text-muted);
   font-size: 13px;
   font-weight: 600;
 }
@@ -69,10 +69,10 @@
   width: 100%;
   overflow: hidden;
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   border-radius: 14px;
 
-  background: #ffffff;
+  background: var(--surface);
 
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 
@@ -142,7 +142,7 @@
 .taskCardHeader h3 {
   margin: 0;
 
-  color: #111827;
+  color: var(--text-strong);
   font-size: 17px;
   font-weight: 650;
   line-height: 1.4;
@@ -161,7 +161,7 @@
 
   flex-shrink: 0;
 
-  color: #9ca3af;
+  color: var(--text-faint);
   font-size: 10px;
 
   transition:
@@ -170,7 +170,7 @@
 }
 
 .expandIndicatorOpen {
-  color: #2563eb;
+  color: var(--accent-trainer);
   transform: rotate(180deg);
 }
 
@@ -189,8 +189,8 @@
 
   border-radius: 999px;
 
-  background: #eff6ff;
-  color: #1d4ed8;
+  background: var(--surface-alt);
+  color: var(--accent-trainer-hover);
 
   font-size: 11px;
   font-weight: 700;
@@ -210,7 +210,7 @@
 
   margin-top: 12px;
 
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 13px;
   line-height: 1.5;
 }
@@ -233,7 +233,7 @@
   overflow: hidden;
 
   border-radius: 999px;
-  background: #e5e7eb;
+  background: var(--border);
 }
 
 .progressBarFill {
@@ -241,7 +241,7 @@
 
   border-radius: inherit;
 
-  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  background: linear-gradient(90deg, var(--accent-trainer), #3b82f6);
 }
 
 /* ============================================================
@@ -251,7 +251,7 @@
 .taskDetails {
   overflow: hidden;
 
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--border);
 }
 
 .taskDetailsInner {
@@ -269,7 +269,7 @@
 .sectionLabel {
   margin: 0 0 7px;
 
-  color: #6b7280;
+  color: var(--text-muted);
 
   font-size: 11px;
   font-weight: 700;
@@ -280,7 +280,7 @@
 .description {
   margin: 0;
 
-  color: #4b5563;
+  color: var(--text-muted);
 
   font-size: 14px;
   line-height: 1.7;
@@ -305,14 +305,14 @@
 
   padding: 13px 15px;
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   border-radius: 9px;
 
-  background: #ffffff;
+  background: var(--surface);
 }
 
 .infoLabel {
-  color: #6b7280;
+  color: var(--text-muted);
 
   font-size: 11px;
   font-weight: 650;
@@ -321,7 +321,7 @@
 }
 
 .taskInfo strong {
-  color: #111827;
+  color: var(--text-strong);
   font-size: 14px;
 }
 
@@ -333,7 +333,7 @@
   margin-top: 26px;
   padding-top: 24px;
 
-  border-top: 1px solid #eef0f3;
+  border-top: 1px solid var(--border);
 }
 
 .progressHeader {
@@ -344,7 +344,7 @@
 
   margin-bottom: 12px;
 
-  color: #374151;
+  color: var(--text);
   font-size: 14px;
   font-weight: 600;
 }
@@ -352,7 +352,7 @@
 .progressHeader h3 {
   margin: 0 0 5px;
 
-  color: #111827;
+  color: var(--text-strong);
   font-size: 16px;
   font-weight: 700;
 }
@@ -360,7 +360,7 @@
 .progressHeader p {
   margin: 0;
 
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 12px;
   font-weight: 400;
   line-height: 1.5;
@@ -369,7 +369,7 @@
 .progressPercentage {
   flex-shrink: 0;
 
-  color: #2563eb;
+  color: var(--accent-trainer);
   font-size: 18px;
   font-weight: 700;
 }
@@ -386,7 +386,7 @@
 
   border-radius: 999px;
 
-  background: #e5e7eb;
+  background: var(--border);
 }
 
 /* ============================================================
@@ -408,13 +408,13 @@
 .subtaskHeader h3 {
   margin: 0;
 
-  color: #111827;
+  color: var(--text-strong);
   font-size: 16px;
   font-weight: 700;
 }
 
 .subtaskHeader > span {
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 12px;
   font-weight: 600;
 }
@@ -437,12 +437,12 @@
   min-height: 48px;
   padding: 10px 13px;
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   border-radius: 9px;
 
-  background: #ffffff;
+  background: var(--surface);
 
-  color: #374151;
+  color: var(--text);
 
   font-size: 14px;
 
@@ -471,7 +471,7 @@
 
   flex-shrink: 0;
 
-  accent-color: #2563eb;
+  accent-color: var(--accent-trainer);
 
   cursor: pointer;
 }
@@ -491,14 +491,14 @@
 }
 
 .subtaskCompleted span {
-  color: #6b7280;
+  color: var(--text-muted);
   text-decoration: line-through;
 }
 
 .subtask small {
   flex-shrink: 0;
 
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 11px;
 }
 
@@ -510,16 +510,16 @@
   margin-top: 28px;
   padding: 16px;
 
-  border: 1px dashed #d1d5db;
+  border: 1px dashed var(--border);
   border-radius: 9px;
 
-  background: #fafafa;
+  background: var(--surface-alt);
 }
 
 .noSubtasks p {
   margin: 0;
 
-  color: #6b7280;
+  color: var(--text-muted);
 
   font-size: 13px;
 }
@@ -542,11 +542,11 @@
 
   padding: 11px 12px;
 
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border);
   border-radius: 8px;
 
-  background: #ffffff;
-  color: #111827;
+  background: var(--surface);
+  color: var(--text-strong);
 
   font-family: inherit;
   font-size: 14px;
@@ -568,8 +568,8 @@
 }
 
 .progressForm textarea:disabled {
-  background: #f3f4f6;
-  color: #9ca3af;
+  background: var(--surface-alt);
+  color: var(--text-faint);
 }
 
 /* ============================================================
@@ -584,8 +584,8 @@
   border: 0;
   border-radius: 8px;
 
-  background: #2563eb;
-  color: #ffffff;
+  background: var(--accent-trainer);
+  color: var(--surface);
 
   font-family: inherit;
   font-size: 13px;
@@ -600,7 +600,7 @@
 }
 
 .progressForm button:hover:not(:disabled) {
-  background: #1d4ed8;
+  background: var(--accent-trainer-hover);
 
   box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
 
@@ -620,7 +620,7 @@
   margin-top: 30px;
   padding-top: 24px;
 
-  border-top: 1px solid #eef0f3;
+  border-top: 1px solid var(--border);
 }
 
 .historyHeader {
@@ -630,7 +630,7 @@
 .historyHeader h3 {
   margin: 0;
 
-  color: #111827;
+  color: var(--text-strong);
 
   font-size: 16px;
   font-weight: 700;
@@ -639,7 +639,7 @@
 .noHistory {
   margin: 0;
 
-  color: #6b7280;
+  color: var(--text-muted);
 
   font-size: 13px;
 }
@@ -661,14 +661,14 @@
 
   padding: 13px 14px;
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   border-radius: 9px;
 
-  background: #fafafa;
+  background: var(--surface-alt);
 }
 
 .progressItemPercentage {
-  color: #2563eb;
+  color: var(--accent-trainer);
 
   font-size: 14px;
   font-weight: 700;
@@ -683,7 +683,7 @@
 }
 
 .progressItemContent span {
-  color: #4b5563;
+  color: var(--text-muted);
 
   font-size: 13px;
   line-height: 1.45;
@@ -692,7 +692,7 @@
 }
 
 .progressItemContent small {
-  color: #9ca3af;
+  color: var(--text-faint);
 
   font-size: 11px;
 }
@@ -710,7 +710,7 @@
 
   padding: 20px;
 
-  color: #6b7280;
+  color: var(--text-muted);
 
   font-size: 13px;
 }
@@ -728,11 +728,11 @@
 
   padding: 14px 16px;
 
-  border: 1px solid #fecaca;
+  border: 1px solid var(--danger-border);
   border-radius: 10px;
 
-  background: #fef2f2;
-  color: #b91c1c;
+  background: var(--danger-bg);
+  color: var(--danger);
 
   font-size: 14px;
 }
@@ -754,10 +754,10 @@
 .empty {
   padding: 56px 24px;
 
-  border: 1px dashed #d1d5db;
+  border: 1px dashed var(--border);
   border-radius: 14px;
 
-  background: #fafafa;
+  background: var(--surface-alt);
 
   text-align: center;
 }
@@ -765,7 +765,7 @@
 .empty h3 {
   margin: 0 0 8px;
 
-  color: #374151;
+  color: var(--text);
 
   font-size: 17px;
 }
@@ -773,7 +773,7 @@
 .empty p {
   margin: 0;
 
-  color: #6b7280;
+  color: var(--text-muted);
 
   font-size: 14px;
 }

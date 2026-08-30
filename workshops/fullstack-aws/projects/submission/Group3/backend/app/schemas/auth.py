@@ -1,4 +1,4 @@
-from pydantic import EmailStr
+from pydantic import EmailStr, Field
 
 from app.schemas.base import CamelModel
 
@@ -6,6 +6,13 @@ from app.schemas.base import CamelModel
 class LoginRequest(CamelModel):
     email: EmailStr
     password: str
+
+
+class ProfileUpdate(CamelModel):
+    full_name: str | None = None
+    email: EmailStr | None = None
+    current_password: str | None = None
+    new_password: str | None = Field(default=None, min_length=8)
 
 
 class TokenResponse(CamelModel):

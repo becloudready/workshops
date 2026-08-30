@@ -16,6 +16,8 @@ import TrainerTrainees from "./components/Trainer/TrainerTrainees";
 import { logout, setName as setTraineeName } from "./store/TraineeSlice";
 import { setName as setTrainerName } from "./store/TrainerSlice";
 
+import useTheme from "./hooks/useTheme";
+
 import "./App.css";
 
 const API_BASE_URL =
@@ -31,6 +33,13 @@ function App() {
   const { accessToken, tokenType, role, isAuthenticated } = useSelector(
     (state) => state.trainee,
   );
+
+  // ============================================================
+  // Theme (light/dark) - shared regardless of role, toggled from
+  // whichever sidebar is showing
+  // ============================================================
+
+  const { theme, toggleTheme } = useTheme();
 
   // ============================================================
   // Trainer navigation
@@ -119,9 +128,13 @@ function App() {
   return (
     <div className="app-layout">
       {isManager ? (
-        <TrainerSidebar onLogout={handleLogout} />
+        <TrainerSidebar
+          onLogout={handleLogout}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+        />
       ) : (
-        <TraineeSidebar />
+        <TraineeSidebar theme={theme} onToggleTheme={toggleTheme} />
       )}
 
       <div className="app-main">

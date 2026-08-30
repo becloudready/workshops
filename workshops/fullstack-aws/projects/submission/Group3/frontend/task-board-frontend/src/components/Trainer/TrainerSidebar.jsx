@@ -1,9 +1,13 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setTab } from "../../store/TrainerSlice";
+import ProfileModal from "../ProfileModal";
 import styles from "./TrainerSidebar.module.css";
 
-export default function TrainerSidebar({ onLogout }) {
+export default function TrainerSidebar({ onLogout, theme, onToggleTheme }) {
   const dispatch = useDispatch();
+
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const { name: trainerName, tab } = useSelector((state) => state.trainer);
 
@@ -60,6 +64,20 @@ export default function TrainerSidebar({ onLogout }) {
       <div className={styles.bottom}>
         <button
           type="button"
+          className={styles.link}
+          onClick={() => setProfileOpen(true)}
+        >
+          <span>⚙</span>
+          <span>Profile Settings</span>
+        </button>
+
+        <button type="button" className={styles.link} onClick={onToggleTheme}>
+          <span>{theme === "dark" ? "☀" : "☾"}</span>
+          <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
+        </button>
+
+        <button
+          type="button"
           className={`${styles.link} ${styles.logoutButton}`}
           onClick={onLogout}
         >
@@ -67,6 +85,10 @@ export default function TrainerSidebar({ onLogout }) {
           <span>Logout</span>
         </button>
       </div>
+
+      {profileOpen && (
+        <ProfileModal onClose={() => setProfileOpen(false)} />
+      )}
     </aside>
   );
 }

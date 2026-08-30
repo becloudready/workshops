@@ -1,0 +1,69 @@
+/* Design tokens for light/dark mode. Toggled explicitly via a
+   data-theme attribute on <html> (see src/hooks/useTheme.js) - this
+   app doesn't follow system preference, it's a plain on/off switch
+   in the sidebar. Light values match the colors already in use
+   everywhere, so switching this file in is a no-op visually until
+   dark mode is actually toggled on. */
+
+:root {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-alt: #f7f7f7;
+  --border: #e5e7eb;
+
+  --text: #1f2937;
+  --text-strong: #111827;
+  --text-muted: #6b7280;
+  --text-faint: #9ca3af;
+
+  --sidebar-bg: #111827;
+  --sidebar-border: #374151;
+  --sidebar-text: #d1d5db;
+  --sidebar-text-muted: #9ca3af;
+  --sidebar-hover: #1f2937;
+
+  --accent-trainee: #2f6f4e;
+  --accent-trainee-hover: #245a3e;
+  --accent-trainer: #2563eb;
+  --accent-trainer-hover: #1d4ed8;
+
+  --danger: #b71c1c;
+  --danger-bg: #ffebee;
+  --danger-border: #e57373;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0b0f17;
+  --surface: #161b26;
+  --surface-alt: #1c2230;
+  --border: #2a3140;
+
+  --text: #e2e8f0;
+  --text-strong: #f3f4f6;
+  --text-muted: #9aa4b2;
+  --text-faint: #6b7280;
+
+  --sidebar-bg: #0a0e15;
+  --sidebar-border: #232a38;
+  --sidebar-text: #d1d5db;
+  --sidebar-text-muted: #8891a0;
+  --sidebar-hover: #1a2130;
+
+  --accent-trainee: #3ecf8e;
+  --accent-trainee-hover: #34b57c;
+  --accent-trainer: #5b8def;
+  --accent-trainer-hover: #7aa5f2;
+
+  --danger: #f87171;
+  --danger-bg: #3a1414;
+  --danger-border: #7f1d1d;
+}
+
+/* Fast path for the two admin pages (Cohorts/Trainees management) -
+   ~150 one-off hex colors between them with no shared palette, not
+   worth hand-tokenizing right now. A full invert mathematically
+   preserves each element's original contrast ratio; each page opts
+   in by adding "themeInvert" alongside its root class. */
+:root[data-theme="dark"] .themeInvert {
+  filter: invert(1) hue-rotate(180deg);
+}

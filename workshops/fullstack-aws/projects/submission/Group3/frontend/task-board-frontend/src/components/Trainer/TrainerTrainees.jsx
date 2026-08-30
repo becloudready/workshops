@@ -700,7 +700,7 @@ export default function TrainerTrainees() {
   // ============================================================
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} themeInvert`}>
       {/* HEADER */}
 
       <header className={styles.header}>

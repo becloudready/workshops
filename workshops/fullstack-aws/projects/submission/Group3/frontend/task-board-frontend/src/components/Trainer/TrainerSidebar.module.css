@@ -1,7 +1,7 @@
 .sidebar {
   width: 260px;
   height: 100vh;
-  background: #111827;
+  background: var(--sidebar-bg);
   color: white;
 
   display: flex;
@@ -18,7 +18,7 @@
 
 .header {
   padding: 0 12px 24px;
-  border-bottom: 1px solid #374151;
+  border-bottom: 1px solid var(--sidebar-border);
 }
 
 .header h2 {
@@ -41,7 +41,7 @@
 
   padding: 24px 12px;
 
-  border-bottom: 1px solid #374151;
+  border-bottom: 1px solid var(--sidebar-border);
 }
 
 .avatar {
@@ -52,7 +52,7 @@
 
   border-radius: 50%;
 
-  background: #2563eb;
+  background: var(--accent-trainer);
 
   display: flex;
   align-items: center;
@@ -82,7 +82,7 @@
 
   margin-top: 3px;
 
-  color: #9ca3af;
+  color: var(--sidebar-text-muted);
 
   font-size: 13px;
 }
@@ -99,7 +99,7 @@
 .navigationTitle {
   margin: 0 12px 10px;
 
-  color: #6b7280;
+  color: var(--sidebar-text-muted);
 
   font-size: 11px;
   font-weight: 700;
@@ -127,7 +127,7 @@
 
   background: transparent;
 
-  color: #d1d5db;
+  color: var(--sidebar-text);
 
   font-family: inherit;
   font-size: 14px;
@@ -153,12 +153,12 @@
 }
 
 .link:hover {
-  background: #1f2937;
+  background: var(--sidebar-hover);
   color: white;
 }
 
 .link.active {
-  background: #2563eb;
+  background: var(--accent-trainer);
   color: white;
 }
 
@@ -167,7 +167,7 @@
 ============================================================ */
 
 .bottom {
-  border-top: 1px solid #374151;
+  border-top: 1px solid var(--sidebar-border);
 
   padding-top: 16px;
 }
@@ -183,7 +183,7 @@
 }
 
 .logoutButton:hover {
-  background: #1f2937;
+  background: var(--sidebar-hover);
   color: white;
 }
 

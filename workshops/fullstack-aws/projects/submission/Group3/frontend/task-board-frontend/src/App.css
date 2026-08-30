@@ -4,7 +4,7 @@
   display: flex;
   width: 100%;
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--bg);
 }
 
 /* Sidebar stays visible while the right side scrolls */
@@ -32,16 +32,8 @@
 .main-content {
   flex: 1;
   padding: 32px;
-  background: #f8fafc;
+  background: var(--bg);
   box-sizing: border-box;
-}
-
-/* Simple content styling */
-
-.main-content p {
-  margin: 0;
-  font-size: 18px;
-  color: #334155;
 }
 
 /* Mobile */

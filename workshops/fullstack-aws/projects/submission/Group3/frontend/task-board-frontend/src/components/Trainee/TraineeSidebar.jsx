@@ -1,9 +1,13 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/TraineeSlice";
+import ProfileModal from "../ProfileModal";
 import "./TraineeSidebar.css";
 
-const TraineeSidebar = () => {
+const TraineeSidebar = ({ theme, onToggleTheme }) => {
   const dispatch = useDispatch();
+
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const trainee = useSelector((state) => state.trainee);
 
@@ -62,6 +66,24 @@ const TraineeSidebar = () => {
       <div className="sidebar-bottom">
         <button
           type="button"
+          className="sidebar-link"
+          onClick={() => setProfileOpen(true)}
+        >
+          <span>⚙</span>
+          <span>Profile Settings</span>
+        </button>
+
+        <button
+          type="button"
+          className="sidebar-link"
+          onClick={onToggleTheme}
+        >
+          <span>{theme === "dark" ? "☀" : "☾"}</span>
+          <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
+        </button>
+
+        <button
+          type="button"
           className="sidebar-link logout-button"
           onClick={handleLogout}
         >
@@ -69,6 +91,10 @@ const TraineeSidebar = () => {
           <span>Logout</span>
         </button>
       </div>
+
+      {profileOpen && (
+        <ProfileModal onClose={() => setProfileOpen(false)} />
+      )}
     </aside>
   );
 };

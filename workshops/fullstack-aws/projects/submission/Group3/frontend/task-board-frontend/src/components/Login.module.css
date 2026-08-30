@@ -4,16 +4,16 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: #f4f5f3;
+  background: var(--bg);
 }
 
 .loginCard {
   width: 100%;
   max-width: 420px;
   padding: 2.5rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
   border-radius: 12px;
-  background: #fff;
+  background: var(--surface);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
@@ -24,7 +24,7 @@
 
 .label {
   margin: 0 0 0.5rem;
-  color: #2f6f4e;
+  color: var(--accent-trainee);
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -32,12 +32,12 @@
 
 .header h1 {
   margin: 0 0 0.5rem;
-  color: #222;
+  color: var(--text-strong);
 }
 
 .header p:last-child {
   margin: 0;
-  color: #777;
+  color: var(--text-muted);
 }
 
 .inputGroup {
@@ -48,20 +48,22 @@
 }
 
 .inputGroup label {
-  color: #333;
+  color: var(--text);
   font-weight: 600;
 }
 
 .inputGroup input {
   padding: 0.8rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border);
   border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
   font-size: 1rem;
 }
 
 .inputGroup input:focus {
   outline: none;
-  border-color: #2f6f4e;
+  border-color: var(--accent-trainee);
 }
 
 /* Only buttons inside this Login component */
@@ -70,7 +72,7 @@
   padding: 0.85rem;
   border: none;
   border-radius: 6px;
-  background: #2f6f4e;
+  background: var(--accent-trainee);
   color: white;
   font-size: 1rem;
   font-weight: 600;
@@ -78,7 +80,7 @@
 }
 
 .loginCard button:hover {
-  background: #245a3e;
+  background: var(--accent-trainee-hover);
 }
 
 .loginCard button:disabled {
@@ -89,8 +91,8 @@
 .error {
   margin-bottom: 1rem;
   padding: 0.75rem;
-  border: 1px solid #e57373;
+  border: 1px solid var(--danger-border);
   border-radius: 6px;
-  background: #ffebee;
-  color: #b71c1c;
+  background: var(--danger-bg);
+  color: var(--danger);
 }
