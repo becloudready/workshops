@@ -2,7 +2,7 @@
   width: 260px;
   height: 100vh;
   background: var(--sidebar-bg);
-  color: white;
+  color: var(--sidebar-text);
   display: flex;
   flex-direction: column;
   padding: 24px 16px;
@@ -111,14 +111,46 @@
 /* Bottom section */
 
 .sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   border-top: 1px solid var(--sidebar-border);
-  padding-top: 16px;
+  padding-top: 12px;
+}
+
+/* Utility actions (Profile Settings, theme toggle) read as
+   secondary/quiet compared to primary nav - muted by default,
+   brightening only on hover, with a smaller icon so they don't
+   compete visually with the main navigation above. */
+.utility-link {
+  color: var(--sidebar-text-muted);
+  font-size: 13px;
+}
+
+.utility-link span:first-child {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.utility-link:hover {
+  background: var(--sidebar-hover);
+  color: var(--sidebar-text);
 }
 
 .logout-button {
   background: transparent;
   border: none;
+  margin-top: 6px;
+  padding-top: 13px;
+  border-top: 1px solid var(--sidebar-border);
+  border-radius: 0;
+  color: var(--sidebar-text-muted);
   cursor: pointer;
   font-family: inherit;
   text-align: left;
+}
+
+.logout-button:hover {
+  background: var(--sidebar-danger-bg);
+  color: var(--sidebar-danger);
 }

@@ -66,7 +66,7 @@ const TraineeSidebar = ({ theme, onToggleTheme }) => {
       <div className="sidebar-bottom">
         <button
           type="button"
-          className="sidebar-link"
+          className="sidebar-link utility-link"
           onClick={() => setProfileOpen(true)}
         >
           <span>⚙</span>
@@ -75,7 +75,7 @@ const TraineeSidebar = ({ theme, onToggleTheme }) => {
 
         <button
           type="button"
-          className="sidebar-link"
+          className="sidebar-link utility-link"
           onClick={onToggleTheme}
         >
           <span>{theme === "dark" ? "☀" : "☾"}</span>

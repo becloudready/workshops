@@ -64,14 +64,18 @@ export default function TrainerSidebar({ onLogout, theme, onToggleTheme }) {
       <div className={styles.bottom}>
         <button
           type="button"
-          className={styles.link}
+          className={`${styles.link} ${styles.utilityButton}`}
           onClick={() => setProfileOpen(true)}
         >
           <span>⚙</span>
           <span>Profile Settings</span>
         </button>
 
-        <button type="button" className={styles.link} onClick={onToggleTheme}>
+        <button
+          type="button"
+          className={`${styles.link} ${styles.utilityButton}`}
+          onClick={onToggleTheme}
+        >
           <span>{theme === "dark" ? "☀" : "☾"}</span>
           <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
         </button>

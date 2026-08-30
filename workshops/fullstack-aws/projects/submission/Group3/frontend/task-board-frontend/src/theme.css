@@ -1,62 +1,69 @@
 /* Design tokens for light/dark mode. Toggled explicitly via a
    data-theme attribute on <html> (see src/hooks/useTheme.js) - this
    app doesn't follow system preference, it's a plain on/off switch
-   in the sidebar. Light values match the colors already in use
-   everywhere, so switching this file in is a no-op visually until
-   dark mode is actually toggled on. */
+   in the sidebar.
+
+   Light: beige / off-white / light brown - warm, paper-like.
+   Dark: navy / charcoal / near-black - cool, deep. */
 
 :root {
-  --bg: #f8fafc;
-  --surface: #ffffff;
-  --surface-alt: #f7f7f7;
-  --border: #e5e7eb;
+  --bg: #f2ead9;
+  --surface: #fdf9f0;
+  --surface-alt: #e9dfc7;
+  --border: #d6c4a1;
 
-  --text: #1f2937;
-  --text-strong: #111827;
-  --text-muted: #6b7280;
-  --text-faint: #9ca3af;
+  --text: #3b2f22;
+  --text-strong: #241a10;
+  --text-muted: #7c6a51;
+  --text-faint: #a4906d;
 
-  --sidebar-bg: #111827;
-  --sidebar-border: #374151;
-  --sidebar-text: #d1d5db;
-  --sidebar-text-muted: #9ca3af;
-  --sidebar-hover: #1f2937;
+  --sidebar-bg: #241d16;
+  --sidebar-border: #423527;
+  --sidebar-text: #ebdfc8;
+  --sidebar-text-muted: #a4937a;
+  --sidebar-hover: #33291e;
 
-  --accent-trainee: #2f6f4e;
-  --accent-trainee-hover: #245a3e;
-  --accent-trainer: #2563eb;
-  --accent-trainer-hover: #1d4ed8;
+  --accent-trainee: #6d7f45;
+  --accent-trainee-hover: #576636;
+  --accent-trainer: #4c6f9c;
+  --accent-trainer-hover: #3c5a80;
 
-  --danger: #b71c1c;
-  --danger-bg: #ffebee;
-  --danger-border: #e57373;
+  --danger: #a13f34;
+  --danger-bg: #f3e0da;
+  --danger-border: #d3a293;
+
+  --sidebar-danger: #e0938a;
+  --sidebar-danger-bg: #3a2420;
 }
 
 :root[data-theme="dark"] {
-  --bg: #0b0f17;
-  --surface: #161b26;
-  --surface-alt: #1c2230;
-  --border: #2a3140;
+  --bg: #12151d;
+  --surface: #1a1e29;
+  --surface-alt: #212635;
+  --border: #313a4d;
 
-  --text: #e2e8f0;
-  --text-strong: #f3f4f6;
-  --text-muted: #9aa4b2;
-  --text-faint: #6b7280;
+  --text: #d9dee8;
+  --text-strong: #f2f4f8;
+  --text-muted: #8b93a7;
+  --text-faint: #5d6478;
 
-  --sidebar-bg: #0a0e15;
-  --sidebar-border: #232a38;
-  --sidebar-text: #d1d5db;
-  --sidebar-text-muted: #8891a0;
-  --sidebar-hover: #1a2130;
+  --sidebar-bg: #0c0e14;
+  --sidebar-border: #232a3a;
+  --sidebar-text: #ccd2e0;
+  --sidebar-text-muted: #7a8296;
+  --sidebar-hover: #1a2030;
 
-  --accent-trainee: #3ecf8e;
-  --accent-trainee-hover: #34b57c;
-  --accent-trainer: #5b8def;
-  --accent-trainer-hover: #7aa5f2;
+  --accent-trainee: #7fbf74;
+  --accent-trainee-hover: #94cf8a;
+  --accent-trainer: #6f9ce0;
+  --accent-trainer-hover: #8ab0ea;
 
-  --danger: #f87171;
-  --danger-bg: #3a1414;
-  --danger-border: #7f1d1d;
+  --danger: #e08585;
+  --danger-bg: #3a1f1f;
+  --danger-border: #7a3a3a;
+
+  --sidebar-danger: #e79a92;
+  --sidebar-danger-bg: #2c1a1a;
 }
 
 /* Fast path for the two admin pages (Cohorts/Trainees management) -
