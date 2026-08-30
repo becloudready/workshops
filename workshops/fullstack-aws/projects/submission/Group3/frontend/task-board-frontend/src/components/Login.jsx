@@ -4,7 +4,8 @@ import styles from "./Login.module.css";
 
 import { setCredentials } from "../store/TraineeSlice";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
 
 export default function Login({ onLogin }) {
   const dispatch = useDispatch();
@@ -144,7 +145,10 @@ export default function Login({ onLogin }) {
           {/* Email */}
 
           <div className={styles.inputGroup}>
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">
+              Email / manager@noticeboardtracker.dev /
+              trainee1@noticeboardtracker.dev
+            </label>
 
             <input
               id="email"
@@ -161,7 +165,9 @@ export default function Login({ onLogin }) {
           {/* Password */}
 
           <div className={styles.inputGroup}>
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">
+              Password / Manager123! / Trainee123!
+            </label>
 
             <input
               id="password"

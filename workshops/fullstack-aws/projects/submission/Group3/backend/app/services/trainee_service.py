@@ -7,6 +7,7 @@ from app.models.enums import UserRole
 from app.models.task import Task
 from app.models.user import User
 from app.models.task_assignment import TaskAssignment
+from app.models.subtask_completion import SubtaskCompletion
 from app.schemas.trainee import TraineeCreate, TraineeUpdate
 
 
@@ -408,10 +409,41 @@ class TraineeService:
             return False
 
         # ----------------------------------------------------
+        # Delete subtask completion records
+        #
+        # These records reference users.id through
+        # subtask_completions.trainee_id.
+        #
+        # They must be deleted before the trainee.
+        # ----------------------------------------------------
+
+        self.db.query(SubtaskCompletion).filter(
+            SubtaskCompletion.trainee_id == trainee.id,
+        ).delete(
+            synchronize_session=False,
+        )
+
+        # ----------------------------------------------------
+        # Delete task assignments
+        #
+        # These records also reference the trainee.
+        # ----------------------------------------------------
+
+        self.db.query(TaskAssignment).filter(
+            TaskAssignment.trainee_id == trainee.id,
+        ).delete(
+            synchronize_session=False,
+        )
+
+        # ----------------------------------------------------
         # Delete trainee
         # ----------------------------------------------------
 
         self.db.delete(trainee)
+
+        # ----------------------------------------------------
+        # Commit everything together
+        # ----------------------------------------------------
 
         self.db.commit()
 
