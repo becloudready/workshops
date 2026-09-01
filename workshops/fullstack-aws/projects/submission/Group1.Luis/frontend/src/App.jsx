@@ -1,0 +1,96 @@
+import "./App.css";
+import { Navigate, Route, Routes } from "react-router-dom";
+
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./pages/Login";
+import Registration from "./pages/Registration";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import CustomerDashboard from "./pages/CustomerDashboard";
+import TellerDashboard from "./pages/TellerDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
+import UsersRoles from "./features/admin/UsersRoles";
+import AccountManagement from "./features/admin/AccountManagement";
+
+function AppRoutes() {
+  const { user, restoring } = useAuth();
+
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Registration />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+
+      <Route
+        path="/customer"
+        element={
+          <ProtectedRoute allowedRoles={["customer"]}>
+            <CustomerDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/teller"
+        element={
+          <ProtectedRoute allowedRoles={["teller"]}>
+            <TellerDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/users-roles"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <UsersRoles />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/account-management"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AccountManagement />
+          </ProtectedRoute>
+        }
+      />
+      
+      <Route
+        path="/"
+        element={
+          restoring ? (
+            <p>Loading…</p>
+          ) : user ? (
+            <Navigate to={`/${user.role}`} replace />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
+  );
+}
+
+export default App;
