@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+/* Design tokens for NoticeBoardTracker.
+   Every color used by a component comes from here — components never hardcode
+   hex values. Tailwind v4 turns each --color-* token into utilities
+   (e.g. --color-page becomes bg-page / text-page / border-page). */
+@theme {
+  /* Brand */
+  --color-brand: #2563eb;
+  --color-brand-hover: #1d4ed8;
+  --color-brand-subtle: #eff6ff;
+
+  /* Surfaces */
+  --color-page: #f6f7f9;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f1f3f5;
+
+  /* Borders */
+  --color-line: #e3e6ea;
+  --color-line-strong: #cbd2d9;
+
+  /* Text */
+  --color-ink: #1a1d21;
+  --color-ink-muted: #5c6670;
+  --color-ink-subtle: #8b949e;
+
+  /* Notice priority — used by the badge in NoticeCard (Stage 2) */
+  --color-high: #dc2626;
+  --color-high-bg: #fef2f2;
+  --color-normal: #2563eb;
+  --color-normal-bg: #eff6ff;
+  --color-low: #059669;
+  --color-low-bg: #ecfdf5;
+}
