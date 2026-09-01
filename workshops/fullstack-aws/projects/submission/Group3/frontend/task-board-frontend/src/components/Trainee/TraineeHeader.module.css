@@ -1,0 +1,48 @@
+.traineeHeader {
+  width: 100%;
+  padding: 2rem;
+  border-radius: 12px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  box-sizing: border-box;
+}
+
+.headerContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.welcomeLabel {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.traineeHeader h1 {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.traineeHeader h1 span {
+  color: var(--accent-trainee);
+}
+
+.traineeName {
+  margin: 0.25rem 0 0;
+  color: var(--text);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.description {
+  max-width: 650px;
+  margin: 0.25rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}

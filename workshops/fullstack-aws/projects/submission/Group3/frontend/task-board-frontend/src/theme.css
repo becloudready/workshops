@@ -1,0 +1,80 @@
+/* Design tokens for light/dark mode. Toggled explicitly via a
+   data-theme attribute on <html> (see src/hooks/useTheme.js) - this
+   app doesn't follow system preference, it's a plain on/off switch
+   in the sidebar.
+
+   Light: beige / off-white page with a light brown sidebar - warm,
+   paper-like. Dark: navy / charcoal page with a grey sidebar - cool,
+   deep. */
+
+:root {
+  --bg: #f2ead9;
+  --surface: #fdf9f0;
+  --surface-alt: #e9dfc7;
+  --border: #d6c4a1;
+
+  --text: #3b2f22;
+  --text-strong: #241a10;
+  --text-muted: #7c6a51;
+  --text-faint: #a4906d;
+
+  --sidebar-bg: #c9ab7d;
+  --sidebar-border: #b3925f;
+  --sidebar-text: #3a2b1a;
+  --sidebar-text-muted: #6b5439;
+  --sidebar-hover: #bb9c6c;
+
+  --accent-trainee: #6d7f45;
+  --accent-trainee-hover: #576636;
+  --accent-trainer: #4c6f9c;
+  --accent-trainer-hover: #3c5a80;
+
+  --danger: #a13f34;
+  --danger-bg: #f3e0da;
+  --danger-border: #d3a293;
+
+  --sidebar-danger: #a13f34;
+  --sidebar-danger-bg: #e6c9bd;
+}
+
+:root[data-theme="dark"] {
+  --bg: #12151d;
+  --surface: #1a1e29;
+  --surface-alt: #212635;
+  --border: #313a4d;
+
+  --text: #d9dee8;
+  --text-strong: #f2f4f8;
+  --text-muted: #8b93a7;
+  --text-faint: #5d6478;
+
+  --sidebar-bg: #2b2d31;
+  --sidebar-border: #3f4147;
+  --sidebar-text: #e4e5e8;
+  --sidebar-text-muted: #9a9ca3;
+  --sidebar-hover: #38393f;
+
+  --accent-trainee: #7fbf74;
+  --accent-trainee-hover: #94cf8a;
+  --accent-trainer: #6f9ce0;
+  --accent-trainer-hover: #8ab0ea;
+
+  --danger: #e08585;
+  --danger-bg: #3a1f1f;
+  --danger-border: #7a3a3a;
+
+  --sidebar-danger: #e79a92;
+  --sidebar-danger-bg: #3a2b2b;
+}
+
+/* Fast path for the two admin pages (Cohorts/Trainees management) -
+   ~150 one-off hex colors between them with no shared palette, not
+   worth hand-tokenizing right now. A full invert(1) mapped their
+   original white card backgrounds to pure black - darker than the
+   sidebar's grey and too harsh once you expand a cohort/trainee.
+   Dialing back to invert(0.75) lands their backgrounds on a lighter
+   charcoal instead, while still preserving legible contrast for the
+   (now light) text that was dark in the original light-mode design. */
+:root[data-theme="dark"] .themeInvert {
+  filter: invert(0.75) hue-rotate(180deg);
+}
