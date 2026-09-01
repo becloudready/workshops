@@ -1,0 +1,196 @@
+.container {
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  margin: 0 0 0.25rem;
+  color: #777;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.header h2 {
+  margin: 0;
+  color: #222;
+  font-size: 1.75rem;
+}
+
+.taskCount {
+  margin: 0;
+  color: #666;
+}
+
+.taskList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.taskCard {
+  padding: 1.25rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+
+.taskCard:hover {
+  border-color: #2f6f4e;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.taskCardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.taskCard h3 {
+  margin: 0;
+  color: #222;
+  font-size: 1.05rem;
+}
+
+.description {
+  margin: 0.75rem 0;
+  color: #666;
+  line-height: 1.5;
+}
+
+.taskMeta {
+  display: flex;
+  gap: 1rem;
+  color: #777;
+  font-size: 0.85rem;
+}
+
+.statusBadge {
+  flex-shrink: 0;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: #e8f3ec;
+  color: #2f6f4e;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.selectedTask {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.selectedHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.selectedHeader h2 {
+  margin: 0;
+}
+
+.subtasks {
+  margin-top: 1.5rem;
+}
+
+.subtasks h3,
+.progress h3 {
+  margin-bottom: 0.75rem;
+}
+
+.subtask {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-bottom: 1px solid #eee;
+}
+
+.subtask input {
+  width: 1rem;
+  height: 1rem;
+}
+
+.progress {
+  margin-top: 1.5rem;
+}
+
+.progressList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.progressItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: 6px;
+  background: #f7f7f7;
+}
+
+.progressItem strong {
+  color: #2f6f4e;
+}
+
+.progressItem span {
+  color: #555;
+}
+
+.progressItem small {
+  margin-left: auto;
+  color: #888;
+}
+
+.empty {
+  padding: 3rem;
+  border: 1px dashed #ccc;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.empty h3 {
+  margin: 0 0 0.5rem;
+}
+
+.empty p {
+  margin: 0;
+  color: #777;
+}
+
+.status {
+  padding: 2rem;
+  text-align: center;
+}
+
+.error {
+  padding: 1.5rem;
+  border: 1px solid #e57373;
+  border-radius: 8px;
+  background: #ffebee;
+  color: #b71c1c;
+}
+
+.error h2 {
+  margin-top: 0;
+}
