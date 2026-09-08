@@ -1,7 +1,0 @@
-aws_region   = "us-east-1"
-project_name = "noticeboardtracker"
-
-# Do not put real secrets in a committed tfvars file.
-# Set these as environment variables instead, e.g. in PowerShell:
-#   $env:TF_VAR_database_url = "postgresql://user:pass@host:5432/noticeboardtracker"
-#   $env:TF_VAR_jwt_secret_key = "<the same value from your local .env>"
