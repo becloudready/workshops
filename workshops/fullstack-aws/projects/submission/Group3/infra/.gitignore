@@ -1,0 +1,3 @@
+# vendored Lambda deps + zip, terraform local state - regenerate, don't commit
+build/
+.terraform/

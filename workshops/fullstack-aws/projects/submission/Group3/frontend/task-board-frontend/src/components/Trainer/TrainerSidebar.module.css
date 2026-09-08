@@ -1,0 +1,228 @@
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 24px 16px;
+
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.header {
+  padding: 0 12px 24px;
+  border-bottom: 1px solid var(--sidebar-border);
+}
+
+.header h2 {
+  margin: 0;
+
+  font-size: 22px;
+  font-weight: 700;
+
+  text-transform: capitalize;
+}
+
+/* ============================================================
+   TRAINER PROFILE
+============================================================ */
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 24px 12px;
+
+  border-bottom: 1px solid var(--sidebar-border);
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: var(--accent-trainer);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.details {
+  min-width: 0;
+}
+
+.details h3 {
+  margin: 0;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.details span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: var(--sidebar-text-muted);
+
+  font-size: 13px;
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+
+.navigation {
+  flex: 1;
+  padding-top: 24px;
+}
+
+.navigationTitle {
+  margin: 0 12px 10px;
+
+  color: var(--sidebar-text-muted);
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+}
+
+/* ============================================================
+   NAVIGATION LINKS
+============================================================ */
+
+.link {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 11px 12px;
+  margin-bottom: 5px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: var(--sidebar-text);
+
+  font-family: inherit;
+  font-size: 14px;
+
+  text-align: left;
+  text-decoration: none;
+
+  box-sizing: border-box;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.link span:first-child {
+  width: 20px;
+
+  text-align: center;
+
+  flex-shrink: 0;
+}
+
+.link:hover {
+  background: var(--sidebar-hover);
+  color: var(--sidebar-text);
+}
+
+.link.active {
+  background: var(--accent-trainer);
+  color: white;
+}
+
+/* ============================================================
+   BOTTOM
+============================================================ */
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  border-top: 1px solid var(--sidebar-border);
+
+  padding-top: 12px;
+}
+
+/* Utility actions (Profile Settings, theme toggle) read as
+   secondary/quiet compared to primary nav - muted by default,
+   brightening only on hover, with a smaller icon so they don't
+   compete visually with the main navigation above. */
+.utilityButton {
+  color: var(--sidebar-text-muted);
+  font-size: 13px;
+}
+
+.utilityButton span:first-child {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.utilityButton:hover {
+  background: var(--sidebar-hover);
+  color: var(--sidebar-text);
+}
+
+.logoutButton {
+  background: transparent;
+  border: none;
+
+  margin-top: 6px;
+  padding-top: 13px;
+
+  border-top: 1px solid var(--sidebar-border);
+  border-radius: 0;
+
+  color: var(--sidebar-text-muted);
+
+  cursor: pointer;
+
+  font-family: inherit;
+  text-align: left;
+}
+
+.logoutButton:hover {
+  background: var(--sidebar-danger-bg);
+  color: var(--sidebar-danger);
+}
+
+/* ============================================================
+   BUTTON RESET
+============================================================ */
+
+button.link {
+  appearance: none;
+  -webkit-appearance: none;
+}

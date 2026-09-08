@@ -1,0 +1,1497 @@
+/* ============================================================
+   ROOT
+============================================================ */
+
+.container {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --surface-soft: #fafbfc;
+  --border: #e7e9ed;
+  --border-dark: #d9dce2;
+
+  --text: #17191d;
+  --text-soft: #656b75;
+  --text-muted: #9298a2;
+
+  --accent: #111318;
+  --accent-soft: #f0f1f3;
+
+  --green: #15945b;
+  --green-soft: #eaf8f1;
+
+  --orange: #d97706;
+  --orange-soft: #fff5e6;
+
+  --red: #dc3d3d;
+  --red-soft: #fff0f0;
+
+  --blue: #3b6fd8;
+  --blue-soft: #edf3ff;
+
+  width: 100%;
+  min-height: 100%;
+  padding: 34px;
+  background: var(--bg);
+  color: var(--text);
+  box-sizing: border-box;
+}
+
+.container *,
+.container *::before,
+.container *::after {
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.header {
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+.headerContent {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.eyebrow,
+.label {
+  margin: 0 0 7px;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: clamp(30px, 4vw, 42px);
+  line-height: 1.05;
+  font-weight: 750;
+  letter-spacing: -0.045em;
+}
+
+.headerDescription {
+  max-width: 600px;
+  margin: 10px 0 0;
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.countBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text-soft);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.countDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+/* ============================================================
+   BUTTONS
+============================================================ */
+
+.primaryButton,
+.secondaryButton {
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 10px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 2px 5px rgba(37, 99, 235, 0.18);
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(37, 99, 235, 0.2);
+}
+
+.primaryButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.secondaryButton {
+  border: 1px solid var(--border-dark);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.secondaryButton:hover:not(:disabled) {
+  background: var(--surface-soft);
+  border-color: #c7cad0;
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.buttonIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+  line-height: 1;
+}
+
+/* ============================================================
+   ERROR
+============================================================ */
+
+.errorBanner {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  max-width: 1400px;
+  margin: 0 auto 18px;
+  padding: 12px 15px;
+  border: 1px solid #f0cccc;
+  border-radius: 11px;
+  background: var(--red-soft);
+  color: #9f2929;
+}
+
+.errorBanner p {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.errorBannerIcon,
+.errorIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #e65353;
+  color: white;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* ============================================================
+   CREATE PANEL
+============================================================ */
+
+.createPanel {
+  max-width: 1400px;
+  margin: 0 auto 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 10px 35px rgba(20, 25, 35, 0.045);
+}
+
+.panelHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 24px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.panelHeader h2 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: -0.025em;
+}
+
+.panelHeader p:not(.eyebrow) {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.panelIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--text);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+/* ============================================================
+   FORMS
+============================================================ */
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  padding: 22px 24px 24px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.formGroup label {
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  height: 43px;
+  padding: 0 12px;
+  border: 1px solid var(--border-dark);
+  border-radius: 9px;
+  outline: none;
+  background: #fff;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 12px;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.formGroup input::placeholder {
+  color: #b0b4bb;
+}
+
+.formGroup input:hover,
+.formGroup select:hover {
+  border-color: #c6cad0;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  border-color: #8d929a;
+  box-shadow: 0 0 0 3px rgba(17, 19, 24, 0.06);
+}
+
+.formGroup input:disabled,
+.formGroup select:disabled {
+  background: #f5f6f7;
+  cursor: not-allowed;
+}
+
+.formHint {
+  margin-top: -1px;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.formActions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  padding-top: 3px;
+}
+
+/* ============================================================
+   TRAINEE LIST
+============================================================ */
+
+.traineeList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.traineeCard {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 2px 8px rgba(20, 25, 35, 0.025);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.traineeCard:hover {
+  border-color: #dcdfe4;
+}
+
+.traineeCardOpen {
+  border-color: #d5d8dd;
+  box-shadow: 0 10px 30px rgba(20, 25, 35, 0.055);
+}
+
+/* ============================================================
+   TRAINEE HEADER
+============================================================ */
+
+.traineeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  padding: 20px 22px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.traineeIdentity {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 14px;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #f0f1f3 0%, #e5e7ea 100%);
+  color: #454a52;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.identityText {
+  min-width: 0;
+}
+
+.identityTop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.identityTop .eyebrow {
+  margin: 0;
+}
+
+.identityText h2 {
+  margin: 0;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.3;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.email {
+  margin: 4px 0 0;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cohortBadge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  padding: 0 8px;
+  border: 1px solid #e3e5e8;
+  border-radius: 6px;
+  background: #f7f8f9;
+  color: #666c75;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.expandButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+/* ============================================================
+   TRAINEE CONTENT
+============================================================ */
+
+.traineeContent {
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+}
+
+.traineeInner {
+  padding: 4px 22px 28px;
+}
+
+/* ============================================================
+   SECTIONS
+============================================================ */
+
+.section {
+  padding-top: 24px;
+}
+
+.section + .section {
+  margin-top: 26px;
+  padding-top: 26px;
+  border-top: 1px solid var(--border);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.sectionHeader h3 {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+}
+
+.sectionCount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--text-soft);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* ============================================================
+   PROFILE
+============================================================ */
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.infoCard {
+  min-width: 0;
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface-soft);
+}
+
+.infoCard span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--text-muted);
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.infoCard strong {
+  display: block;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   TASKS
+============================================================ */
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.taskCard {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.taskCard:hover {
+  border-color: #d7dae0;
+}
+
+.taskCardOpen {
+  border-color: #cfd3d9;
+  box-shadow: 0 5px 18px rgba(20, 25, 35, 0.045);
+}
+
+.taskButton {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.taskTop {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.taskNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--text-soft);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.taskMain {
+  min-width: 0;
+  flex: 1;
+}
+
+.taskTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.taskTitleRow h4 {
+  margin: 0;
+  overflow: hidden;
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.taskDescription {
+  display: -webkit-box;
+  margin: 5px 0 0;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.taskArrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.progressWrapper {
+  margin-top: 15px;
+  padding-left: 42px;
+}
+
+.progressLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+  color: var(--text-muted);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.progressLabel strong {
+  color: var(--text);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.progressTrack {
+  width: 100%;
+  height: 5px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #eceef1;
+}
+
+.progressBar {
+  height: 100%;
+  min-width: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #111318 0%, #555b65 100%);
+}
+
+.taskFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 10px 16px 11px 58px;
+  border-top: 1px solid #f0f1f3;
+  background: #fcfcfd;
+  color: var(--text-muted);
+  font-size: 9px;
+  font-weight: 650;
+}
+
+.footerLabel {
+  margin-right: 5px;
+  color: #a4a8b0;
+}
+
+.noDueDate {
+  color: #b0b3ba;
+}
+
+.viewProgress {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-soft);
+  font-weight: 750;
+}
+
+.viewProgress span {
+  font-size: 12px;
+}
+
+/* ============================================================
+   URGENCY
+============================================================ */
+
+.urgency {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-height: 21px;
+  padding: 0 7px;
+  border-radius: 6px;
+  background: #f1f2f4;
+  color: #6b7078;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.urgencyLow {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.urgencyMedium {
+  background: var(--orange-soft);
+  color: var(--orange);
+}
+
+.urgencyHigh {
+  background: var(--red-soft);
+  color: var(--red);
+}
+
+.urgencyCritical {
+  background: #fbe4e4;
+  color: #bd2222;
+}
+
+/* ============================================================
+   TASK PROGRESS
+============================================================ */
+
+.taskProgress {
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  background: #fafbfc;
+}
+
+.progressContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 17px;
+}
+
+.progressLoading,
+.noProgress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 90px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.progressDetails {
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.progressDetails .eyebrow {
+  margin-bottom: 8px;
+}
+
+.progressDetails > p:last-child {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   SUBTASKS
+============================================================ */
+
+.subtasks {
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.detailHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 12px;
+}
+
+.detailHeader h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.detailHeader > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  border-radius: 7px;
+  background: var(--accent-soft);
+  color: var(--text-soft);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.subtaskList {
+  display: flex;
+  flex-direction: column;
+}
+
+.subtaskItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  border-top: 1px solid #f0f1f3;
+}
+
+.subtaskCheck {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #d9dce1;
+  border-radius: 6px;
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.subtaskCheckCompleted {
+  border-color: var(--green);
+  background: var(--green);
+}
+
+.subtaskItem strong {
+  min-width: 0;
+  flex: 1;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.subtaskCompleted,
+.subtaskIncomplete {
+  flex-shrink: 0;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.subtaskCompleted {
+  color: var(--green);
+}
+
+.subtaskIncomplete {
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   PROGRESS UPDATES
+============================================================ */
+
+.progressUpdatesDropdown {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.progressUpdatesButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 62px;
+  padding: 10px 14px;
+  border: 0;
+  background: #fff;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.progressUpdatesButton:hover {
+  background: #fcfcfd;
+}
+
+.progressUpdatesButtonText {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progressUpdatesButtonText strong {
+  display: block;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.progressUpdatesButtonText span {
+  display: block;
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: 9px;
+}
+
+.progressUpdatesIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 8px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.progressUpdatesArrow {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.progressUpdatesDropdownContent {
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+}
+
+.progressUpdatesDropdownInner {
+  padding: 5px 14px 14px;
+}
+
+.progressUpdateList {
+  display: flex;
+  flex-direction: column;
+}
+
+.progressUpdate {
+  display: flex;
+  gap: 10px;
+  min-height: 70px;
+  padding: 13px 0;
+  border-bottom: 1px solid #f0f1f3;
+}
+
+.progressUpdate:last-child {
+  border-bottom: 0;
+}
+
+.progressUpdateTimeline {
+  position: relative;
+  width: 12px;
+  flex-shrink: 0;
+}
+
+.progressUpdateTimeline::after {
+  position: absolute;
+  top: 11px;
+  bottom: -13px;
+  left: 50%;
+  width: 1px;
+  background: #e4e6e9;
+  content: "";
+}
+
+.progressUpdate:last-child .progressUpdateTimeline::after {
+  display: none;
+}
+
+.progressUpdateDot {
+  position: relative;
+  z-index: 1;
+  width: 7px;
+  height: 7px;
+  margin: 4px auto 0;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.progressUpdateBody {
+  min-width: 0;
+  flex: 1;
+}
+
+.progressUpdateHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.progressUpdateHeader strong {
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.progressUpdateHeader span {
+  color: var(--text-muted);
+  font-size: 9px;
+}
+
+.progressUpdateBody p {
+  margin: 6px 0 0;
+  color: var(--text-soft);
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.noProgressUpdates {
+  margin: 0;
+  padding: 14px 0 3px;
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+/* ============================================================
+   EMPTY STATES
+============================================================ */
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 330px;
+  padding: 40px;
+  border: 1px dashed var(--border-dark);
+  border-radius: 16px;
+  background: var(--surface);
+  text-align: center;
+}
+
+.emptyIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 16px;
+  border-radius: 14px;
+  background: var(--accent-soft);
+  color: var(--text-muted);
+  font-size: 24px;
+}
+
+.emptyState h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.emptyState p {
+  max-width: 330px;
+  margin: 7px 0 18px;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.emptySmall {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px dashed var(--border-dark);
+  border-radius: 11px;
+  background: var(--surface-soft);
+}
+
+.emptySmallIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--accent-soft);
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.emptySmall strong {
+  display: block;
+  color: var(--text);
+  font-size: 11px;
+}
+
+.emptySmall p {
+  margin: 3px 0 0;
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+/* ============================================================
+   LOADING
+============================================================ */
+
+.status,
+.loadingInline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.status {
+  min-height: 300px;
+}
+
+.loadingInline {
+  min-height: 140px;
+}
+
+.loadingSpinner {
+  width: 15px;
+  height: 15px;
+  border: 2px solid #e0e2e6;
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  padding: 40px;
+  text-align: center;
+}
+
+.errorState .errorIcon {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 14px;
+}
+
+.errorState h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.errorState p {
+  max-width: 420px;
+  margin: 7px 0 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+/* ============================================================
+   FOCUS
+============================================================ */
+
+.primaryButton:focus-visible,
+.secondaryButton:focus-visible,
+.traineeHeader:focus-visible,
+.taskButton:focus-visible,
+.progressUpdatesButton:focus-visible {
+  outline: 2px solid #6f747c;
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   ANIMATION
+============================================================ */
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 900px) {
+  .container {
+    padding: 25px 20px;
+  }
+
+  .headerContent {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .headerActions {
+    width: 100%;
+  }
+
+  .countBadge {
+    flex: 1;
+  }
+
+  .infoGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .container {
+    padding: 20px 14px;
+  }
+
+  .header {
+    margin-bottom: 20px;
+  }
+
+  .header h1 {
+    font-size: 30px;
+  }
+
+  .headerActions {
+    align-items: stretch;
+  }
+
+  .headerActions .primaryButton {
+    flex: 1;
+  }
+
+  .traineeHeader {
+    padding: 16px;
+  }
+
+  .traineeInner {
+    padding: 2px 16px 22px;
+  }
+
+  .identityTop {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .formActions {
+    grid-column: auto;
+  }
+
+  .panelHeader {
+    padding: 18px;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .taskButton {
+    padding: 14px;
+  }
+
+  .progressWrapper {
+    padding-left: 0;
+  }
+
+  .taskFooter {
+    padding-left: 14px;
+  }
+
+  .taskTitleRow {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 16px 10px;
+  }
+
+  .headerDescription {
+    font-size: 12px;
+  }
+
+  .headerActions {
+    flex-direction: column;
+  }
+
+  .countBadge {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .headerActions .primaryButton {
+    width: 100%;
+  }
+
+  .traineeIdentity {
+    gap: 10px;
+  }
+
+  .avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+  }
+
+  .identityText h2 {
+    max-width: 180px;
+    font-size: 14px;
+  }
+
+  .email {
+    max-width: 180px;
+  }
+
+  .expandButton {
+    width: 30px;
+    height: 30px;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionHeader {
+    align-items: flex-start;
+  }
+
+  .taskTop {
+    gap: 9px;
+  }
+
+  .taskNumber {
+    display: none;
+  }
+
+  .taskArrow {
+    width: 22px;
+  }
+
+  .progressUpdatesButton {
+    padding: 10px;
+  }
+
+  .progressUpdatesDropdownInner {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .progressUpdateHeader {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .container *,
+  .container *::before,
+  .container *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+.profileActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.deleteButton {
+  padding: 0.65rem 1rem;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fff;
+  color: #dc2626;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.deleteButton:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+}
+
+.deleteButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+@media (max-width: 600px) {
+  .profileActions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .profileActions button {
+    width: 100%;
+  }
+}

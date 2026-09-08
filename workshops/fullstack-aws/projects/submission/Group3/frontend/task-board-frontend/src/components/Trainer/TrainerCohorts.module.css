@@ -1,0 +1,1339 @@
+/* ============================================================
+   TRAINER COHORTS
+   ============================================================ */
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px;
+  color: #172033;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.header h2 {
+  margin: 4px 0 0;
+  font-size: 32px;
+  line-height: 1.15;
+  font-weight: 750;
+  letter-spacing: -0.03em;
+  color: #101828;
+}
+
+.label {
+  margin: 0;
+  color: #667085;
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.count,
+.sectionCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: #f2f4f7;
+  color: #475467;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.primaryButton,
+.secondaryButton,
+.deleteButton {
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 10px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 2px 5px rgba(37, 99, 235, 0.18);
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(37, 99, 235, 0.2);
+}
+
+.primaryButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled,
+.deleteButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 13px;
+  border: 1px solid #d0d5dd;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #344054;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.secondaryButton:hover:not(:disabled) {
+  background: #f5f6f7;
+  border-color: #98a2b3;
+}
+
+.deleteButton {
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid #fecdca;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #b42318;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.deleteButton:hover:not(:disabled) {
+  background: #f5f6f7;
+  border-color: #d0d5dd;
+  color: #b42318;
+}
+
+/* ============================================================
+   ERROR / STATUS
+   ============================================================ */
+
+.status,
+.error {
+  width: 100%;
+  max-width: 1400px;
+  margin: 32px auto;
+  padding: 24px;
+  border-radius: 14px;
+}
+
+.status {
+  background: #f8fafc;
+  border: 1px solid #e4e7ec;
+  color: #475467;
+  text-align: center;
+}
+
+.status p {
+  margin: 0;
+}
+
+.error {
+  background: #fef3f2;
+  border: 1px solid #fecdca;
+  color: #b42318;
+}
+
+.error h2,
+.error p {
+  margin-top: 0;
+}
+
+.error h2 {
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.error p {
+  margin-bottom: 0;
+  font-size: 14px;
+}
+
+/* ============================================================
+   COHORT LIST
+   ============================================================ */
+
+.cohortList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cohortCard {
+  overflow: hidden;
+  border: 1px solid #e4e7ec;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(16, 24, 40, 0.04);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.cohortCard:hover {
+  border-color: #d0d5dd;
+}
+
+.cohortCardOpen {
+  border-color: #b8c7e6;
+  box-shadow: 0 8px 25px rgba(16, 24, 40, 0.07);
+}
+
+/* ============================================================
+   COHORT HEADER
+   ============================================================ */
+
+.cohortHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px 24px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.18s ease;
+}
+
+.cohortHeader:hover {
+  background: #f5f6f7;
+}
+
+.cohortHeader h3 {
+  margin: 5px 0 0;
+  color: #101828;
+  font-size: 19px;
+  line-height: 1.3;
+  font-weight: 720;
+}
+
+.cohortDescription {
+  margin: 7px 0 0;
+  max-width: 720px;
+  color: #667085;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.cohortHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+  color: #667085;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.cohortHeaderRight > span:last-child {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: #667085;
+  font-size: 12px;
+}
+
+/* ============================================================
+   COHORT CONTENT
+   ============================================================ */
+
+.cohortContent {
+  overflow: hidden;
+  border-top: 1px solid #eaecf0;
+}
+
+.cohortInner {
+  padding: 24px;
+  background: #fafbfc;
+}
+
+.section {
+  margin-bottom: 26px;
+  padding: 20px;
+  border: 1px solid #e4e7ec;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.sectionHeader h4 {
+  margin: 4px 0 0;
+  color: #101828;
+  font-size: 16px;
+  line-height: 1.3;
+  font-weight: 720;
+}
+
+.sectionCount {
+  min-width: 28px;
+  height: 28px;
+  font-size: 12px;
+}
+
+/* ============================================================
+   EMPTY STATES
+   ============================================================ */
+
+.empty,
+.emptySmall {
+  border: 1px dashed #d0d5dd;
+  border-radius: 12px;
+  background: #fcfcfd;
+  color: #667085;
+  text-align: center;
+}
+
+.empty {
+  padding: 52px 24px;
+}
+
+.empty h3 {
+  margin: 0 0 6px;
+  color: #344054;
+  font-size: 18px;
+}
+
+.empty p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.emptySmall {
+  padding: 20px;
+}
+
+.emptySmall p {
+  margin: 0;
+  font-size: 13px;
+}
+
+/* ============================================================
+   LOADING
+   ============================================================ */
+
+.loadingInline {
+  padding: 30px;
+  color: #667085;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* ============================================================
+   TRAINEES
+   ============================================================ */
+
+.traineeList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.traineeBlock {
+  overflow: hidden;
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.traineeButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 16px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+button.traineeButton {
+  cursor: pointer;
+}
+
+button.traineeButton:hover {
+  background: #f5f6f7;
+}
+
+.traineeIdentity {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  flex: 1;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #eff4ff;
+  color: #3156a3;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.traineeIdentity strong {
+  display: block;
+  overflow: hidden;
+  color: #344054;
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.traineeIdentity small {
+  display: block;
+  margin-top: 3px;
+  color: #667085;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+/* ============================================================
+   CREATE COHORT
+   ============================================================ */
+
+.createCohortPanel {
+  overflow: hidden;
+  margin-bottom: 20px;
+  padding: 22px;
+  border: 1px solid #dbe4f5;
+  border-radius: 14px;
+  background: #f8faff;
+}
+
+/* ============================================================
+   FORMS
+   ============================================================ */
+
+.taskForm {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.formGroup label {
+  color: #344054;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.formGroup input,
+.formGroup textarea,
+.formGroup select,
+.subtaskInput input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d0d5dd;
+  border-radius: 9px;
+  outline: none;
+  background: #ffffff;
+  color: #101828;
+  font: inherit;
+  font-size: 14px;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.formGroup input,
+.formGroup select,
+.subtaskInput input {
+  height: 42px;
+  padding: 0 12px;
+}
+
+.formGroup textarea {
+  min-height: 100px;
+  padding: 11px 12px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.formGroup input::placeholder,
+.formGroup textarea::placeholder,
+.subtaskInput input::placeholder {
+  color: #98a2b3;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus,
+.formGroup select:focus,
+.subtaskInput input:focus {
+  border-color: #84a3df;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.formGroup input:disabled,
+.formGroup textarea:disabled,
+.formGroup select:disabled,
+.subtaskInput input:disabled {
+  background: #f2f4f7;
+  cursor: not-allowed;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ============================================================
+   SUBTASK FORM
+   ============================================================ */
+
+.subtaskForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #eaecf0;
+  border-radius: 11px;
+  background: #fcfcfd;
+}
+
+.subtaskFormHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.subtaskFormHeader label {
+  color: #344054;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.subtaskInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.subtaskInput {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.subtaskInput > span {
+  width: 28px;
+  flex-shrink: 0;
+  color: #667085;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.removeButton {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 8px;
+  background: #f2f4f7;
+  color: #667085;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.removeButton:hover:not(:disabled) {
+  background: #e4e7ec;
+  color: #344054;
+}
+
+.removeButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   COLLAPSIBLE HEADERS
+   ============================================================ */
+
+.collapsibleHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.collapsibleHeader h4 {
+  margin: 4px 0 0;
+  color: #101828;
+  font-size: 16px;
+}
+
+.collapsibleHeader > span {
+  color: #667085;
+  font-size: 12px;
+}
+
+/* ============================================================
+   TASK LIST
+   ============================================================ */
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task {
+  overflow: hidden;
+  border: 1px solid #e4e7ec;
+  border-radius: 13px;
+  background: #ffffff;
+}
+
+.taskButton {
+  width: 100%;
+  display: block;
+  padding: 16px 18px;
+  border: 0;
+  background: #ffffff;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.18s ease;
+}
+
+.taskButton:hover {
+  background: #f5f6f7;
+}
+
+.taskInfo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.taskInfo h5 {
+  margin: 0;
+  color: #101828;
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 720;
+}
+
+.taskInfo p {
+  margin: 5px 0 0;
+  color: #667085;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.urgency {
+  flex-shrink: 0;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.urgencyLow {
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+.urgencyMedium {
+  background: #eff8ff;
+  color: #175cd3;
+}
+
+.urgencyHigh {
+  background: #fffaeb;
+  color: #b54708;
+}
+
+.urgencyUrgent {
+  background: #fef3f2;
+  color: #b42318;
+}
+
+/* ============================================================
+   TASK FOOTER
+   ============================================================ */
+
+.taskFooter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  padding: 10px 18px;
+  border-top: 1px solid #f2f4f7;
+  color: #667085;
+  font-size: 11px;
+}
+
+.taskFooter > span:last-child {
+  font-weight: 650;
+  color: #475467;
+}
+
+/* ============================================================
+   TASK PROGRESS
+   ============================================================ */
+
+.taskProgress {
+  overflow: hidden;
+  padding: 18px;
+  border-top: 1px solid #eaecf0;
+  background: #f8fafc;
+}
+
+.progressSummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  border: 1px solid #e4e7ec;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.progressSummary strong {
+  color: #344054;
+  font-size: 13px;
+}
+
+.progressSummary span {
+  color: #2563eb;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+/* ============================================================
+   PROGRESS WRAPPER
+   ============================================================ */
+
+.progressWrapper {
+  width: min(300px, 35%);
+  flex-shrink: 0;
+}
+
+.progressLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.progressLabel span {
+  color: #667085;
+  font-size: 11px;
+}
+
+.progressLabel strong {
+  color: #344054;
+  font-size: 12px;
+}
+
+.progressTrack {
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #eaecf0;
+}
+
+.progressBar {
+  height: 100%;
+  min-width: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #2563eb, #4f7fe8);
+}
+
+/* ============================================================
+   EXPAND ICON
+   ============================================================ */
+
+.expandIcon {
+  width: 24px;
+  flex-shrink: 0;
+  color: #667085;
+  font-size: 11px;
+  text-align: center;
+}
+
+/* ============================================================
+   TRAINEE DETAILS
+   ============================================================ */
+
+.traineeDetails {
+  overflow: hidden;
+  padding: 18px;
+  border-top: 1px solid #eaecf0;
+  background: #f8fafc;
+}
+
+/* ============================================================
+   SUBTASK PROGRESS
+   ============================================================ */
+
+.subtaskProgressSection {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.subtaskProgressHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.subtaskProgressHeader h5 {
+  margin: 4px 0 0;
+  color: #101828;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.subtaskProgressList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.subtaskProgressItem {
+  padding: 13px 14px;
+  border: 1px solid #e4e7ec;
+  border-radius: 10px;
+  background: #ffffff;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.subtaskProgressItem:hover {
+  background: #f5f6f7;
+  border-color: #d0d5dd;
+}
+
+.subtaskProgressItemComplete {
+  border-color: #abefc6;
+  background: #f6fef9;
+}
+
+.subtaskProgressRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.subtaskIdentity {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.subtaskIdentity strong {
+  display: block;
+  color: #344054;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.subtaskIdentity small {
+  display: block;
+  margin-top: 3px;
+  color: #667085;
+  font-size: 11px;
+}
+
+.subtaskComplete,
+.subtaskIncomplete {
+  width: 27px;
+  height: 27px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.subtaskComplete {
+  background: #dcfae6;
+  color: #039855;
+}
+
+.subtaskIncomplete {
+  background: #f2f4f7;
+  color: #98a2b3;
+}
+
+.subtaskStatus {
+  flex-shrink: 0;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+
+.subtaskStatusComplete {
+  background: #dcfae6;
+  color: #027a48;
+}
+
+.subtaskStatusIncomplete {
+  background: #f2f4f7;
+  color: #667085;
+}
+
+/* ============================================================
+   PROGRESS UPDATES
+   ============================================================ */
+
+.progressUpdatesSection {
+  overflow: hidden;
+  border: 1px solid #e4e7ec;
+  border-radius: 11px;
+  background: #ffffff;
+}
+
+.progressUpdatesButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 15px 16px;
+  border: 0;
+  background: #ffffff;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.18s ease;
+}
+
+.progressUpdatesButton:hover {
+  background: #f5f6f7;
+}
+
+.progressUpdatesTitle {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.progressUpdatesIcon {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #eff4ff;
+  color: #3156a3;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.progressUpdatesTitle strong {
+  display: block;
+  color: #344054;
+  font-size: 13px;
+}
+
+.progressUpdatesTitle small {
+  display: block;
+  margin-top: 3px;
+  color: #667085;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* ============================================================
+   HISTORY
+   ============================================================ */
+
+.history {
+  overflow: hidden;
+  border-top: 1px solid #eaecf0;
+  background: #fafbfc;
+}
+
+.progressUpdateList {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 14px;
+}
+
+.historyEntry {
+  position: relative;
+  padding: 13px 14px;
+  border: 1px solid #e4e7ec;
+  border-radius: 10px;
+  background: #ffffff;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.historyEntry:hover {
+  background: #f5f6f7;
+  border-color: #d0d5dd;
+}
+
+.historyHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.historyHeader strong {
+  display: block;
+  color: #344054;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.historyHeader small {
+  display: block;
+  margin-top: 3px;
+  color: #667085;
+  font-size: 10px;
+}
+
+.historyHeader > small {
+  flex-shrink: 0;
+  margin-top: 0;
+  text-align: right;
+}
+
+.historyEntry p {
+  margin: 10px 0 0;
+  padding-top: 9px;
+  border-top: 1px solid #f2f4f7;
+  color: #475467;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.noHistory {
+  margin: 0;
+  padding: 20px;
+  color: #667085;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ============================================================
+   FOCUS STATES
+   ============================================================ */
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.2);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .container {
+    padding: 24px 18px;
+  }
+
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .headerActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .cohortHeader {
+    padding: 18px;
+  }
+
+  .cohortInner {
+    padding: 16px;
+  }
+
+  .section {
+    padding: 16px;
+  }
+
+  .progressWrapper {
+    width: min(240px, 35%);
+  }
+}
+
+@media (max-width: 700px) {
+  .container {
+    padding: 18px 12px;
+  }
+
+  .header h2 {
+    font-size: 27px;
+  }
+
+  .cohortHeader {
+    align-items: flex-start;
+  }
+
+  .cohortHeaderRight {
+    gap: 8px;
+  }
+
+  .cohortHeaderRight > span:first-child {
+    display: none;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .taskFooter {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .traineeButton {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 13px;
+  }
+
+  .progressWrapper {
+    width: 100%;
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .expandIcon {
+    margin-left: auto;
+  }
+
+  .subtaskProgressRow {
+    align-items: flex-start;
+  }
+
+  .historyHeader {
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .historyHeader > small {
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .headerActions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .headerActions .primaryButton {
+    width: 100%;
+  }
+
+  .sectionHeader {
+    align-items: flex-start;
+  }
+
+  .taskButton {
+    padding: 14px;
+  }
+
+  .taskInfo {
+    flex-direction: column;
+  }
+
+  .urgency {
+    align-self: flex-start;
+  }
+
+  .taskProgress,
+  .traineeDetails {
+    padding: 12px;
+  }
+
+  .progressSummary {
+    padding: 12px;
+  }
+
+  .subtaskProgressRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .subtaskStatus {
+    margin-left: 38px;
+  }
+
+  .subtaskInput {
+    align-items: flex-start;
+  }
+
+  .subtaskInput > span {
+    margin-top: 12px;
+  }
+
+  .removeButton {
+    margin-top: 4px;
+  }
+}
+
+.cohortHeader {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+.cohortHeaderButton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cohortHeaderButton:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.deleteCohortButton {
+  align-self: center;
+  margin-right: 50px;
+  padding: 8px 14px;
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+  background: transparent;
+  color: #ef4444;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.deleteCohortButton:hover:not(:disabled) {
+  background: #ef4444;
+  color: white;
+}
+
+.deleteCohortButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
