@@ -1,0 +1,268 @@
+{
+  "info": {
+    "_postman_id": "b3f1a2e0-4c1a-4e8a-9d3a-1f2b3c4d5e6f",
+    "name": "NoticeBoardTracker - Curriculum API",
+    "description": "Manual/regression collection for the Curriculum API (TrainingPlan CRUD). See API_CONTRACT.md for the full contract. Run the 'Happy Path' folder top-to-bottom (or use Collection Runner) - it creates a TrainingPlan, exercises it, then deletes it, so it doesn't leave data behind in the shared Atlas cluster.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080", "type": "string" },
+    { "key": "trainingPlanId", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Happy Path",
+      "item": [
+        {
+          "name": "Create Training Plan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Response has a generated id\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.id).to.exist;",
+                  "    pm.collectionVariables.set(\"trainingPlanId\", json.id);",
+                  "});",
+                  "pm.test(\"Title matches request\", function () {",
+                  "    pm.expect(pm.response.json().title).to.eql(\"Onboarding Week 1\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Onboarding Week 1\",\n  \"modules\": [\"Git\", \"Java Basics\"],\n  \"milestones\": [\"Setup complete\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/curriculum",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "curriculum"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Training Plans",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response is an array\", function () {",
+                  "    pm.expect(pm.response.json()).to.be.an(\"array\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/curriculum",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "curriculum"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Training Plan By Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Returned id matches requested id\", function () {",
+                  "    pm.expect(pm.response.json().id).to.eql(pm.collectionVariables.get(\"trainingPlanId\"));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/curriculum/{{trainingPlanId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "curriculum", "{{trainingPlanId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Training Plan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Title was updated\", function () {",
+                  "    pm.expect(pm.response.json().title).to.eql(\"Onboarding Week 1 (Updated)\");",
+                  "});",
+                  "pm.test(\"Id is unchanged\", function () {",
+                  "    pm.expect(pm.response.json().id).to.eql(pm.collectionVariables.get(\"trainingPlanId\"));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Onboarding Week 1 (Updated)\",\n  \"modules\": [\"Git\", \"Java Basics\", \"Spring Boot\"],\n  \"milestones\": [\"Setup complete\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/curriculum/{{trainingPlanId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "curriculum", "{{trainingPlanId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Training Plan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/curriculum/{{trainingPlanId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "curriculum", "{{trainingPlanId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Error Cases",
+      "item": [
+        {
+          "name": "Create Training Plan - Blank Title (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test(\"Error body has a message field\", function () {",
+                  "    pm.expect(pm.response.json().message).to.exist;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"\",\n  \"modules\": [],\n  \"milestones\": []\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/curriculum",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "curriculum"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Training Plan - Not Found (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "pm.test(\"Error body has a message field\", function () {",
+                  "    pm.expect(pm.response.json().message).to.exist;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/curriculum/000000000000000000000000",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "curriculum", "000000000000000000000000"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Training Plan - Not Found (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "pm.test(\"Error body has a message field\", function () {",
+                  "    pm.expect(pm.response.json().message).to.exist;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/curriculum/000000000000000000000000",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "curriculum", "000000000000000000000000"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
