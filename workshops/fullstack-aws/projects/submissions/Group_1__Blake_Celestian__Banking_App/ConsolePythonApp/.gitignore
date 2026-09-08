@@ -1,0 +1,10 @@
+__pycache__/
+.venv/
+node_modules
+*.db
+.env
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfvars
+frontend/dist/

@@ -1,0 +1,47 @@
+steps for testing local database
+
+start up postgres on local machine
+brew services start postgresql@18
+
+verify that postgres is running
+pg_isready
+
+go to project folder
+cd /Users/jesiel/Documents/GitHub/ConsolePythonApp
+
+start the local environment 
+source .venv/bin/activate
+
+install requirements if you dont have them
+pip install -r requirements.txt
+
+set local database url
+export DATABASE_URL="postgresql://postgres.quoarrypegdpebjdesha:beqcaz-4hidpu-pemveV@aws-0-us-west-2.pooler.supabase.com:6543/postgres"
+start fastapi
+cd project1
+uvicorn main:app --reload
+
+open api docs on browser
+http://127.0.0.1:8000/docs
+
+test create account
+{
+  "owner_id": "CUSTOMER_UUID",
+  "account_type": "Checking",
+  "amount": 100
+}
+
+stop the app
+control C
+
+stop postgres
+brew services stop postgresql@18
+
+Steps for starting front end
+cd frontend
+npm ci
+cp .env.example .env
+npm run dev
+
+front end will be here 
+http://localhost:5173

@@ -1,0 +1,67 @@
+
+All users should have:
+email and password for login (email must be unique)
+An admin toggle (upon creation)
+A user id for account ownership (uuid)
+Birthday, phone number
+First name last name
+
+Customers specifically:
+Can make own accounts
+Allowed to have bank accounts (checking or savings)
+Allowed to make transactions
+Can only see their own transactions
+
+Admin specifically:
+Allowed to see all accounts of all customers can see balances, amount of accounts, etc but cannot make transactions.
+Can see all transactions
+
+All accounts should have:
+A user id (Customer only) denoting who owns it
+Account number
+Balance details (USD and cents)
+account type
+
+Checking account specifically:
+Allowed to overdraft (fee of our choosing)
+
+Savings account specifically:
+Nothing extra needed for a savings account
+
+All transactions must require:
+From owner id
+From owner account number
+To owner id
+To owner account number
+And a description for the payment
+As well as a reminder of how much was sent (ex $50) 
+Transaction date stored
+Transactions stored in log
+Category
+
+
+Logins:
+email and password (depending on if admin determines which UI you see)
+Logout
+
+Coinflip:
+During purchases pop up will ask to agree to pay double current 
+50/50 if customer wins they pay $0 (payment description says wager won), if they lose they pay double (and payment description says wager lost)
+
+Category Tracker:
+Dashboard apis for each category
+Pie chart potentially
+
+Tasks:
+Darren: Users both customer and admin & ORM
+Jesiel: Accounts & ORM
+Adam: Transactions & ORM
+Blake: Coin Flip & Category
+Tamana: Login & Category
+
+Database:
+ORM will be SQLModel
+Backend Testing is mandatory requirement, frontend is optional
+Pytest along with pytest-asyncio and TestClient for unit testing
+
+
