@@ -1,6 +1,14 @@
 # Cloud, Data & AI Workshops — AWS, Databricks Genie, AI Agents, LLMOps
 
-Hands-on workshop labs built by [BeCloudReady](https://becloudready.com/workshops) for engineering and analytics teams. Each lab is self-contained, with pre-scoped IAM permissions, step-by-step walkthroughs, and sample data included. Drop into a workshop or run independently.
+Your analysts got retitled "data engineers" and nobody trained them. Your backend team
+owns AWS infrastructure now because the platform team is three people. Somebody signed
+the GPU contract and the LLM stack is running unobserved. The tooling arrived; the
+training didn't.
+
+These are the labs we use to close that gap. Each one is self-contained, with pre-scoped
+IAM permissions, step-by-step walkthroughs, and sample data included — built to be run by
+a team that has the job title but not yet the reps. Drop into an instructor-led workshop
+or work through them on your own.
 
 ---
 
@@ -19,7 +27,7 @@ Each workshop's README carries the full lab-by-lab breakdown. Related open sourc
 
 ## About
 
-[BeCloudReady](https://becloudready.com) is a Databricks Registered Partner that builds and delivers cloud workshops for engineering teams. We run community workshops at [TorontoAI](https://toronto-ai.org) (10K+ members).
+[BeCloudReady](https://becloudready.com?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=root-readme) is a Databricks Registered Partner that builds and delivers cloud workshops for engineering teams. We run community workshops at [TorontoAI](https://toronto-ai.org?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=root-readme) (10K+ members).
 
 |                             |                                                                                                              |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -28,7 +36,7 @@ Each workshop's README carries the full lab-by-lab breakdown. Related open sourc
 | **Sales Demo Environments** | Reproducible demo stacks for SE teams and partner programs                                                   |
 
 **Need a workshop for your team?**
-→ [becloudready.com/workshops](https://becloudready.com/workshops) · [Book a call](https://calendly.com/kchandank/30-mins-meeting)
+→ [becloudready.com/workshops](https://becloudready.com/workshops?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=root-readme) · [Book a call](https://calendly.com/kchandank/30-mins-meeting?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=root-readme)
 
 ---
 

@@ -49,6 +49,6 @@ benchmarks — for teams that outgrow the managed tool.
 
 ---
 
-Built by [BeCloudReady](https://becloudready.com) — Databricks Registered Partner.
-[Book this workshop](https://becloudready.com/workshops/databricks-genie) ·
-[Free webinar series](https://becloudready.com/webinar/db-agent?utm_source=github&utm_medium=workshop-readme)
+Built by [BeCloudReady](https://becloudready.com?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=databricks-genie) — Databricks Registered Partner.
+[Book this workshop](https://becloudready.com/workshops/databricks-genie?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=databricks-genie) ·
+[Free webinar series](https://becloudready.com/webinar/db-agent?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=databricks-genie)

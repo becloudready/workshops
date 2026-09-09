@@ -28,4 +28,4 @@ point the `CATALOG`/`SCHEMA` widgets anywhere and re-run.
 
 > 🎙️ **Prefer learning live?** Free webinar series building db-agent's newest features
 > (agent memory, S3 Vectors, knowledge files) with live Q&A —
-> [register free](https://becloudready.com/webinar/db-agent?utm_source=github&utm_medium=modules-readme).
+> [register free](https://becloudready.com/webinar/db-agent?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=databricks-genie-fundamentals).

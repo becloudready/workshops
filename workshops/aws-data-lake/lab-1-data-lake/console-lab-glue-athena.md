@@ -2,7 +2,7 @@
 
 End-to-end student lab: create S3 buckets, catalog raw CSV with a Glue Crawler, run a PySpark ETL job that converts CSV to partitioned Parquet, catalog the output, and compare Athena query cost before and after: with a self-serve assignment at the end.
 
-> Full web version with video: [beCloudReady: AWS Data Lake with Glue & Athena](https://www.becloudready.com/learn/aws-data-lake-glue-athena)
+> Full web version with video: [beCloudReady: AWS Data Lake with Glue & Athena](https://www.becloudready.com/learn/aws-data-lake-glue-athena?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=aws-data-lake-lab-1)
 
 **Time:** ~90 minutes, including the assignment.
 
