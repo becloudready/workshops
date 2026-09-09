@@ -1,14 +1,12 @@
 # Cloud, Data & AI Workshops — AWS, Databricks Genie, AI Agents, LLMOps
 
-Your analysts got retitled "data engineers" and nobody trained them. Your backend team
-owns AWS infrastructure now because the platform team is three people. Somebody signed
-the GPU contract and the LLM stack is running unobserved. The tooling arrived; the
-training didn't.
+Hands-on lab repos for four stacks: AWS data lakes, Databricks Genie agents, full-stack
+AWS, and LLMOps. Each lab is self-contained, with pre-scoped IAM permissions,
+step-by-step walkthroughs, and sample data included.
 
-These are the labs we use to close that gap. Each one is self-contained, with pre-scoped
-IAM permissions, step-by-step walkthroughs, and sample data included — built to be run by
-a team that has the job title but not yet the reps. Drop into an instructor-led workshop
-or work through them on your own.
+Built by [BeCloudReady](https://becloudready.com/workshops?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=root-readme)
+for teams who inherited a stack before they were trained on it. Run them in an
+instructor-led workshop, or work through them on your own.
 
 ---
 
