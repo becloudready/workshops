@@ -100,13 +100,13 @@ Terraform projects handle this automatically when you pass `student_name=<slug>`
 
 ## Live Delivery
 
-This curriculum is delivered as an instructor-led workshop by [beCloudReady](https://becloudready.com).
+This curriculum is delivered as an instructor-led workshop by [beCloudReady](https://becloudready.com?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=fullstack-aws).
 
 - **Format:** 1-week intensive, live sessions + async lab time
 - **Stack:** per-student AWS sandbox with GitHub Copilot seats included
 - **Outcome:** deployed portfolio project + CI/CD pipeline in production
 
-[Book a cohort for your team →](https://becloudready.com/workshops)
+[Book a cohort for your team →](https://becloudready.com/workshops?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=fullstack-aws)
 
 ---
 
