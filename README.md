@@ -1,7 +1,7 @@
 # Cloud, Data & AI Workshops — AWS, Databricks Genie, AI Agents, LLMOps
 
 Hands-on lab repos for four stacks: AWS data lakes, Databricks Genie agents, full-stack
-AWS, and LLMOps. Each lab is self-contained, with pre-scoped IAM permissions,
+AWS, and Snowflake. Each lab is self-contained, with pre-scoped IAM permissions,
 step-by-step walkthroughs, and sample data included.
 
 Built by [BeCloudReady](https://becloudready.com/workshops?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=root-readme)
