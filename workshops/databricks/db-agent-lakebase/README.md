@@ -39,7 +39,7 @@ mkdir -p ~/.kaggle
 mv ~/Downloads/kaggle.json ~/.kaggle/ && chmod 600 ~/.kaggle/kaggle.json
 
 # Fetch + unzip into data/raw/
-cd workshops/databricks-db-agent-lakebase
+cd workshops/databricks/db-agent-lakebase
 kaggle datasets download -d olistbr/brazilian-ecommerce -p data/raw/ --unzip
 ```
 
@@ -128,7 +128,7 @@ psql "$LAKEBASE_URL" -c "SELECT current_database(), version();"   # verify
 ### 3. Apply the OLTP schema and load data
 
 ```bash
-cd workshops/databricks-db-agent-lakebase
+cd workshops/databricks/db-agent-lakebase
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r data/pipelines/requirements.txt
 
