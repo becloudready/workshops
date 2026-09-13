@@ -4,10 +4,6 @@ Hands-on lab repos for four stacks: AWS data lakes, Databricks Genie agents, ful
 AWS, and Snowflake. Each lab is self-contained, with pre-scoped IAM permissions,
 step-by-step walkthroughs, and sample data included.
 
-Built by [BeCloudReady](https://becloudready.com/workshops?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=root-readme)
-for teams who inherited a stack before they were trained on it. Run them in an
-instructor-led workshop, or work through them on your own.
-
 ---
 
 ## Workshops
