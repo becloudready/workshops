@@ -1,19 +1,27 @@
 # Contributing
 
-Found a bug or a gap in a published lab? Issues and PRs are welcome. Have a lab that fits one of the workshop tracks? Reach out before opening a PR.
+This repository holds the lab content BeCloudReady delivers in client workshops. Changes are accepted, with the caveat that the material has to stay deliverable in a live room.
 
----
+## Corrections
 
-## Resource tagging standard
+Corrections to published labs are welcome. A broken command, a stale console path, a dataset link that has moved, or a step that no longer matches the provider's UI are all worth reporting. Open an issue or a pull request with the workshop and lab named.
 
-Every AWS resource created in a workshop must carry the tags below. The nightly cleanup workflow reads them to decide what to delete, so untagged resources are treated as disposable.
+## New labs
 
-| Tag          | Example         | Purpose                                       |
-| ------------ | --------------- | --------------------------------------------- |
-| `workshop`   | `aws-data-lake` | Which lab the resource belongs to             |
-| `date`       | `26-Jul-2026`   | When the cohort ran (format: `dd-mmm-yyyy`)   |
-| `autodelete` | `true`          | Set to `false` to protect a resource (default is `true`) |
+Talk to us before writing one. A lab that does not fit an existing workshop track is unlikely to be merged, however good it is on its own terms.
 
-All Terraform modules in this repo apply these tags automatically via `local.common_tags` (see [`terraform/tags.tf`](terraform/tags.tf)). Resources created manually (via console or CLI) must be tagged manually.
+A lab that is accepted has to:
 
-**To protect a resource from nightly deletion, set `autodelete = false`.** Everything else is deleted at 3 AM EST by [`tools/nightly-cleanup.py`](tools/nightly-cleanup.py).
+Apply the resource tagging standard in [`docs/delivery.md`](docs/delivery.md), so cohort resources can be cleaned up afterwards.
+
+Ship with its own dataset, or with a scripted way to fetch one. Labs that assume a dataset the reader has to find do not survive contact with a room.
+
+State its prerequisites and the permissions it needs. Labs assume infrastructure is provisioned in advance, so anything requiring live provisioning is a demonstration rather than a lab.
+
+## What we will not merge
+
+Marketing content, links to unrelated training, and changes that rewrite a lab around a different product without discussion.
+
+## Student submissions
+
+Students in an active cohort follow the workflow in their own workshop ticket. Work goes in `workshops/<workshop>/projects/submission/<name>/`, never in shared files, and never includes credentials.

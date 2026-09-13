@@ -1,47 +1,66 @@
-# Cloud, Data & AI Workshops — AWS, Databricks Genie, AI Agents, LLMOps
+# BeCloudReady Workshop Labs
 
-Hands-on lab repos for four stacks: AWS data lakes, Databricks Genie agents, full-stack
-AWS, and Snowflake. Each lab is self-contained, with pre-scoped IAM permissions,
-step-by-step walkthroughs, and sample data included.
+This repository holds the lab content BeCloudReady delivers in client workshops, published so that teams evaluating us can read the material before an engagement begins.
 
-Built by [BeCloudReady](https://becloudready.com/workshops?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=root-readme)
-for teams who inherited a stack before they were trained on it. Run them in an
-instructor-led workshop, or work through them on your own.
+## Workshop catalog
 
----
-
-## Workshops
-
-| Workshop                                                                         | What you build                                                                                                                                                               | What you will be able to do                                                                                                                           | Stack                                                                        |
-| -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| [`databricks-genie-ai-agents/`](workshops/databricks-genie-ai-agents/) | A governed conversational AI agent on Databricks AI/BI Genie: LLM fundamentals in SQL, Genie space, Knowledge Store curation, benchmarks                                     | Stand up a Genie agent your stakeholders can trust — curate it, benchmark it, and govern it with Unity Catalog. No Python required for the core track | Databricks, AI/BI Genie, Unity Catalog, SQL                                  |
-| [`aws-data-lake/`](workshops/aws-data-lake/)                           | End-to-end data lake across 6 labs: raw ingestion, ETL, governance, CDC, and analytics                                                                                       | Design and operate the full AWS data engineering stack, from raw S3 files to a governed query layer in Athena and Redshift                            | S3, Glue, Athena, Lake Formation, Redshift, DMS, OpenSearch                  |
-| [`fullstack-aws/`](workshops/fullstack-aws/)                           | Full-stack app on AWS across 7 chapters and 4 deployable projects: React, FastAPI, MongoDB, Terraform, and CI/CD                                                             | Ship a production-ready app on AWS end-to-end, including infrastructure and automated deployment                                                      | React, FastAPI, Lambda, S3, DynamoDB, API Gateway, Terraform, GitHub Actions |
-| [`llmops/`](workshops/llmops/)                                         | Deploy, observe, and route production LLM workloads on a GPU instance: vLLM serving, Prometheus/Grafana dashboards, and LiteLLM gateway with virtual keys and spend tracking | Run LLM inference in-house with full observability and cost controls, without depending on managed APIs                                               | vLLM, LiteLLM, Prometheus, Grafana, DCGM, Docker, Ansible                    |
-
-Each workshop's README carries the full lab-by-lab breakdown. Related open source: [db-agent](https://github.com/db-agent/db-agent) — text-to-SQL AI agent with cross-platform memory, S3 Vectors, and knowledge files (AAAI-25 workshop project).
+| Workshop | Audience | What the team leaves with | Stack |
+| --- | --- | --- | --- |
+| [Databricks Genie AI Agents](workshops/databricks-genie-ai-agents/) | Data analysts and analytics teams | A governed conversational agent built on their own data, curated through a Knowledge Store and benchmarked for accuracy. The core track requires no Python. | Databricks, AI/BI Genie, Unity Catalog, SQL |
+| [AWS Data Lake](workshops/aws-data-lake/) | Data engineers and data platform teams | A working data lake across seven labs, from raw S3 ingestion to a governed query layer in Athena and Redshift. | S3, Glue, Athena, Lake Formation, Redshift Serverless, DMS, OpenSearch, CloudWatch |
+| [Full-Stack AWS](workshops/fullstack-aws/) | Application engineers | A deployed application on AWS, with the Terraform that provisions it and the GitHub Actions pipeline that ships it. | React, FastAPI, MongoDB, Lambda, S3, DynamoDB, API Gateway, Terraform, GitHub Actions |
+| [Text-to-SQL on Databricks](workshops/databricks-db-agent-lakebase/) | Data platform teams evaluating conversational analytics | A text-to-SQL path that runs against their own gold tables without managed model serving. | Lakebase Postgres, Unity Catalog, Delta, vLLM |
 
 ---
 
-## About
+## Databricks Genie AI Agents
 
-[BeCloudReady](https://becloudready.com?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=root-readme) is a Databricks Registered Partner that builds and delivers cloud workshops for engineering teams. We run community workshops at [TorontoAI](https://toronto-ai.org?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=root-readme) (10K+ members).
+The team leaves with a Genie agent their stakeholders can trust, governed through Unity Catalog and benchmarked so its accuracy is a measured number rather than an impression.
 
-|                             |                                                                                                              |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| **Cloud Workshops**         | Per-student AWS / Azure / GCP / Databricks sandboxes, region-locked, namespace-scoped, teardown-clean        |
-| **AI & GPU Labs**           | H100 / A100 cohorts on neo-cloud (Lambda Labs, Shadeform, RunPod): 30-70% cheaper than hyperscaler on-demand |
-| **Sales Demo Environments** | Reproducible demo stacks for SE teams and partner programs                                                   |
+Analysts start with how LLMs actually behave, working in SQL rather than Python. From there the workshop builds a Genie space, curates it with a Knowledge Store, and tests it against a benchmark set. A fundamentals track covers structured output, tool use, the agentic loop, and MCP for teams that want to go further.
 
-**Need a workshop for your team?**
-→ [becloudready.com/workshops](https://becloudready.com/workshops?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=root-readme) · [Book a call](https://calendly.com/kchandank/30-mins-meeting?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=root-readme)
+[Workshop README](workshops/databricks-genie-ai-agents/)
+
+## AWS Data Lake
+
+The team leaves able to operate a data lake end to end, from a raw file landing in S3 through to a governed table an analyst can query.
+
+Seven labs build the stack in order: the lake itself, Lambda ingestion, Lake Formation governance, Redshift Serverless, change data capture, OpenSearch, and CloudWatch monitoring. Each lab is self-contained and carries its own dataset, so a cohort can start at the lab that matches the gap.
+
+[Workshop README](workshops/aws-data-lake/)
+
+## Full-Stack AWS
+
+The team leaves with a deployed application and the pipeline that ships it, having built both rather than watched a demo.
+
+Seven chapters cover object-oriented design, a REST backend with CRUD and filtering, testing, authentication with role-based access, and a React frontend wired to that backend. Four deployable projects follow, each with a dataset, an exercise brief, and a trainer answer key. The material is sized for a multi-day engagement and is cut down per cohort.
+
+[Workshop README](workshops/fullstack-aws/)
+
+## Text-to-SQL on Databricks
+
+The team leaves knowing whether conversational analytics is viable on their own data, having run it without buying managed model serving first.
+
+The lab wires Lakebase Postgres as the OLTP store, Unity Catalog gold tables built as Delta from the same data, and a self-hosted vLLM endpoint exposing an OpenAI-compatible API. It provisions the data and infrastructure. The agent itself lives in [db-agent](https://github.com/db-agent/db-agent), our open-source text-to-SQL project.
+
+[Workshop README](workshops/databricks-db-agent-lakebase/)
 
 ---
 
-## Contributing
+## How labs are provisioned
 
-Found a bug or a gap in a published lab? Issues and PRs are welcome. Have a lab that fits one of the tracks above? Reach out before opening a PR. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the resource-tagging standard every lab must follow.
+Each student works in their own cloud sandbox, namespace-scoped and region-locked, so one student cannot reach another's resources or spend outside an agreed region. Labs assume infrastructure is provisioned and permissions are granted before the room opens, which keeps students on the operational work instead of setup. Every resource created during a lab carries tags identifying the cohort, and a nightly job removes what is left behind. The tagging standard, the cleanup job, and the opt-out for resources that must survive are documented in [`docs/delivery.md`](docs/delivery.md).
 
-## License
+## About BeCloudReady
 
-Apache License 2.0. See [`LICENSE`](LICENSE).
+BeCloudReady delivers hands-on technical workshops to enterprise engineering and analytics teams.
+We are a Databricks Registered Partner.
+We also run community workshops at [TorontoAI](https://toronto-ai.org?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=root-readme).
+
+## Contact
+
+[becloudready.com](https://becloudready.com/workshops?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=root-readme) · [Book a call](https://calendly.com/kchandank/30-mins-meeting?utm_source=github&utm_medium=repo&utm_campaign=workshops&utm_content=root-readme)
+
+---
+
+Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md) · Support: [`SUPPORT.md`](SUPPORT.md) · License: Apache 2.0, see [`LICENSE`](LICENSE).
