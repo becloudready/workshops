@@ -63,4 +63,4 @@ We also run community workshops at [TorontoAI](https://toronto-ai.org?utm_source
 
 ---
 
-Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md) · Support: [`SUPPORT.md`](SUPPORT.md) · License: Apache 2.0, see [`LICENSE`](LICENSE).
+Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md) · License: Apache 2.0, see [`LICENSE`](LICENSE).
