@@ -24,6 +24,14 @@ override.tf.json
 *_override.tf.json
 .terraformrc
 terraform.rc
+
+.vscode/
+venv/
+__pycache__/
+*.pyc
+.venv/
+.env
+
 # Lock files SHOULD be committed (pin provider versions) — don't ignore .terraform.lock.hcl.
 
 # Python
