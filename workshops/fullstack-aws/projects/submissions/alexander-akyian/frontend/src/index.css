@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
+:root {
+  --text: #3c4043;
+  --heading: #202124;
+  --muted: #5f6368;
+  --line: #dadce0;
+  --hover: #f1f3f4;
+  --accent: #1e8e3e;
+  --accent-dark: #137333;
+  --accent-soft: #e6f4ea;
+  --warn: #b06000;
+  --bad: #c5221f;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text);
+  background: #ffffff;
+}
+
+* { box-sizing: border-box; }
+
+body { margin: 0; min-width: 320px; }
+
+h1, h2, h3, p { margin: 0; }
+
+input, select, textarea, button { font: inherit; color: inherit; }
