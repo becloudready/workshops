@@ -59,3 +59,9 @@ jobs:
 
       - name: Smoke test the API
         run: curl -fsS "${{ secrets.VITE_API_URL }}/notices"
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CF_DISTRIBUTION_ID }} \
+            --paths "/*"

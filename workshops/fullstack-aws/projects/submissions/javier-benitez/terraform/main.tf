@@ -16,53 +16,100 @@ provider "aws" {
 locals {
   name     = "student-${var.student_name}-notice-board"
   role_arn = var.lambda_role_arn != "" ? var.lambda_role_arn : one(aws_iam_role.lambda_exec[*].arn)
+
+  # AWS managed cache policy "CachingOptimized"
+  caching_optimized_policy_id = "658327ea-f89d-4fab-a63d-7e88639e58f6"
 }
 
 # ==========================================
-# 1. FRONTEND: S3 static website (public read)
+# 1. FRONTEND: private S3 bucket behind CloudFront
 # ==========================================
 resource "aws_s3_bucket" "frontend" {
   bucket        = "${local.name}-frontend"
   force_destroy = true
 }
 
+# Tier 3: block all public access. Only CloudFront can read the bucket.
 resource "aws_s3_bucket_public_access_block" "frontend" {
   bucket = aws_s3_bucket.frontend.id
 
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_website_configuration" "frontend" {
-  bucket = aws_s3_bucket.frontend.id
+resource "aws_cloudfront_origin_access_control" "oac" {
+  name                              = "${local.name}-oac"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
 
-  index_document {
-    suffix = "index.html"
+resource "aws_cloudfront_distribution" "frontend" {
+  enabled             = true
+  is_ipv6_enabled     = true
+  default_root_object = "index.html"
+  comment             = "${local.name} frontend"
+
+  origin {
+    domain_name              = aws_s3_bucket.frontend.bucket_regional_domain_name
+    origin_id                = "s3-${aws_s3_bucket.frontend.id}"
+    origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
   }
 
-  error_document {
-    key = "index.html"
+  default_cache_behavior {
+    target_origin_id       = "s3-${aws_s3_bucket.frontend.id}"
+    viewer_protocol_policy = "redirect-to-https"
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    compress               = true
+    cache_policy_id        = local.caching_optimized_policy_id
+  }
+
+  # Single-page app: send unknown paths back to index.html
+  custom_error_response {
+    error_code         = 403
+    response_code      = 200
+    response_page_path = "/index.html"
+  }
+
+  custom_error_response {
+    error_code         = 404
+    response_code      = 200
+    response_page_path = "/index.html"
+  }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  viewer_certificate {
+    cloudfront_default_certificate = true
   }
 }
 
-resource "aws_s3_bucket_policy" "public_read" {
+resource "aws_s3_bucket_policy" "cloudfront_only" {
   bucket = aws_s3_bucket.frontend.id
 
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Sid       = "PublicReadGetObject"
+      Sid       = "AllowCloudFrontServicePrincipal"
       Effect    = "Allow"
-      Principal = "*"
+      Principal = { Service = "cloudfront.amazonaws.com" }
       Action    = "s3:GetObject"
       Resource  = "${aws_s3_bucket.frontend.arn}/*"
+      Condition = {
+        StringEquals = {
+          "AWS:SourceArn" = aws_cloudfront_distribution.frontend.arn
+        }
+      }
     }]
   })
 
-  # The policy is rejected while Block Public Access is still on,
-  # so wait for the public access block to be turned off first.
   depends_on = [aws_s3_bucket_public_access_block.frontend]
 }
 

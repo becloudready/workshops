@@ -1,10 +1,15 @@
-output "website_url" {
-  description = "Public URL of the S3 static website (open this in your browser)"
-  value       = "http://${aws_s3_bucket_website_configuration.frontend.website_endpoint}"
+output "cloudfront_url" {
+  description = "HTTPS URL of the site through CloudFront"
+  value       = "https://${aws_cloudfront_distribution.frontend.domain_name}"
+}
+
+output "cloudfront_distribution_id" {
+  description = "Distribution ID, used for cache invalidation in GitHub Actions"
+  value       = aws_cloudfront_distribution.frontend.id
 }
 
 output "s3_bucket_name" {
-  description = "S3 bucket that hosts the frontend (use with aws s3 sync)"
+  description = "Private S3 bucket that holds the frontend build"
   value       = aws_s3_bucket.frontend.id
 }
 

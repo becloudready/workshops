@@ -8,7 +8,7 @@ A React frontend hosted on S3 talks to a Python Lambda backend through API Gatew
 
 | Piece | URL |
 |-------|-----|
-| Website (S3) | http://student-javier-benitez-notice-board-frontend.s3-website-us-east-1.amazonaws.com |
+| Website (CloudFront, HTTPS) | https://d2vy7qfbeo1jb4.cloudfront.net |
 | API (API Gateway) | https://du14hmw473.execute-api.us-east-1.amazonaws.com |
 
 ## Architecture
@@ -141,3 +141,19 @@ Repository secrets used: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGI
 - [x] Pushing a change to `master` triggers the workflow automatically
 - [x] The workflow completes without errors
 - [x] The updated app is live without any manual AWS CLI commands
+
+## Tier 3: CloudFront CDN
+
+The frontend is now served over HTTPS through CloudFront, and the S3 bucket is private.
+
+- CloudFront Origin Access Control (OAC) signs requests from CloudFront to S3
+- S3 Block Public Access is fully on, and the bucket policy only allows `cloudfront.amazonaws.com` for this distribution
+- Unknown paths fall back to `index.html` so the single-page app works on refresh
+- The GitHub Actions workflow invalidates the CloudFront cache (`/*`) after every frontend deploy, using the `CF_DISTRIBUTION_ID` secret
+
+### Acceptance criteria
+
+- [x] The app loads over HTTPS via the CloudFront URL
+- [x] The S3 bucket is no longer publicly accessible directly
+- [x] Pushing to `master` triggers a CloudFront cache invalidation automatically
+- [x] The site is served from CloudFront edge locations (check the `x-cache` and `x-amz-cf-pop` headers in DevTools, Network tab)
