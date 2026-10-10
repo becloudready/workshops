@@ -127,3 +127,17 @@ terraform destroy
 - **`AccessDenied` creating the IAM role:** some lab accounts block IAM. Set `lambda_role_arn` in `terraform.tfvars` to an existing role (for example the lab's `LabRole`) and run `terraform apply` again.
 - **API returns 500:** check the Lambda logs in CloudWatch. The usual cause is a wrong `mongo_uri` or Atlas Network Access not allowing `0.0.0.0/0`.
 - **Page loads but says it can't reach the API:** the frontend was built without `VITE_API_URL`. Rebuild with it set and sync to S3 again.
+
+## Tier 2: GitHub Actions
+
+Every push to `master` on my fork that touches this folder deploys automatically: it packages the Lambda, updates the function code, builds the frontend with `VITE_API_URL`, and syncs it to S3, then smoke tests the API.
+
+The live workflow is at `.github/workflows/javier-benitez-notice-board.yml` on my fork. Since submissions can't modify `.github/`, a copy is kept in `ci/deploy.yml` for review.
+
+Repository secrets used: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `LAMBDA_FUNCTION_NAME`, `S3_BUCKET`, `VITE_API_URL`.
+
+### Acceptance criteria
+
+- [x] Pushing a change to `master` triggers the workflow automatically
+- [x] The workflow completes without errors
+- [x] The updated app is live without any manual AWS CLI commands

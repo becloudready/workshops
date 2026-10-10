@@ -72,7 +72,7 @@ export default function App() {
     <div className="page">
       <header className="masthead">
         <h1>Notice Board</h1>
-        <p>Updates for the Full-Stack AWS cohort</p>
+        <p>Updates for the Full-Stack AWS cohort, auto-deployed with GitHub Actions</p>
       </header>
 
       <main className="layout">
