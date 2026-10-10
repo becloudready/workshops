@@ -1,0 +1,8 @@
+# Copy this file to terraform.tfvars and fill in your real values.
+# terraform.tfvars is gitignored, so your connection string never gets committed.
+
+student_name = "javier-benitez"
+mongo_uri    = "mongodb+srv://USER:PASSWORD@YOUR-CLUSTER.mongodb.net/?retryWrites=true&w=majority"
+
+# Only set this if your AWS account blocks creating IAM roles:
+# lambda_role_arn = "arn:aws:iam::123456789012:role/LabRole"
