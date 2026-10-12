@@ -1,0 +1,25 @@
+# Dependencies and build output
+node_modules/
+dist/
+backend/_build/
+backend/lambda.zip
+*.zip
+__pycache__/
+.venv/
+venv/
+
+# Terraform state and secrets
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+*.tfvars
+!terraform.tfvars.example
+
+# Local env files and credentials
+.env
+.env.*
+!.env.example
+*.csv
+*.pem

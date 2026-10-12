@@ -1,0 +1,262 @@
+:root {
+  --cork: #b8875a;
+  --cork-dark: #8f6440;
+  --frame: #4a3221;
+  --ink: #2b211a;
+  --pin: #c8352e;
+  --paper-yellow: #fff2a6;
+  --paper-blue: #d6e9fb;
+  --paper-green: #dcf1d2;
+  --paper-white: #fffdf7;
+  --focus: #1f5fbf;
+
+  --font-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink);
+  background-color: var(--frame);
+}
+
+.page {
+  min-height: 100vh;
+  padding: clamp(1rem, 3vw, 2.5rem);
+}
+
+/* Header sits on the wooden frame */
+.masthead {
+  max-width: 72rem;
+  margin: 0 auto 1.5rem;
+  color: #f6e7d4;
+}
+
+.masthead h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.masthead p {
+  margin: 0.5rem 0 0;
+  color: #d9c3a8;
+}
+
+/* Two columns: compose form on the left, cork board on the right */
+.layout {
+  max-width: 72rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(16rem, 20rem) 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.compose {
+  background: var(--paper-white);
+  border-radius: 6px;
+  padding: 1.25rem;
+  position: sticky;
+  top: 1rem;
+}
+
+.compose h2 {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+
+.compose form {
+  display: flex;
+  flex-direction: column;
+}
+
+.compose label {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
+}
+
+.compose input,
+.compose textarea {
+  font: inherit;
+  color: inherit;
+  padding: 0.6rem 0.7rem;
+  border: 2px solid #d8cbbb;
+  border-radius: 4px;
+  background: #fff;
+  margin-bottom: 1rem;
+  resize: vertical;
+}
+
+.compose textarea {
+  margin-bottom: 0.25rem;
+}
+
+.count {
+  align-self: flex-end;
+  font-size: 0.8rem;
+  color: #7a6a5c;
+  margin-bottom: 1rem;
+}
+
+.compose button {
+  font: inherit;
+  font-weight: 700;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background: var(--pin);
+  color: #fff;
+  cursor: pointer;
+}
+
+.compose button:hover:not(:disabled) {
+  background: #a82a24;
+}
+
+.compose button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  margin: 1rem 0 0;
+  padding: 0.7rem 0.8rem;
+  border-left: 4px solid var(--pin);
+  background: #fbe6e4;
+  color: #7d1f1a;
+  font-size: 0.95rem;
+}
+
+/* The cork board itself */
+.board {
+  min-height: 24rem;
+  border-radius: 6px;
+  padding: clamp(1rem, 3vw, 2rem);
+  background-color: var(--cork);
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.08) 1px, transparent 2px),
+    radial-gradient(circle at 70% 60%, rgba(0, 0, 0, 0.1) 1px, transparent 2px),
+    radial-gradient(circle at 40% 80%, rgba(0, 0, 0, 0.08) 1.5px, transparent 2.5px);
+  background-size: 9px 9px, 13px 13px, 17px 17px;
+  box-shadow: inset 0 0 0 3px var(--cork-dark), inset 0 0 40px rgba(0, 0, 0, 0.25);
+}
+
+.board-empty {
+  margin: 2rem 0;
+  text-align: center;
+  color: #fff8ee;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.notes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 1.75rem 1.25rem;
+}
+
+.note {
+  position: relative;
+  padding: 1.6rem 1.1rem 1rem;
+  transform: rotate(var(--tilt, 0deg));
+  box-shadow: 2px 6px 10px rgba(40, 20, 5, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.paper-yellow { background: var(--paper-yellow); }
+.paper-blue { background: var(--paper-blue); }
+.paper-green { background: var(--paper-green); }
+.paper-white { background: var(--paper-white); }
+
+.pin {
+  position: absolute;
+  top: -0.45rem;
+  left: 50%;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-left: -0.55rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f07a72, var(--pin) 55%, #7e1e19);
+  box-shadow: 1px 3px 3px rgba(0, 0, 0, 0.4);
+}
+
+.note-message {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.note-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #5a4a3c;
+}
+
+.note-author {
+  font-weight: 700;
+}
+
+.note-delete {
+  align-self: flex-start;
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.2rem 0;
+  border: none;
+  background: none;
+  color: #8a2a24;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .compose {
+    position: static;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .note {
+    transform: none;
+  }
+}
