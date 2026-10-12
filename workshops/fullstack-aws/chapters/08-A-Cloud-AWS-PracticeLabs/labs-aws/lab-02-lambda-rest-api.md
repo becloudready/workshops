@@ -94,9 +94,9 @@ Click **Deploy**.
 2. Choose **HTTP API** → click **Build**
 3. Click **Add integration**:
    - Integration type: **Lambda**
-   - Lambda function: `student-rest-api`
+   - Lambda function: `student-<NAME>-rest-api`
    - Version: **2.0** (payload format)
-4. API name: `student-rest-api-gw`
+4. API name: `student-<NAME>-rest-api-gw`
 5. Click **Next**
 
 ### Configure routes
