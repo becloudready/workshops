@@ -1,0 +1,30 @@
+:root {
+  font-family: system-ui, 'Segoe UI', sans-serif;
+  color: #000000;
+  background: #d6d5d5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --heading: #000000;
+  --text: #000000;
+  --input-text: #17232d;
+  --surface: #ffffff;
+  --border: #4b5563;
+  --button-bg: #176b62;
+  --button-border: #145b53;
+  --focus: #2b8076;
+  --error: #ff8b8b;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+#root {
+  min-height: 100vh;
+}

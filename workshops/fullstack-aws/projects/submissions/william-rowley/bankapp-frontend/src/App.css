@@ -1,0 +1,689 @@
+:root {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --bg-main: #f8fafc;
+  --surface: #ffffff;
+  --surface-alt: #f1f5f9;
+  --heading: #0f172a;
+  --text: #334155;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --border-focus: #3b82f6;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-active: #1e40af;
+  --button-bg: #2563eb;
+  --button-border: #2563eb;
+  --focus: rgba(37, 99, 235, 0.4);
+  --error: #dc2626;
+  --error-bg: #fef2f2;
+  --error-border: #fecaca;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-dialog: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-main: #0b0f19;
+    --surface: #111827;
+    --surface-alt: #1f2937;
+    --heading: #f9fafb;
+    --text: #d1d5db;
+    --text-muted: #9ca3af;
+    --border: #1f2937;
+    --border-focus: #60a5fa;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --primary-active: #1d4ed8;
+    --button-bg: #2563eb;
+    --button-border: #2563eb;
+    --focus: rgba(59, 130, 246, 0.5);
+    --error: #f87171;
+    --error-bg: rgba(239, 68, 68, 0.1);
+    --error-border: rgba(239, 68, 68, 0.2);
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4);
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--bg-main);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.app-shell {
+  width: min(100% - 40px, 1100px);
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header & Brand */
+.site-header {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding: 0 8px;
+}
+
+.brand-button {
+  color: var(--heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.brand-button:hover {
+  opacity: 0.85;
+}
+
+.text-button {
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.15s ease;
+}
+
+.text-button:hover {
+  color: var(--heading);
+  background-color: var(--surface-alt);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+}
+
+.header-actions .text-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Page Containers */
+.page-content {
+  padding: 40px 0;
+  flex: 1;
+}
+
+.home-page {
+  display: flex;
+  min-height: 350px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.customers-page {
+  text-align: left;
+}
+
+.customers-page > .text-button {
+  display: block;
+  margin: 16px auto 0;
+}
+
+/* Login Page Two-Column Grid */
+.login-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* Left Hero Side */
+.login-hero-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 16px;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--heading);
+  line-height: 1.15;
+}
+
+.hero-subtitle {
+  color: var(--text-muted);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  max-width: 400px;
+}
+
+/* Credit Card Graphic */
+.card-graphic-wrapper {
+  perspective: 1000px;
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 8px;
+}
+
+.card-graphic {
+  width: 100%;
+  height: 180px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  box-sizing: border-box;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 16px 28px -8px rgba(30, 58, 138, 0.4);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.card-graphic::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 220px;
+  height: 220px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.card-chip {
+  width: 38px;
+  height: 28px;
+  background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%);
+  border-radius: 5px;
+}
+
+.card-icon {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  opacity: 0.85;
+}
+
+.card-number {
+  font-family: monospace;
+  font-size: 1.1875rem;
+  letter-spacing: 2px;
+}
+
+.card-footer-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+}
+
+/* Auth Cards & Login Section */
+.auth-section {
+  width: 100%;
+  padding: 32px;
+  box-sizing: border-box;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.auth-section h2 {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.auth-section > h1 {
+  margin-bottom: 24px;
+}
+
+.auth-section > [role='status'] {
+  margin-bottom: 16px;
+  font-size: 0.875rem;
+  color: var(--primary);
+  text-align: center;
+}
+
+.auth-form {
+  display: grid;
+  gap: 18px;
+}
+
+.auth-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--heading);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.auth-form input,
+.auth-form select {
+  width: 100%;
+  min-height: 42px;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--heading);
+  font: inherit;
+  font-size: 0.875rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-form input:focus,
+.auth-form select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--focus);
+}
+
+.auth-toggle {
+  margin: 12px auto 0;
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-toggle:hover {
+  text-decoration: underline;
+  background: transparent;
+}
+
+.login-mode-toggle {
+  display: block;
+  margin: 12px auto 0;
+  color: var(--text-muted);
+}
+
+/* Headings */
+h1, h2, p {
+  margin: 0;
+}
+
+h1 {
+  color: var(--heading);
+  font-size: 1.875rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+h2 {
+  color: var(--heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Buttons */
+.primary-button {
+  min-height: 42px;
+  padding: 10px 20px;
+  border: 1px solid var(--button-border);
+  border-radius: var(--radius-sm);
+  background: var(--button-bg);
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.primary-button:hover:not(:disabled) {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.primary-button:active:not(:disabled) {
+  background: var(--primary-active);
+  transform: translateY(1px);
+}
+
+.primary-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.primary-button:focus-visible,
+.text-button:focus-visible,
+.account-toggle:focus-visible,
+.icon-button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* Page Layout Rows */
+.page-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.account-page-title {
+  justify-content: space-between;
+}
+
+/* Account Actions & Table Controls */
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 6px;
+}
+
+.account-toggle {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.account-toggle:hover:not(:disabled) {
+  border-color: #cbd5e1;
+  background-color: var(--surface-alt);
+  color: var(--heading);
+}
+
+.account-toggle:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.delete-account-button {
+  color: #ef4444;
+}
+
+.delete-account-button:hover:not(:disabled) {
+  background: var(--error-bg);
+  border-color: var(--error-border);
+}
+
+.delete-account-button:disabled {
+  color: var(--text-muted);
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Table Design */
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+.customer-accounts-table th:first-child,
+.customer-accounts-table td:first-child {
+  text-align: left;
+}
+
+.customer-accounts-table th:last-child,
+.customer-accounts-table td:last-child {
+  text-align: right;
+}
+
+th, td {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  overflow-wrap: anywhere;
+}
+
+th {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: var(--surface-alt);
+}
+
+tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.015);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.account-details-row > td {
+  padding: 20px;
+  background-color: var(--surface-alt);
+}
+
+.account-details-row table {
+  max-width: 600px;
+  margin: 0 auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+/* Modal / Dialog Styling */
+.profile-dialog {
+  box-sizing: border-box;
+  width: min(100% - 32px, 460px);
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-dialog);
+}
+
+.profile-dialog::backdrop {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.profile-dialog h2 {
+  margin-bottom: 20px;
+}
+
+.profile-dialog .text-button {
+  color: var(--text-muted);
+}
+
+.profile-dialog .error-message {
+  margin-bottom: 16px;
+}
+
+.delete-dialog > p {
+  margin-bottom: 24px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.danger-button {
+  border-color: #dc2626;
+  background: #dc2626;
+}
+
+.danger-button:hover:not(:disabled) {
+  background: #b91c1c;
+  border-color: #b91c1c;
+}
+
+.profile-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.profile-dialog .profile-form label,
+.account-dialog .auth-form label,
+.transfer-dialog .auth-form label {
+  text-align: left;
+}
+
+/* Alerts & Status Messages */
+.error-message {
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  background-color: var(--error-bg);
+  border: 1px solid var(--error-border);
+  border-radius: var(--radius-sm);
+  color: var(--error);
+  font-size: 0.84rem;
+  font-weight: 500;
+  text-align: left;
+}
+
+/* Persistent Centered Footer */
+.site-footer {
+  margin-top: auto;
+  padding: 24px 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  width: 100%;
+}
+
+.site-footer p {
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  margin: 0;
+}
+
+/* Mobile & Tablet Responsiveness */
+@media (max-width: 768px) {
+  .login-grid-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .login-hero-side {
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .app-shell {
+    width: min(100% - 24px, 1100px);
+  }
+
+  .page-content {
+    padding-top: 24px;
+  }
+
+  .auth-section {
+    padding: 24px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  th, td {
+    padding: 10px 12px;
+  }
+
+  .profile-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .profile-actions button {
+    width: 100%;
+  }
+}
